@@ -9,18 +9,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Logo\MainIcon.png" />
+    <None Remove="Assets\Fonts\Ledger-Regular.ttf" />
+    <None Remove="Assets\Logo\mainlogo.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Assets\Icons\" />
+    <Folder Include="Assets\Themes\Dark\" />
+    <Folder Include="Assets\Themes\Light\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\" />
     <Folder Include="ViewModels\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Logo\MainIcon.png" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\Ledger-Regular.ttf" />
+    <Resource Include="Assets\Logo\mainlogo.png" />
   </ItemGroup>
 
 </Project>

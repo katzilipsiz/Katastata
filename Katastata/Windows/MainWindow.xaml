@@ -4,11 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Katastata"
+        xmlns:uc="clr-namespace:Katastata.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" 
-        Height="450" Width="800" 
-        Icon="C:\Users\Эльмир Муслимов.NMT\Documents\Katastata\Katastata\Katastata\Assets\Logo\MainIcon.png">
+        Height="1080" Width="1920" 
+        WindowState="Maximized"
+        Icon="/Assets/Logo/MainLogo.png">
     <Grid>
+
+        <uc:LoginPage/>
 
     </Grid>
 </Window>
