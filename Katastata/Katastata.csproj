@@ -9,10 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Logo\MainIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Assets\Icons\" />
     <Folder Include="Models\" />
     <Folder Include="Views\" />
     <Folder Include="ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Logo\MainIcon.png" />
   </ItemGroup>
 
 </Project>
