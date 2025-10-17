@@ -9,9 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Assets\Themes\Dark\**" />
     <Compile Remove="Assets\Themes\Light\**" />
+    <EmbeddedResource Remove="Assets\Themes\Dark\**" />
     <EmbeddedResource Remove="Assets\Themes\Light\**" />
+    <None Remove="Assets\Themes\Dark\**" />
     <None Remove="Assets\Themes\Light\**" />
+    <Page Remove="Assets\Themes\Dark\**" />
     <Page Remove="Assets\Themes\Light\**" />
   </ItemGroup>
 
@@ -24,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="Assets\Icons\" />
+    <Folder Include="Assets\Themes\" />
     <Folder Include="Models\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Services\" />
