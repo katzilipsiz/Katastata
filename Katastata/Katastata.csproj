@@ -11,6 +11,7 @@
   <ItemGroup>
     <None Remove="Assets\Fonts\Ledger-Regular.ttf" />
     <None Remove="Assets\Logo\mainlogo.png" />
+    <None Remove="Assets\Logo\TextLogo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,7 @@
   <ItemGroup>
     <Resource Include="Assets\Fonts\Ledger-Regular.ttf" />
     <Resource Include="Assets\Logo\mainlogo.png" />
+    <Resource Include="Assets\Logo\TextLogo.png" />
   </ItemGroup>
 
 </Project>

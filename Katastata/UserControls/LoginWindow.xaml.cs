@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Katastata.UserControls
 {
     /// <summary>
-    /// Логика взаимодействия для LoginPage.xaml
+    /// Логика взаимодействия для LoginWindow.xaml
     /// </summary>
-    public partial class LoginPage : UserControl
+    public partial class LoginWindow : Window
     {
-        public LoginPage()
+        public LoginWindow()
         {
             InitializeComponent();
         }
