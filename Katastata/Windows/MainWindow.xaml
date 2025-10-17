@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Katastata"
         xmlns:view="clr-namespace:Katastata.Views"
+        
         mc:Ignorable="d"
         Title="Katastata" 
         Height="1040" Width="1920"
@@ -120,6 +121,7 @@
     </Window.Resources>
 
     <Grid Background="{StaticResource BrownBack1}">
+       
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="382"/>
@@ -194,6 +196,7 @@
 
                 <Button x:Name="Login"
                         Content="Войти в аккаунт" 
+                        Click="Login_Click"
                         BorderBrush="{x:Null}" 
                         Background="{StaticResource RedBack1}"
                         Margin="25 0"

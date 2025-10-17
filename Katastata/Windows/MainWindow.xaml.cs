@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Katastata.UserControls;
 
 namespace Katastata
 {
@@ -25,6 +26,12 @@ namespace Katastata
         private void CloseButton(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Login_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.ShowDialog();
         }
     }
 }

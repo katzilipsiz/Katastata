@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Katastata.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="1080" d:DesignWidth="1920">
+             d:DesignHeight="800" d:DesignWidth="600">
 
     <Window.Resources>
         
@@ -92,60 +92,48 @@
             </Grid.Effect>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="165"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="165"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
             <Image Grid.Row="1" 
                    Source="/Assets/Logo/TextLogo.png"
                    Margin="150 25"/>
 
-            <StackPanel Grid.Row="2">
+            <StackPanel Grid.Row="2" 
+                        Margin="25 25 25 0">
 
-                <Label Content="Добро пожаловать!"
-                       HorizontalAlignment="Center"
-                       FontSize="48"/>
+                <Label Content="Логин"
+                       FontSize="24"
+                       Foreground="{StaticResource YellowElement1}"/>
+                <TextBox Text="ничего"
+                         FontSize="32"/>
 
-                <Label Content="Вход в аккаунт..."
-                       HorizontalAlignment="Center"
-                       FontSize="36"/>
             </StackPanel>
 
             <StackPanel Grid.Row="3" 
                         Margin="25 25 25 0">
 
-                <Label Content="Логин"
-                       FontSize="32"
-                       Foreground="{StaticResource YellowElement1}"/>
-                <TextBox Text="ничего"
-                         FontSize="32"/>
-
-            </StackPanel>
-
-            <StackPanel Grid.Row="4" 
-                        Margin="25 25 25 0">
-
                 <Label Content="Пароль"
-                       FontSize="32"
+                       FontSize="24"
                        Foreground="{StaticResource YellowElement1}"/>
                 <TextBox Text="ничего"
                          FontSize="32"/>
 
             </StackPanel>
 
-            <Button Grid.Row="5"
+            <Button Grid.Row="4"
                     Margin="25 25 25 0"
                     Content="Войти"
                     BorderThickness="0"
                     FontSize="32"/>
 
-            <Button Grid.Row="6"
+            <Button Grid.Row="5"
                     Margin="25"
                     Content="Регистрация"
                     Foreground="White"
