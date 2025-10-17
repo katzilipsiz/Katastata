@@ -1,0 +1,157 @@
+﻿<Window x:Class="Katastata.UserControls.LoginWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Katastata.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="1080" d:DesignWidth="1920">
+
+    <Window.Resources>
+        
+        <SolidColorBrush x:Key="BrownBack1" Color="#281D17"/>
+        <SolidColorBrush x:Key="RedBack1" Color="#4B2619"/>
+        <SolidColorBrush x:Key="YellowElement1" Color="#E3B662"/>
+
+
+    <!--Button-->
+    <Style TargetType="TextBox">
+
+        <Setter Property="Background"
+                    Value="{x:Null}"/>
+
+        <Setter Property="BorderThickness"
+                    Value="0 0 0 2"/>
+
+        <Setter Property="BorderBrush"
+                    Value="{StaticResource YellowElement1}"/>
+
+        <Setter Property="Foreground"
+                    Value="White"/>
+
+    </Style>
+
+    <!--Label-->
+    <Style TargetType="Label">
+
+        <Setter Property="Foreground"
+                    Value="White"/>
+
+        <Setter Property="FontFamily"
+        Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
+
+    </Style>
+
+    <!--Button-->
+    <Style TargetType="Button">
+
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" 
+                            Value="20" />
+            </Style>
+        </Style.Resources>
+
+        <Setter Property="Background"
+                    Value="{StaticResource YellowElement1}"/>
+
+        <Setter Property="Foreground"
+                    Value="{StaticResource BrownBack1}"/>
+
+        <Setter Property="FontFamily"
+                    Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
+
+        <Setter Property="BorderThickness"
+                    Value="2"/>
+
+        <Setter Property="BorderBrush"
+                    Value="{StaticResource YellowElement1}"/>
+
+    </Style>
+        
+    </Window.Resources> 
+
+
+
+    <Grid Background="{StaticResource BrownBack1}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1"
+              Background="{StaticResource RedBack1}">
+
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="16"
+                                  RenderingBias="Quality" 
+                                  ShadowDepth="2"
+                                  Color="#261404"/>
+            </Grid.Effect>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="165"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="165"/>
+            </Grid.RowDefinitions>
+
+            <Image Grid.Row="1" 
+                   Source="/Assets/Logo/TextLogo.png"
+                   Margin="150 25"/>
+
+            <StackPanel Grid.Row="2">
+
+                <Label Content="Добро пожаловать!"
+                       HorizontalAlignment="Center"
+                       FontSize="48"/>
+
+                <Label Content="Вход в аккаунт..."
+                       HorizontalAlignment="Center"
+                       FontSize="36"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" 
+                        Margin="25 25 25 0">
+
+                <Label Content="Логин"
+                       FontSize="32"
+                       Foreground="{StaticResource YellowElement1}"/>
+                <TextBox Text="ничего"
+                         FontSize="32"/>
+
+            </StackPanel>
+
+            <StackPanel Grid.Row="4" 
+                        Margin="25 25 25 0">
+
+                <Label Content="Пароль"
+                       FontSize="32"
+                       Foreground="{StaticResource YellowElement1}"/>
+                <TextBox Text="ничего"
+                         FontSize="32"/>
+
+            </StackPanel>
+
+            <Button Grid.Row="5"
+                    Margin="25 25 25 0"
+                    Content="Войти"
+                    BorderThickness="0"
+                    FontSize="32"/>
+
+            <Button Grid.Row="6"
+                    Margin="25"
+                    Content="Регистрация"
+                    Foreground="White"
+                    Background="{x:Null}"
+                    FontSize="32"/>
+
+        </Grid>
+    </Grid>
+</Window>

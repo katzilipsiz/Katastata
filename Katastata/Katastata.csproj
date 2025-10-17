@@ -8,4 +8,32 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\Fonts\Ledger-Regular.ttf" />
+    <None Remove="Assets\Logo\mainlogo.png" />
+    <None Remove="Assets\Logo\TextLogo.png" />
+    <None Remove="Assets\Templates\App1.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Icons\" />
+    <Folder Include="Assets\Themes\Dark\" />
+    <Folder Include="Assets\Themes\Light\" />
+    <Folder Include="Models\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\Ledger-Regular.ttf" />
+    <Resource Include="Assets\Logo\mainlogo.png" />
+    <Resource Include="Assets\Logo\TextLogo.png" />
+    <Resource Include="Assets\Templates\App1.png" />
+  </ItemGroup>
+
 </Project>
