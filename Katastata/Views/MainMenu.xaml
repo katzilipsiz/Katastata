@@ -38,7 +38,7 @@
             Value="White"/>
 
             <Setter Property="FontFamily"
-Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
+                    Value="Katastata;Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
 
         </Style>
 
@@ -71,7 +71,7 @@ Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regul
                 Value="28"/>
 
             <Setter Property="FontFamily"
-            Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
+                    Value="Katastata;Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
 
             <Setter Property="BorderThickness"
             Value="0"/>
@@ -104,7 +104,7 @@ Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regul
         Value="28"/>
 
             <Setter Property="FontFamily"
-    Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
+                    Value="Katastata;Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
 
             <Setter Property="BorderThickness"
     Value="0"/>
@@ -144,8 +144,8 @@ Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regul
               Margin="25 25 0 25">
             
             <StackPanel Orientation="Vertical">
-                
-                <Image Source="/Assets/Templates/App1.png"
+
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
                        Margin="16 16 16 0"/>
                 
                 <Label Content="Hollow Knight"
@@ -164,8 +164,8 @@ Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regul
               Margin="25 25 0 25">
             
             <StackPanel Orientation="Vertical">
-                
-                <Image Source="/Assets/Templates/App1.png"
+
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
                        Margin="16 16 16 0"/>
                 
                 <Label Content="Hollow Knight"
@@ -184,8 +184,8 @@ Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regul
               Margin="25 25 0 25">
             
             <StackPanel Orientation="Vertical">
-                
-                <Image Source="/Assets/Templates/App1.png"
+
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
                        Margin="16 16 16 0"/>
                 
                 <Label Content="Hollow Knight"
@@ -204,8 +204,8 @@ Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regul
               Margin="25 25 0 25">
             
             <StackPanel Orientation="Vertical">
-                
-                <Image Source="/Assets/Templates/App1.png"
+
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
                        Margin="16 16 16 0"/>
                 
                 <Label Content="Hollow Knight"
@@ -224,8 +224,8 @@ Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regul
               Margin="25 25 0 25">
             
             <StackPanel Orientation="Vertical">
-                
-                <Image Source="/Assets/Templates/App1.png"
+
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
                        Margin="16 16 16 0"/>
                 
                 <Label Content="Hollow Knight"

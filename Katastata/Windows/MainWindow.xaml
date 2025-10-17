@@ -6,10 +6,9 @@
         xmlns:local="clr-namespace:Katastata"
         xmlns:view="clr-namespace:Katastata.Views"
         mc:Ignorable="d"
-        Title="MainWindow" 
-        Height="1080" Width="1920" 
-        WindowState="Maximized"
-        Icon="/Assets/Logo/MainLogo.png">
+        Title="Katastata" 
+        Height="1040" Width="1920"
+        Icon="/Assets/Logo/MainLogo.png" WindowStyle="None" ResizeMode="NoResize" Cursor="" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
 
@@ -209,6 +208,19 @@
         <view:MainMenu Grid.Column="1">
             
         </view:MainMenu>
+
+        <Button Grid.Column="2" 
+                Click="CloseButton"
+                VerticalAlignment="Top" 
+                Margin="0 25 25 25"
+                Width="25"
+                Height="25"
+                BorderBrush="{x:Null}">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Logo/mainlogo.png" 
+                            Stretch="UniformToFill"/>
+            </Button.Background>
+        </Button>
 
     </Grid>
     
