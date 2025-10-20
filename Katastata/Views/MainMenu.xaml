@@ -138,105 +138,262 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0"
-              Grid.Column="0"
-              Background="#4B2619"
-              Margin="25 25 0 25">
-            
-            <StackPanel Orientation="Vertical">
 
-                <Image Source="/Katastata;component/Assets/Templates/App1.png"
-                       Margin="16 16 16 0"/>
-                
-                <Label Content="Hollow Knight"
-                       FontSize="24"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="White"/>
-                
-            </StackPanel>
-            
-        </Grid>
-        
-        <Grid Grid.Row="1"
-              Grid.Column="0"
-              Background="#4B2619"
-              Margin="25 25 0 25">
-            
-            <StackPanel Orientation="Vertical">
 
+        <StackPanel Grid.Row="0">
+            <Button Background="#4B2619"
+                    Margin="25 25 0 0"
+                    Click="Button_Click">
                 <Image Source="/Katastata;component/Assets/Templates/App1.png"
-                       Margin="16 16 16 0"/>
-                
-                <Label Content="Hollow Knight"
-                       FontSize="24"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="White"/>
-                
-            </StackPanel>
-            
-        </Grid>
-        
-        <Grid Grid.Row="2"
-              Grid.Column="0"
-              Background="#4B2619"
-              Margin="25 25 0 25">
-            
-            <StackPanel Orientation="Vertical">
+                       Margin="16 16 16 16"/>
+            </Button>
 
-                <Image Source="/Katastata;component/Assets/Templates/App1.png"
-                       Margin="16 16 16 0"/>
-                
-                <Label Content="Hollow Knight"
-                       FontSize="24"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="White"/>
-                
-            </StackPanel>
-            
-        </Grid>
-        
-        <Grid Grid.Row="0"
-              Grid.Column="1"
-              Background="#4B2619"
-              Margin="25 25 0 25">
-            
-            <StackPanel Orientation="Vertical">
+            <Label Content="Hollow Knight"
+                   FontSize="24"
+                   Margin="25 0 0 25"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="White"/>
+        </StackPanel>
 
+        <StackPanel Grid.Row="1">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
                 <Image Source="/Katastata;component/Assets/Templates/App1.png"
-                       Margin="16 16 16 0"/>
-                
-                <Label Content="Hollow Knight"
-                       FontSize="24"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="White"/>
-                
-            </StackPanel>
-            
-        </Grid>
-        
-        <Grid Grid.Row="0"
-              Grid.Column="2"
-              Background="#4B2619"
-              Margin="25 25 0 25">
-            
-            <StackPanel Orientation="Vertical">
+               Margin="16 16 16 16"/>
+            </Button>
 
-                <Image Source="/Katastata;component/Assets/Templates/App1.png"
-                       Margin="16 16 16 0"/>
-                
-                <Label Content="Hollow Knight"
-                       FontSize="24"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="White"/>
-                
-            </StackPanel>
-            
-        </Grid>
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
         
+        <StackPanel Grid.Row="2">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+               Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="0"
+                    Grid.Column="1">
+            <Button Background="#4B2619"
+                    Margin="25 25 0 0"
+                    Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+                       Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+                   FontSize="24"
+                   Margin="25 0 0 25"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="White"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="1">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+               Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2"
+                    Grid.Column="1">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+               Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="0"
+                    Grid.Column="2">
+            <Button Background="#4B2619"
+                    Margin="25 25 0 0"
+                    Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+                       Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+                   FontSize="24"
+                   Margin="25 0 0 25"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="White"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="2">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+               Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2"
+                    Grid.Column="2">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+               Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="0"
+                    Grid.Column="3">
+            <Button Background="#4B2619"
+                    Margin="25 25 0 0"
+                    Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+                       Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+                   FontSize="24"
+                   Margin="25 0 0 25"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="White"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="3">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+               Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2"
+                    Grid.Column="3">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+               Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="0"
+                    Grid.Column="4">
+            <Button Background="#4B2619"
+                    Margin="25 25 0 0"
+                    Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+                       Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+                   FontSize="24"
+                   Margin="25 0 0 25"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="White"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Grid.Column="4">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+               Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2"
+                    Grid.Column="4">
+            <Button Background="#4B2619"
+            Margin="25 25 0 0"
+            Click="Button_Click">
+                <Image Source="/Katastata;component/Assets/Templates/App1.png"
+               Margin="16 16 16 16"/>
+            </Button>
+
+            <Label Content="Hollow Knight"
+           FontSize="24"
+           Margin="25 0 0 25"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Foreground="White"/>
+        </StackPanel>
+
+        
+
+
     </Grid>
 </UserControl>

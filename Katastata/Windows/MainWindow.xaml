@@ -11,116 +11,8 @@
         Height="1040" Width="1920"
         Icon="/Assets/Logo/MainLogo.png" WindowStyle="None" ResizeMode="NoResize" Cursor="" WindowStartupLocation="CenterScreen">
 
-    <Window.Resources>
 
-        <SolidColorBrush x:Key="BrownBack1" Color="#281D17"/>
-        <SolidColorBrush x:Key="RedBack1" Color="#4B2619"/>
-        <SolidColorBrush x:Key="YellowElement1" Color="#E3B662"/>
-
-
-        <!--Button-->
-        <Style TargetType="TextBox">
-
-            <Setter Property="Background"
-                Value="{x:Null}"/>
-
-            <Setter Property="BorderThickness"
-                Value="0 0 0 2"/>
-
-            <Setter Property="BorderBrush"
-                Value="{StaticResource YellowElement1}"/>
-
-            <Setter Property="Foreground"
-                Value="White"/>
-
-        </Style>
-
-        <!--Label-->
-        <Style TargetType="Label">
-
-            <Setter Property="Foreground"
-                Value="White"/>
-
-            <Setter Property="FontFamily"
-    Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
-
-        </Style>
-
-        <!--RadioButton-->
-        <Style TargetType="RadioButton">
-
-            
-
-
-            <!--<Style.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" 
-                        Value="20" />
-                </Style>
-            </Style.Resources>-->
-
-            <Setter Property="Background"
-                Value="{StaticResource RedBack1}"/>
-
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-
-            <Setter Property="HorizontalAlignment"
-                    Value="Center"/>
-
-            <Setter Property="Foreground"
-                Value="{StaticResource YellowElement1}"/>
-
-            <Setter Property="FontSize"
-                    Value="28"/>
-
-            <Setter Property="FontFamily"
-                Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
-
-            <Setter Property="BorderThickness"
-                Value="0"/>
-
-        </Style>
-
-        <!--Button-->
-        <Style TargetType="Button">
-
-
-
-
-            <!--<Style.Resources>
-        <Style TargetType="Border">
-            <Setter Property="CornerRadius" 
-                Value="20" />
-        </Style>
-    </Style.Resources>-->
-
-            <Setter Property="Background"
-        Value="{StaticResource RedBack1}"/>
-
-            <Setter Property="VerticalAlignment"
-            Value="Center"/>
-
-            <Setter Property="HorizontalAlignment"
-            Value="Center"/>
-
-            <Setter Property="Foreground"
-        Value="{StaticResource YellowElement1}"/>
-
-            <Setter Property="FontSize"
-            Value="28"/>
-
-            <Setter Property="FontFamily"
-        Value="C:\Katz-work\College\Курсовая\Katastata\Assets\Fonts\Ledger-Regular.ttf#Ledger"/>
-
-            <Setter Property="BorderThickness"
-        Value="0"/>
-
-        </Style>
-
-    </Window.Resources>
-
-    <Grid Background="{StaticResource BrownBack1}">
+    <Grid Background="{DynamicResource BlackBack1}">
        
 
         <Grid.ColumnDefinitions>
@@ -148,16 +40,15 @@
                    Margin="75 25"
                    Grid.Row="0"/>
 
-            <RadioButton x:Name="MainButton"
+            <Button x:Name="MainButton"
                     Grid.Row="1"
                     Content="Главная" 
-                    IsChecked="True" 
                     BorderBrush="{x:Null}" 
                     Background="{StaticResource RedBack1}"
                     Height="80"
                     Width="384"/>
 
-            <RadioButton x:Name="OptimizeButton"
+            <Button x:Name="OptimizeButton"
                          Grid.Row="2"
                          Content="Оптимизация" 
                          BorderBrush="{x:Null}" 
@@ -165,7 +56,7 @@
                          Height="80"
                          Width="384"/>
 
-            <RadioButton x:Name="SettingButton"
+            <Button x:Name="SettingButton"
                          Grid.Row="3"
                          Content="Настройки" 
                          BorderBrush="{x:Null}" 
@@ -173,7 +64,7 @@
                          Height="80"
                          Width="384"/>
             
-            <RadioButton x:Name="SystemButton"
+            <Button x:Name="SystemButton"
                          Grid.Row="4"
                          Content="Система"  
                          BorderBrush="{x:Null}" 

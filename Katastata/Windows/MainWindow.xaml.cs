@@ -22,6 +22,15 @@ namespace Katastata
             InitializeComponent();
         }
 
+        private void ApplyTheme(string themeName)
+        {
+            Application.Current.Resources.MergedDictionaries.Clear();
+
+            var themeUri = new Uri($"Assets/Themes/{themeName}.xaml", UriKind.Relative);
+            var themeDict = new ResourceDictionary { Source = themeUri };
+
+            Application.Current.Resources.MergedDictionaries.Add(themeDict);
+        }
 
         private void CloseButton(object sender, RoutedEventArgs e)
         {
