@@ -1,0 +1,121 @@
+﻿<Window x:Class="Katastata.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Katastata"
+        xmlns:view="clr-namespace:Katastata.Views"
+        
+        mc:Ignorable="d"
+        Title="Katastata" 
+        Height="1040" Width="1920"
+        Icon="/Assets/Logo/MainLogo.png" WindowStyle="None" ResizeMode="NoResize" Cursor="" WindowStartupLocation="CenterScreen">
+
+
+    <Grid Background="{DynamicResource BlackBack1}">
+       
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="382"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="50"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" 
+              Background="{StaticResource RedBack1}">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+
+
+            <Image Source="/Assets/Logo/TextLogo.png" 
+                   Margin="75 25"
+                   Grid.Row="0"/>
+
+            <Button x:Name="MainButton"
+                    Grid.Row="1"
+                    Content="Главная" 
+                    BorderBrush="{x:Null}" 
+                    Background="{StaticResource RedBack1}"
+                    Height="80"
+                    Width="384"/>
+
+            <Button x:Name="OptimizeButton"
+                         Grid.Row="2"
+                         Content="Оптимизация" 
+                         BorderBrush="{x:Null}" 
+                         Background="{StaticResource RedBack1}"
+                         Height="80"
+                         Width="384"/>
+
+            <Button x:Name="SettingButton"
+                         Grid.Row="3"
+                         Content="Настройки" 
+                         BorderBrush="{x:Null}" 
+                         Background="{StaticResource RedBack1}"
+                         Height="80"
+                         Width="384"/>
+            
+            <Button x:Name="SystemButton"
+                         Grid.Row="4"
+                         Content="Система"  
+                         BorderBrush="{x:Null}" 
+                         Background="{StaticResource RedBack1}"
+                         Height="80"
+                         Width="384"/>
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="7"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Margin="25">
+
+                <Ellipse Width="50"
+                         Height="50">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="/Assets/Logo/mainlogo.png"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+
+                <Button x:Name="Login"
+                        Content="Войти в аккаунт" 
+                        Click="Login_Click"
+                        BorderBrush="{x:Null}" 
+                        Background="{StaticResource RedBack1}"
+                        Margin="25 0"
+                        />
+
+
+            </StackPanel>
+            
+
+        </Grid>
+
+        <view:MainMenu Grid.Column="1">
+            
+        </view:MainMenu>
+
+        <Button Grid.Column="2" 
+                Click="CloseButton"
+                VerticalAlignment="Top" 
+                Margin="0 25 25 25"
+                Width="25"
+                Height="25"
+                BorderBrush="{x:Null}">
+            <Button.Background>
+                <ImageBrush ImageSource="/Assets/Logo/mainlogo.png" 
+                            Stretch="UniformToFill"/>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+    
+</Window>
