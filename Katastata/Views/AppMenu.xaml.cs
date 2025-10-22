@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace Katastata.Views
 {
     /// <summary>
-    /// Логика взаимодействия для MainMenu.xaml
+    /// Логика взаимодействия для AppMenu.xaml
     /// </summary>
-    public partial class MainMenu : UserControl
+    public partial class AppMenu : UserControl
     {
-        public MainMenu()
+        public AppMenu()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
