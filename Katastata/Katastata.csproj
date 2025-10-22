@@ -29,7 +29,6 @@
   <ItemGroup>
     <Folder Include="Assets\Icons\" />
     <Folder Include="Assets\Themes\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
