@@ -14,10 +14,10 @@ namespace Katastata.Models
         public TimeSpan TotalTime { get; set; }
         public DateTime LastLaunched {  get; set; }
 
-        public void UpdateFromSession(Session session)
+        public void UpdateFromSession(Sessions sessions)
         {
-            TotalTime += session.GetDuration();
-            LastLaunched = session.StartTime;
+            TotalTime += sessions.GetDuration();
+            LastLaunched = sessions.StartTime;
         }
     }
 }

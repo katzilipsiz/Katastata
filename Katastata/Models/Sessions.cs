@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Katastata.Models
 {
-    public class Session
+    public class Sessions
     {
         public int Id { get; set; }
         public int UserId { get; set; }

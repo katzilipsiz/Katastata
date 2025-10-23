@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Katastata.Models
 {
-    public class Category
+    public class Categories
     {
         public int Id { get; set; }
-        public string Name { get; set; } = "Новая категория";
+        public string Title { get; set; } = "Новая категория";
         public string Description { get; set; } = string.Empty;
         public string IconPath { get; set; } = string.Empty;
     }

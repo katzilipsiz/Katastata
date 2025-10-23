@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Katastata.Models
 {
-    public class User
+    public class Users
     {
         public int Id { get; set; }
         public string Login { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public string HashPassword { get; set; } = string.Empty;
         public DateTime RegisteredAt { get; set; } = DateTime.Now;
         public int SettingId { get; set; }
         public int SystemId { get; set; }
