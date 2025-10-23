@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Katastata.Models
 {
-    internal class Settings
+    public class Settings
     {
+        public int Id { get; set; }
+        public int ThemeId { get; set; }
+        public int TimeLimit { get; set; }
     }
 }

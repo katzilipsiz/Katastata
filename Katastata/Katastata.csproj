@@ -24,16 +24,19 @@
     <None Remove="Assets\Logo\mainlogo.png" />
     <None Remove="Assets\Logo\TextLogo.png" />
     <None Remove="Assets\Templates\App1.png" />
+    <None Remove="Katastata.db" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Assets\Icons\" />
     <Folder Include="Assets\Themes\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.10" />
+    <PackageReference Include="System.Data.SQLite" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +44,9 @@
     <Resource Include="Assets\Logo\mainlogo.png" />
     <Resource Include="Assets\Logo\TextLogo.png" />
     <Resource Include="Assets\Templates\App1.png" />
+    <Resource Include="Katastata.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

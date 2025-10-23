@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace Katastata.Models
 {
-    public class Session
+    public class Statistic
     {
         public int Id { get; set; }
         public int UserId { get; set; }
         public int ApplicationId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
-        public TimeSpan Duration { get; set; }
+        public TimeSpan TotalTime { get; set; }
+        public DateTime LastLaunched {  get; set; }
 
-
-        public TimeSpan GetDuration()
+        public void UpdateFromSession(Session session)
         {
-            return EndTime.HasValue ? EndTime.Value - StartTime : DateTime.Now - StartTime;
+            TotalTime += session.GetDuration();
+            LastLaunched = session.StartTime;
         }
     }
 }
