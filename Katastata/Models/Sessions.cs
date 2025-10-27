@@ -8,17 +8,17 @@ namespace Katastata.Models
 {
     public class Sessions
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public int ApplicationId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
-        public TimeSpan Duration { get; set; }
+        public int id { get; set; }
+        public int user_id { get; set; }
+        public int app_id { get; set; }
+        public DateTime begin_at { get; set; }
+        public DateTime? end_at { get; set; }
+        public TimeSpan duration { get; set; }
 
 
         public TimeSpan GetDuration()
         {
-            return EndTime.HasValue ? EndTime.Value - StartTime : DateTime.Now - StartTime;
+            return end_at.HasValue ? end_at.Value - begin_at : DateTime.Now - begin_at;
         }
     }
 }

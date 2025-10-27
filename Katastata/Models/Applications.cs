@@ -5,12 +5,12 @@ namespace Katastata.Models
 {
     public class Applications
     {
-        public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string Process { get; set; } = string.Empty;
-        public string? Description { get; set; }
-        public string? Notes { get; set; }
-        public string IconPath { get; set; } = string.Empty;
-        public int CategoryId { get; set; } = 1;
+        public int id { get; set; }
+        public string title { get; set; } = string.Empty;
+        public string process { get; set; } = string.Empty;
+        public int category_id { get; set; } = 1;
+        public string? icon_path { get; set; }
+        public string? description { get; set; }
+        public string? notes { get; set; }
     }
 }

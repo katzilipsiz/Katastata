@@ -8,11 +8,11 @@ namespace Katastata.Models
 {
     public class SystemInfo
     {
-        public int Id { get; set; }
-        public string Gpu { get; set; } = string.Empty;
-        public string Cpu { get; set; } = string.Empty;
-        public string MotherBoard { get; set; } = string.Empty;
-        public string Ram { get; set; } = string.Empty;
-        public string OC { get; set; } = string.Empty;
+        public int id { get; set; }
+        public string gpu { get; set; } = string.Empty;
+        public string cpu { get; set; } = string.Empty;
+        public string ram { get; set; } = string.Empty;
+        public string mb { get; set; } = string.Empty;
+        public string oc { get; set; } = string.Empty;
     }
 }

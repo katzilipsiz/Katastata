@@ -8,12 +8,11 @@ namespace Katastata.Models
 {
     public class Users
     {
-        public int Id { get; set; }
-        public string Login { get; set; } = string.Empty;
-        public string HashPassword { get; set; } = string.Empty;
-        public DateTime RegisteredAt { get; set; } = DateTime.Now;
-        public int SettingId { get; set; }
-        public int SystemId { get; set; }
+        public int id { get; set; }
+        public string loginLogin { get; set; } = string.Empty;
+        public string hash_password{ get; set; } = string.Empty;
+        public DateTime created_at { get; set; } = DateTime.Now;
+        public int system_id { get; set; }
 
 
     }

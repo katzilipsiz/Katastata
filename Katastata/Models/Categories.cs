@@ -10,9 +10,9 @@ namespace Katastata.Models
 {
     public class Categories
     {
-        public int Id { get; set; }
-        public string Title { get; set; } = "Новая категория";
-        public string Description { get; set; } = string.Empty;
-        public string IconPath { get; set; } = string.Empty;
+        public int id { get; set; }
+        public string title { get; set; } = "Новая категория";
+        public string description { get; set; } = string.Empty;
+        public string icon_path { get; set; } = string.Empty;
     }
 }

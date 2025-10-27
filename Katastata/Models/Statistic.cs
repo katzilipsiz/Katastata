@@ -8,16 +8,16 @@ namespace Katastata.Models
 {
     public class Statistic
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public int ApplicationId { get; set; }
-        public TimeSpan TotalTime { get; set; }
-        public DateTime LastLaunched {  get; set; }
+        public int id { get; set; }
+        public int app_id{ get; set; }
+        public int user_id{ get; set; }
+        public DateTime last_launch_at {  get; set; }
+        public TimeSpan total_time{ get; set; }
 
         public void UpdateFromSession(Sessions sessions)
         {
-            TotalTime += sessions.GetDuration();
-            LastLaunched = sessions.StartTime;
+            total_time += sessions.GetDuration();
+            last_launch_at = sessions.begin_at;
         }
     }
 }
