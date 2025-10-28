@@ -1,6 +1,7 @@
 ﻿<Window x:Class="Katastata.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
         Title="Katastata — Статистика использования" Height="600" Width="800">
     <Grid Margin="20">
         <StackPanel>
@@ -34,6 +35,18 @@
                 </ListView>
             </GroupBox>
 
+            <GroupBox Header="Все приложения" Margin="0,0,0,20">
+                <ListView x:Name="ApplicationsList">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Приложение" Width="200" DisplayMemberBinding="{Binding app.title}"/>
+                            <GridViewColumn Header="Время использования" Width="150" DisplayMemberBinding="{Binding totalTime}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+
+
             <GroupBox Header="Итого" Margin="0,0,0,20">
                 <StackPanel>
                     <TextBlock>
@@ -47,6 +60,6 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
-        
+
     </Grid>
 </Window>

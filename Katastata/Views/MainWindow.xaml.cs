@@ -43,6 +43,32 @@ namespace Katastata.Views
             }
         }
 
+        private void EnsureUserExists()
+        {
+            try
+            {
+                // Проверяем, есть ли пользователь с _userId в БД
+                var userCount = _db.ExecuteScalar<int>(
+                    "SELECT COUNT(*) FROM Users WHERE user_id = @UserId",
+                    new { UserId = _userId });
+
+                if (userCount == 0)
+                {
+                    // Создаём пользователя, если его нет
+                    _db.Execute(
+                        "INSERT INTO Users (user_id, username) VALUES (@UserId, @Username)",
+                        new { UserId = _userId, Username = "DefaultUser" });
+
+                    Debug.WriteLine($"Создан пользователь с ID={_userId}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при проверке/создании пользователя: {ex.Message}", ex);
+            }
+        }
+
+
         // Загрузка статистики использования
         private void LoadStatistics()
         {
@@ -120,11 +146,14 @@ namespace Katastata.Views
             ScanAndSaveApplications();
         }
 
-        // Сканирование и сохранение установленных программ
         private void ScanAndSaveApplications()
         {
             try
             {
+                // 1. Убедимся, что пользователь существует
+                EnsureUserExists();
+
+                // 2. Сканируем программы
                 var appsFromPc = _installedAppsService.GetInstalledApplications();
 
                 foreach (var app in appsFromPc)
@@ -158,5 +187,6 @@ namespace Katastata.Views
                     MessageBoxImage.Error);
             }
         }
+
     }
 }

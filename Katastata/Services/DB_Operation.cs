@@ -65,5 +65,31 @@ namespace Katastata.Services
                 }
             }
         }
+
+        public void Execute(string sql, object parameters = null)
+        {
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = sql;
+
+                    if (parameters != null)
+                    {
+                        // Привязываем параметры (если есть)
+                        foreach (var prop in parameters.GetType().GetProperties())
+                        {
+                            command.Parameters.Add(
+                                new SQLiteParameter(prop.Name, prop.GetValue(parameters))
+                            );
+                        }
+                    }
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
 }
