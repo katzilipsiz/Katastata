@@ -26,6 +26,13 @@
                     Width="120"/>
         </StackPanel>
 
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+            <Button Content="Вход" Width="100" Margin="5" Command="{Binding ShowLoginCommand}"/>
+            <Button Content="Регистрация" Width="100" Margin="5" Command="{Binding ShowRegisterCommand}"/>
+        </StackPanel>
+
+        <ContentControl Content="{Binding CurrentPage}" Margin="0,50,0,0"/>
+
         <!-- Список программ -->
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Programs}"
@@ -49,5 +56,35 @@
                                     Binding="{Binding Category.Name}" Width="Auto"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <DataGrid Grid.Row="2"
+          ItemsSource="{Binding Sessions}"
+          AutoGenerateColumns="False"
+          Background="#252526"
+          Foreground="White"
+          HeadersVisibility="Column"
+          RowBackground="#2D2D30"
+          AlternatingRowBackground="#333337"
+          BorderThickness="0"
+          CanUserAddRows="False"
+          CanUserDeleteRows="False"
+          IsReadOnly="True"
+          Margin="0,10,0,0"
+          Height="200">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Программа" 
+                                    Binding="{Binding ProgramName}" Width="*"/>
+                <DataGridTextColumn Header="Категория" 
+                                    Binding="{Binding CategoryName}" Width="Auto"/>
+                <DataGridTextColumn Header="Начало" 
+                                    Binding="{Binding StartTime}" Width="*"/>
+                <DataGridTextColumn Header="Конец" 
+                                    Binding="{Binding EndTime}" Width="*"/>
+                <DataGridTextColumn Header="Длительность" 
+                                    Binding="{Binding Duration}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
     </Grid>
 </Window>

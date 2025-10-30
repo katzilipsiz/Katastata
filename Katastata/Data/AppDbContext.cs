@@ -42,6 +42,13 @@ namespace Katastata.Data
                 .WithOne(p => p.Category)
                 .HasForeignKey(p => p.CategoryId);
 
+            modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = 1,
+                    Name = "Не классифицировано"
+                }
+            );
         }
     }
 }
