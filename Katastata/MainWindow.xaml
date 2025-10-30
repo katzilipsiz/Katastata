@@ -1,0 +1,53 @@
+﻿<Window x:Class="Katastata.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Katastata — Мониторинг программ"
+        Width="1200" Height="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#1E1E1E">
+
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя панель -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0 0 0 10">
+            <Button Content="Сканировать"
+                    Command="{Binding ScanCommand}"
+                    Padding="10 5"
+                    Background="#007ACC"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    Width="120"/>
+        </StackPanel>
+
+        <!-- Список программ -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Programs}"
+                  AutoGenerateColumns="False"
+                  Background="#252526"
+                  Foreground="White"
+                  HeadersVisibility="Column"
+                  RowBackground="#2D2D30"
+                  AlternatingRowBackground="#333337"
+                  BorderThickness="0"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" 
+                                    Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header="Путь" 
+                                    Binding="{Binding Path}" Width="2*"/>
+                <DataGridTextColumn Header="Категория" 
+                                    Binding="{Binding Category.Name}" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
