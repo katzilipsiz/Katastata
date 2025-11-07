@@ -37,6 +37,8 @@ namespace Katastata
             var viewModel = new AppMonitorService(dbContext); // передаём только контекст
 
             DataContext = viewModel;
+
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -58,5 +60,31 @@ namespace Katastata
             }
 
         }
+
+        private void ApplyTheme(string themePath)
+        {
+            var themeDict = new ResourceDictionary
+            {
+                Source = new Uri(themePath, UriKind.Relative)
+            };
+
+            Application.Current.Resources.MergedDictionaries.Clear();
+            Application.Current.Resources.MergedDictionaries.Add(themeDict);
+        }
+
+        private void LightTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ApplyTheme("Assets/Themes/Light.xaml");
+
+        }
+
+        // Переключение на тёмную тему
+        private void DarkTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ApplyTheme("Assets/Themes/Dark.xaml");
+
+        }
+
+        
     }
 }

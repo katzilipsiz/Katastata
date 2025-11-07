@@ -1,4 +1,112 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Основные цвета -->
+    <Color x:Key="BaseBackgroundColor">#FFFFFFFF</Color>
+    <Color x:Key="BaseForegroundColor">#FFFFFF</Color>
+    <Color x:Key="AccentColor">#FFE67300</Color>
+    <!-- Единый оранжевый -->
+    <Color x:Key="BorderColor">#FFDDDDDD</Color>
+    <Color x:Key="DisabledColor">#FFAAAAAA</Color>
+
+
+    <!-- Кисти -->
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="{StaticResource BaseBackgroundColor}"/>
+    <SolidColorBrush x:Key="TextForegroundBrush" Color="{StaticResource BaseForegroundColor}"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
+    <SolidColorBrush x:Key="DisabledBrush" Color="{StaticResource DisabledColor}"/>
+
+
+    <!-- Дополнительные ресурсы для интерфейса -->
+    <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="DataGridBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="RowBackgroundBrush" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="AlternatingRowBackgroundBrush" Color="#EAEAEA"/>
+    <SolidColorBrush x:Key="HeaderForegroundBrush" Color="#666666"/>
+
+
+    <!-- Стили кнопок -->
+    <Style x:Key="ThemeButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource WindowBackgroundBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="15 8"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="38"/>
+    </Style>
+
+    <Style x:Key="AppButtonStyle" TargetType="Button" BasedOn="{StaticResource ThemeButtonStyle}">
+        <Setter Property="Width" Value="150"/>
+
+        <Style.Triggers>
+            <!-- Анимация при наведении -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation 
+                            Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                            To="#FFD46400"
+                            Duration="0:0:0.2"
+                            FillBehavior="HoldEnd"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                            Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                            To="{StaticResource AccentColor}"
+                            Duration="0:0:0.3"
+                            FillBehavior="HoldEnd"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+
+            <!-- Анимация при нажатии -->
+            <Trigger Property="IsPressed" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                            Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                            To="0.95"
+                            Duration="0:0:0.1"/>
+                            <DoubleAnimation
+                            Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                            To="0.95"
+                            Duration="0:0:0.1"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                            Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                            To="1.0"
+                            Duration="0:0:0.2"/>
+                            <DoubleAnimation
+                            Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                            To="1.0"
+                            Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </Style.Triggers>
+
+        <!-- Трансформация для эффекта нажатия -->
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        <Setter Property="RenderTransform">
+            <ScaleTransform/>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
