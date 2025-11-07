@@ -10,6 +10,6 @@ namespace Katastata.Models
     {
         public int Id { get; set; } //id категории
         public string Name { get; set; } //название категории
-        public ICollection<Program> Programs { get; set; } //программы в категории
+        public ICollection<Program>? Programs { get; set; } //программы в категории
     }
 }

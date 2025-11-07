@@ -2,89 +2,152 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Katastata — Мониторинг программ"
-        Width="1200" Height="800"
+        Width="950" Height="600"
         WindowStartupLocation="CenterScreen"
         Background="#1E1E1E">
 
-    <Grid Margin="20">
+    <Window.Resources>
+        <!-- Эффект тени -->
+        <DropShadowEffect x:Key="SoftShadow"
+                          BlurRadius="12"
+                          ShadowDepth="2"
+                          Opacity="0.4"
+                          Color="Black"/>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <!-- Стиль кнопки с анимацией -->
+        <Style x:Key="AnimatedButton" TargetType="Button">
+            <Setter Property="Background" Value="#2D2D30"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15 8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8"
+                                      ShadowDepth="2"
+                                      Opacity="0.3"
+                                      Color="Black"/>
+                </Setter.Value>
+            </Setter>
 
-        <!-- Верхняя панель -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0 0 0 10">
-            <Button Content="Сканировать"
-                    Command="{Binding ScanCommand}"
-                    Padding="10 5"
-                    Background="#007ACC"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    BorderThickness="0"
-                    Cursor="Hand"
-                    Width="120"/>
-        </StackPanel>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-            <Button Content="Вход" Width="100" Margin="5" Command="{Binding ShowLoginCommand}"/>
-            <Button Content="Регистрация" Width="100" Margin="5" Command="{Binding ShowRegisterCommand}"/>
-        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#007ACC"
+                                                            Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#2D2D30"
+                                                            Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
-        <ContentControl Content="{Binding CurrentPage}" Margin="0,50,0,0"/>
+    <Grid>
+        <!-- Верхний бар -->
+        <Border Background="#005A9E"
+                Height="50"
+                VerticalAlignment="Top">
+            <DockPanel>
+                <TextBlock Text="Katastata"
+                           Foreground="White"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="15,0,0,0" />
+            </DockPanel>
+        </Border>
 
-        <!-- Список программ -->
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Programs}"
-                  AutoGenerateColumns="False"
-                  Background="#252526"
-                  Foreground="White"
-                  HeadersVisibility="Column"
-                  RowBackground="#2D2D30"
-                  AlternatingRowBackground="#333337"
-                  BorderThickness="0"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  IsReadOnly="True">
+        <!-- Контент -->
+        <Grid Margin="20,70,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Название" 
-                                    Binding="{Binding Name}" Width="*"/>
-                <DataGridTextColumn Header="Путь" 
-                                    Binding="{Binding Path}" Width="2*"/>
-                <DataGridTextColumn Header="Категория" 
-                                    Binding="{Binding Category.Name}" Width="Auto"/>
-            </DataGrid.Columns>
-        </DataGrid>
+            <!-- Панель управления -->
+            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,15">
+                <Button Content="⟳ Сканировать"
+                        Command="{Binding ScanCommand}"
+                        Style="{StaticResource AnimatedButton}"
+                        Background="#007ACC"/>
 
-        <DataGrid Grid.Row="2"
-          ItemsSource="{Binding Sessions}"
-          AutoGenerateColumns="False"
-          Background="#252526"
-          Foreground="White"
-          HeadersVisibility="Column"
-          RowBackground="#2D2D30"
-          AlternatingRowBackground="#333337"
-          BorderThickness="0"
-          CanUserAddRows="False"
-          CanUserDeleteRows="False"
-          IsReadOnly="True"
-          Margin="0,10,0,0"
-          Height="200">
+                <Button Content="🕓 Сессии"
+                        Style="{StaticResource AnimatedButton}"
+                        Margin="10,0,0,0"/>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Программа" 
-                                    Binding="{Binding ProgramName}" Width="*"/>
-                <DataGridTextColumn Header="Категория" 
-                                    Binding="{Binding CategoryName}" Width="Auto"/>
-                <DataGridTextColumn Header="Начало" 
-                                    Binding="{Binding StartTime}" Width="*"/>
-                <DataGridTextColumn Header="Конец" 
-                                    Binding="{Binding EndTime}" Width="*"/>
-                <DataGridTextColumn Header="Длительность" 
-                                    Binding="{Binding Duration}" Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                <Button Content="⚙ Настройки"
+                        Style="{StaticResource AnimatedButton}"
+                        Margin="10,0,0,0"/>
+                <Button Content="Авторизация"
+                        Click="AuthClick"
+                        Style="{StaticResource AnimatedButton}"
+                        Margin="10,0,0,0"/>
+            </StackPanel>
 
+            <!-- Таблица -->
+            <Border Grid.Row="1"
+                    Background="#252526"
+                    CornerRadius="8"
+                    Padding="10"
+                    Effect="{StaticResource SoftShadow}">
+                <DataGrid ItemsSource="{Binding Programs}"
+                          AutoGenerateColumns="False"
+                          Background="#252526"
+                          Foreground="White"
+                          HeadersVisibility="Column"
+                          RowBackground="#2D2D30"
+                          AlternatingRowBackground="#333337"
+                          BorderThickness="0"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          IsReadOnly="True"
+                          GridLinesVisibility="None"
+                          RowHeight="35">
+
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007ACC"/>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="2*"/>
+                        <DataGridTextColumn Header="Путь" Binding="{Binding Path}" Width="3*"/>
+                        <DataGridTextColumn Header="Категория" Binding="{Binding Category.Name}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

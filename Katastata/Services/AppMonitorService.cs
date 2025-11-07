@@ -23,15 +23,6 @@ namespace Katastata.Services
                 .Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)) // Только видимые окна
                 .ToList();
 
-            // Убедимся, что дефолтная категория есть
-            var defaultCategory = _context.Categories.FirstOrDefault(c => c.Id == 1);
-            if (defaultCategory == null)
-            {
-                defaultCategory = new Category { Id = 1, Name = "Не классифицировано" };
-                _context.Categories.Add(defaultCategory);
-                _context.SaveChanges();
-            }
-
             foreach (var process in processes)
             {
                 try
@@ -54,7 +45,7 @@ namespace Katastata.Services
                     {
                         Name = string.IsNullOrEmpty(process.ProcessName) ? "Unknown" : process.ProcessName,
                         Path = path,
-                        CategoryId = defaultCategory.Id
+                        CategoryId = 1
                     };
 
                     _context.Programs.Add(newProgram);

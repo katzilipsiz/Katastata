@@ -10,7 +10,6 @@ namespace Katastata.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        // -------------------- Текущая страница (Login/Register) --------------------
         private UserControl _currentPage;
         public UserControl CurrentPage
         {
@@ -21,17 +20,14 @@ namespace Katastata.ViewModels
         public RelayCommand ShowLoginCommand { get; set; }
         public RelayCommand ShowRegisterCommand { get; set; }
 
-        // -------------------- Программы и сессии --------------------
         public ObservableCollection<Program> Programs { get; set; } = new ObservableCollection<Program>();
         public ObservableCollection<SessionViewModel> Sessions { get; set; } = new ObservableCollection<SessionViewModel>();
 
         private readonly AppMonitorService _monitorService;
         private readonly int _currentUserId = 1; // временно фиксируем пользователя
 
-        // -------------------- Команды --------------------
         public ICommand ScanCommand { get; set; }
 
-        // -------------------- Конструктор --------------------
         public MainViewModel(AppMonitorService monitorService)
         {
             _monitorService = monitorService;
@@ -51,7 +47,6 @@ namespace Katastata.ViewModels
             LoadSessions();
         }
 
-        // -------------------- Методы переключения страниц --------------------
         private void ShowLogin()
         {
             CurrentPage = new LoginPage
@@ -67,8 +62,6 @@ namespace Katastata.ViewModels
                 DataContext = new UserViewModel(_monitorService.GetDbContext())
             };
         }
-
-        // -------------------- Сканирование и обновление --------------------
         private void ScanPrograms()
         {
             // 1. Сканируем программы
@@ -87,7 +80,6 @@ namespace Katastata.ViewModels
             LoadSessions();
         }
 
-        // -------------------- Загрузка программ --------------------
         private void LoadPrograms()
         {
             Programs.Clear();
@@ -97,7 +89,6 @@ namespace Katastata.ViewModels
             }
         }
 
-        // -------------------- Загрузка сессий --------------------
         private void LoadSessions()
         {
             Sessions.Clear();

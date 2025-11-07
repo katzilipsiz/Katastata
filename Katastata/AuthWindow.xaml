@@ -1,0 +1,81 @@
+﻿<Window x:Class="Katastata.AuthWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Авторизация — Katastata"
+        Width="420" Height="420"
+        Background="#1E1E1E"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+
+    <Border CornerRadius="12" Background="#252526" Padding="20" Margin="10" >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Katastata"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       Foreground="#00BFFF"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
+
+            <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                <Label FontSize="14"
+                       Content="Логин"
+                       Foreground="White"
+                       BorderThickness="0"/>
+                <TextBox x:Name="UsernameBox" 
+                         FontSize="14"
+                         Padding="8"
+                         Background="#333337"
+                         Foreground="White"
+                         BorderThickness="0"
+                         Height="35"/>
+
+                <Label FontSize="14"
+                       Content="Пароль"
+                       Foreground="White"
+                       BorderThickness="0"/>
+                <PasswordBox x:Name="PasswordBox"
+                             FontSize="14"
+                             Padding="8"
+                             Background="#333337"
+                             Foreground="White"
+                             BorderThickness="0"
+                             Height="35"/>
+
+                <TextBlock x:Name="ErrorText"
+                           Foreground="OrangeRed"
+                           FontWeight="Bold"
+                           TextAlignment="Center"
+                           Visibility="Collapsed"/>
+
+                <Button Content="Войти"
+                        Click="Login_Click"
+                        Background="#007ACC"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        Padding="8"
+                        Cursor="Hand"
+                        Margin="0,10,0,0"/>
+
+                <Separator Margin="0,10,0,10"/>
+
+                <Button Content="Регистрация"
+                        Click="Register_Click"
+                        Background="#333337"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        Padding="8"
+                        Cursor="Hand"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
+
+
