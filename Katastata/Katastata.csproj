@@ -8,4 +8,51 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Assets\Themes\Dark\**" />
+    <Compile Remove="Assets\Themes\Light\**" />
+    <EmbeddedResource Remove="Assets\Themes\Dark\**" />
+    <EmbeddedResource Remove="Assets\Themes\Light\**" />
+    <None Remove="Assets\Themes\Dark\**" />
+    <None Remove="Assets\Themes\Light\**" />
+    <Page Remove="Assets\Themes\Dark\**" />
+    <Page Remove="Assets\Themes\Light\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Fonts\Ledger-Regular.ttf" />
+    <None Remove="Assets\Logo\mainlogo.png" />
+    <None Remove="Assets\Logo\TextLogo.png" />
+    <None Remove="Assets\Templates\App1.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Icons\" />
+    <Folder Include="Assets\Themes\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+    <PackageReference Include="System.Data.SQLite" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\Ledger-Regular.ttf" />
+    <Resource Include="Assets\Logo\mainlogo.png" />
+    <Resource Include="Assets\Logo\TextLogo.png" />
+    <Resource Include="Assets\Templates\App1.png" />
+  </ItemGroup>
+
 </Project>
