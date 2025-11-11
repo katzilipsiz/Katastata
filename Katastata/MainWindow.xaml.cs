@@ -11,23 +11,19 @@ namespace Katastata
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly AppDbContext _db;
-        private readonly AppMonitorService _service;
-
-        public MainWindow()
-        {
-            InitializeComponent();
-            DataContext = new MainViewModel(); // или ViewModelLocator, если ты его используешь
-        }
-
         public MainWindow(int userId, DbContextOptions<AppDbContext> options)
         {
             InitializeComponent();
 
-            _db = new AppDbContext(options);
-            _service = new AppMonitorService(_db);
+            var db = new AppDbContext(options);
+            var service = new AppMonitorService(db);
+            DataContext = new MainViewModel(service, userId);
+        }
 
-            DataContext = new MainViewModel(_service, userId);
+        // Для дизайнера оставим пустой ctor
+        public MainWindow()
+        {
+            InitializeComponent();
         }
 
         private void ApplyTheme(string themePath)

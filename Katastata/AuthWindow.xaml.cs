@@ -11,7 +11,7 @@ namespace Katastata
         private readonly AppDbContext _db;
         private readonly UserViewModel _vm;
 
-        public int LoggedInUserId { get; private set; }
+        public int LoggedInUserId { get; private set; } = -1;
 
         public AuthWindow(DbContextOptions<AppDbContext> options)
         {
@@ -20,36 +20,40 @@ namespace Katastata
             _db = new AppDbContext(options);
             _vm = new UserViewModel(_db);
 
-            // Когда VM вызывает событие — окно реагирует
+            // Подписываемся на событие LoginSuccessful — VM вызовет его при успехе
             _vm.LoginSuccessful += OnLoginSuccessful;
 
-            // Показываем Login по умолчанию
+            // Показываем страницу логина по умолчанию:
             ShowLoginPage(null, null);
+
+            DataContext = _vm;
         }
 
         private void OnLoginSuccessful(int userId)
         {
-            LoggedInUserId = userId;
-            // Закрываем окно как диалог (в UI-потоке)
+            // Отладочное сообщение — если понадобится
             Dispatcher.Invoke(() =>
             {
-                DialogResult = true;
+                LoggedInUserId = userId;
+                // Устанавливаем DialogResult = true только когда окно открыто как диалог
+                DialogResult = true; // <-- должно сработать только из ShowDialog
                 Close();
             });
         }
 
+        // Методы переключения контента — убедись, что в XAML есть ContentControl с x:Name="ContentArea"
         private void ShowLoginPage(object sender, RoutedEventArgs e)
         {
-            var page = new LoginPage();
-            page.DataContext = _vm;
-            ContentArea.Content = page;
+            var login = new LoginPage();
+            login.DataContext = _vm;
+            ContentArea.Content = login;
         }
 
         private void ShowRegisterPage(object sender, RoutedEventArgs e)
         {
-            var page = new RegisterPage();
-            page.DataContext = _vm;
-            ContentArea.Content = page;
+            var reg = new RegisterPage();
+            reg.DataContext = _vm;
+            ContentArea.Content = reg;
         }
     }
 }

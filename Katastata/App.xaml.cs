@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using Katastata.Data;
@@ -7,33 +8,33 @@ namespace Katastata
 {
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
+        private const string DbFileName = "katastata.db";
 
+        private void App_OnStartup(object sender, StartupEventArgs e)
+        {
+            // Создаём/инициируем БД (путь в каталоге с exe)
+            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DbFileName);
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseSqlite("Data Source=appdata.db")
+                .UseSqlite($"Data Source={dbPath}")
                 .Options;
 
-            // Ensure DB exists
+            // ensure db exist
             using (var ctx = new AppDbContext(options))
-            {
                 ctx.Database.EnsureCreated();
-            }
 
-            // Open auth dialog
-            var auth = new AuthWindow(options);
-            bool? res = auth.ShowDialog();
+            // Показываем окно авторизации как диалог — важно ShowDialog()
+            var auth = new AuthWindow(options); // см. конструктор ниже
+            var dialogResult = auth.ShowDialog();
 
-            if (res == true)
+            if (dialogResult == true)
             {
-                int userId = auth.LoggedInUserId;
-                var main = new MainWindow(userId, options);
-                main.Show();
+                // auth.LoggedInUserId должен быть установлен при успешной авторизации
+                var mainWindow = new MainWindow(auth.LoggedInUserId, options);
+                mainWindow.Show();
             }
             else
             {
-                Current.Shutdown();
+                Shutdown(); // если пользователь закрыл/отказался
             }
         }
     }
