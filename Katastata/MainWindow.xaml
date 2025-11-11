@@ -56,6 +56,10 @@
                         Command="{Binding ShowSessionsCommand}"
                         Style="{DynamicResource ThemeButtonStyle}"
                         Margin="10,0,0,0"/>
+                <Button Content="📊 Статистика"
+                        Command="{Binding ShowStatisticsCommand}"
+                        Style="{DynamicResource ThemeButtonStyle}"
+                        Margin="10,0,0,0"/>
                 <Button Content="⚙ Настройки"
                         Style="{DynamicResource ThemeButtonStyle}"
                         Margin="10,0,0,0"/>

@@ -12,20 +12,23 @@ namespace Katastata.ViewModels
         private readonly int _userId;
         public ObservableCollection<Program> Programs { get; } = new ObservableCollection<Program>();
         public RelayCommand ScanCommand { get; }
-        public RelayCommand ShowSessionsCommand { get; }  // Новая команда
+        public RelayCommand ShowSessionsCommand { get; }
+        public RelayCommand ShowStatisticsCommand { get; } 
 
-        public MainViewModel() { } // для дизайнера
+        public MainViewModel() { }
 
         public MainViewModel(AppMonitorService service, int userId)
         {
             _service = service;
             _userId = userId;
             ScanCommand = new RelayCommand(_ => ScanPrograms());
-            ShowSessionsCommand = new RelayCommand(_ => ShowSessions());  // Привязка
+            ShowSessionsCommand = new RelayCommand(_ => ShowSessions());
+            ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics()); 
             LoadPrograms();
             _service.StartMonitoring(_userId);
         }
 
+        // Сканировать программы
         private void ScanPrograms()
         {
             try
@@ -40,6 +43,7 @@ namespace Katastata.ViewModels
             }
         }
 
+        // Показ программ
         private void LoadPrograms()
         {
             Programs.Clear();
@@ -48,11 +52,20 @@ namespace Katastata.ViewModels
                 Programs.Add(p);
         }
 
+        // Показ сессий
         private void ShowSessions()
         {
             var sessions = _service.GetSessions(_userId);
-            var sessionsWindow = new SessionsWindow(sessions);  // Новое окно для сессий
+            var sessionsWindow = new SessionsWindow(sessions);
             sessionsWindow.Show();
+        }
+
+        // Показ статистики
+        private void ShowStatistics()
+        {
+            var stats = _service.GetStatistics(_userId);
+            var statsWindow = new StatisticsWindow(stats);
+            statsWindow.Show();
         }
     }
 }

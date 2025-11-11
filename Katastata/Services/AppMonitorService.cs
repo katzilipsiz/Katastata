@@ -14,9 +14,8 @@ namespace Katastata.Services
     {
         private readonly AppDbContext _context;
         private Dictionary<int, Session> activeSessions = new Dictionary<int, Session>();
-        private System.Timers.Timer monitoringTimer;
+        private System.Timers.Timer monitoringTimer; 
 
-        // P/Invoke для определения активного окна
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
 
@@ -25,16 +24,18 @@ namespace Katastata.Services
 
         public AppMonitorService(AppDbContext context) => _context = context;
 
+        // Начало мониторинга
         public void StartMonitoring(int userId)
         {
             if (monitoringTimer == null)
             {
-                monitoringTimer = new System.Timers.Timer(10000); // Каждые 10 секунд
+                monitoringTimer = new System.Timers.Timer(10000);
                 monitoringTimer.Elapsed += (sender, e) => MonitorProcesses(userId);
                 monitoringTimer.Start();
             }
-        }   
+        }
 
+        // Мониторинг процессов
         private void MonitorProcesses(int userId)
         {
             try
@@ -43,7 +44,6 @@ namespace Katastata.Services
                     .Where(p => !string.IsNullOrEmpty(p.MainWindowTitle))
                     .ToDictionary(p => p.Id, p => p);
 
-                // Завершить закрытые сессии
                 foreach (var sessionId in activeSessions.Keys.ToList())
                 {
                     if (!currentProcesses.ContainsKey(sessionId))
@@ -57,7 +57,6 @@ namespace Katastata.Services
                     }
                 }
 
-                // Определить активное окно
                 IntPtr foregroundWindow = GetForegroundWindow();
                 uint fgProcessId;
                 GetWindowThreadProcessId(foregroundWindow, out fgProcessId);
@@ -77,18 +76,16 @@ namespace Katastata.Services
                             UserId = userId,
                             ProgramId = program.Id,
                             StartTime = DateTime.Now,
-                            EndTime = DateTime.Now // Будет обновлено при закрытии
+                            EndTime = DateTime.Now
                         };
                         activeSessions[fgProcess.Id] = newSession;
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                // Логирование ошибки, если нужно
-            }
+            catch { }
         }
 
+        // Сканирование программ
         private Program AddNewProgram(Process proc)
         {
             if (!_context.Categories.Any(c => c.Id == 1))
@@ -108,6 +105,8 @@ namespace Katastata.Services
             return program;
         }
 
+
+        // Обновление статистики
         private void UpdateStatistics(Session session)
         {
             var stat = _context.Statistics.FirstOrDefault(s => s.UserId == session.UserId && s.ProgramId == session.ProgramId);
@@ -128,6 +127,7 @@ namespace Katastata.Services
             _context.SaveChanges();
         }
 
+        // Сканирование запущенный программ
         public void ScanRunningPrograms(int userId)
         {
             var processes = Process.GetProcesses()
@@ -162,12 +162,13 @@ namespace Katastata.Services
             _context.SaveChanges();
         }
 
+        // Получение списка программ
         public List<Program> GetAllPrograms(int userId)
         {
             return _context.Programs.Include(p => p.Category).ToList();
         }
 
-        // Новый метод для получения сессий пользователя
+        // Получение сессий
         public List<Session> GetSessions(int userId)
         {
             return _context.Sessions
@@ -175,6 +176,16 @@ namespace Katastata.Services
                 .Include(s => s.Program)
                 .ThenInclude(p => p.Category)
                 .OrderByDescending(s => s.StartTime)
+                .ToList();
+        }
+
+        // Получение статистики
+        public List<Statistics> GetStatistics(int userId)
+        {
+            return _context.Statistics
+                .Where(st => st.UserId == userId)
+                .Include(st => st.Program)
+                .OrderByDescending(st => st.TotalTime)
                 .ToList();
         }
     }
