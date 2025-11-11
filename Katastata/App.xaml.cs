@@ -10,31 +10,40 @@ namespace Katastata
     {
         private const string DbFileName = "katastata.db";
 
-        private void App_OnStartup(object sender, StartupEventArgs e)
+        private void Application_Startup(object sender, StartupEventArgs e)
         {
-            // Создаём/инициируем БД (путь в каталоге с exe)
             var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DbFileName);
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseSqlite($"Data Source={dbPath}")
                 .Options;
 
-            // ensure db exist
             using (var ctx = new AppDbContext(options))
                 ctx.Database.EnsureCreated();
 
-            // Показываем окно авторизации как диалог — важно ShowDialog()
-            var auth = new AuthWindow(options); // см. конструктор ниже
-            var dialogResult = auth.ShowDialog();
+            int maxTries = 3;
+            int tries = 0;
+            bool authenticated = false;
 
-            if (dialogResult == true)
+            while (!authenticated && tries < maxTries)
             {
-                // auth.LoggedInUserId должен быть установлен при успешной авторизации
-                var mainWindow = new MainWindow(auth.LoggedInUserId, options);
-                mainWindow.Show();
+                var auth = new AuthWindow(options);
+                var dialogResult = auth.ShowDialog();
+
+                if (dialogResult == true)
+                {
+                    authenticated = true;
+                    var mainWindow = new MainWindow(auth.LoggedInUserId, options);
+                    Current.MainWindow = mainWindow;  // Установите явно для безопасности
+                    mainWindow.Show();
+                    Current.ShutdownMode = ShutdownMode.OnMainWindowClose;  // Верните нормальный режим
+                }
+                tries++;
             }
-            else
+
+            if (!authenticated)
             {
-                Shutdown(); // если пользователь закрыл/отказался
+                MessageBox.Show("Превышено количество попыток авторизации.");
+                Shutdown();
             }
         }
     }
