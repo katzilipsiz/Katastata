@@ -1,16 +1,11 @@
 ﻿<Window x:Class="Katastata.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:Katastata.ViewModels"
         Title="Katastata — Мониторинг программ"
         Width="950" Height="600"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource WindowBackgroundBrush}">
 
-    <Window.DataContext>
-        <vm:MainViewModel />
-    </Window.DataContext>
-    
     <Window.Resources>
         <!-- Эффект тени (оставляем, т.к. не зависит от темы) -->
         <DropShadowEffect x:Key="SoftShadow"

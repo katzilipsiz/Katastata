@@ -1,5 +1,6 @@
-﻿using System.Windows.Controls;
-using Katastata.ViewModels;
+﻿using Katastata.ViewModels;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Katastata.UserControls
 {
@@ -17,5 +18,13 @@ namespace Katastata.UserControls
                 vm.LoginPassword = ((PasswordBox)sender).Password;
             }
         }
+
+        private void OnLoginSuccess(int userId)
+        {
+            var mainWindow = new MainWindow(userId);
+            mainWindow.Show();
+            Window.GetWindow(this)?.Close();
+        }
+
     }
 }

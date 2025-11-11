@@ -1,94 +1,97 @@
-﻿using System.Linq;
+﻿using Katastata.Data;
+using Katastata.Models;
+using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
-using Katastata.Models;
-using Katastata.Data;
 
 namespace Katastata.ViewModels
 {
-    public class UserViewModel : BaseViewModel
+    public class UserViewModel
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
 
-        public UserViewModel(AppDbContext context)
+        public ICommand RegisterCommand { get; }
+        public ICommand LoginCommand { get; }
+
+        // Поля для регистрации
+        public string RegisterUsername { get; set; }
+        public string RegisterPassword { get; set; }
+
+        // Поля для логина
+        public string LoginUsername { get; set; }
+        public string LoginPassword { get; set; }
+
+        public UserViewModel(AppDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
             RegisterCommand = new RelayCommand(RegisterUser);
             LoginCommand = new RelayCommand(LoginUser);
         }
 
-        // Регистрация
-        public string RegisterUsername { get; set; }
-        public string RegisterPassword { get; set; } // сюда будем сохранять пароль с PasswordBox
-        public ICommand RegisterCommand { get; set; }
-
-        // Вход
-        public string LoginUsername { get; set; }
-        public string LoginPassword { get; set; } // сюда будем сохранять пароль с PasswordBox
-        public ICommand LoginCommand { get; set; }
-
-        public string ErrorMessage { get; set; }
-
-        public User CurrentUser { get; private set; }
-
-        private void RegisterUser()
+        private void RegisterUser(object obj)
         {
             if (string.IsNullOrWhiteSpace(RegisterUsername) || string.IsNullOrWhiteSpace(RegisterPassword))
             {
-                ErrorMessage = "Заполните все поля";
-                OnPropertyChanged(nameof(ErrorMessage));
+                MessageBox.Show("Введите имя пользователя и пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (_context.Users.Any(u => u.Username == RegisterUsername))
+            if (_dbContext.Users.Any(u => u.Username == RegisterUsername))
             {
-                ErrorMessage = "Пользователь уже существует";
-                OnPropertyChanged(nameof(ErrorMessage));
+                MessageBox.Show("Такой пользователь уже существует!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            var user = new User
+            var hashedPassword = HashPassword(RegisterPassword);
+
+            var newUser = new User
             {
                 Username = RegisterUsername,
-                PasswordHash = HashPassword(RegisterPassword),
+                PasswordHash = hashedPassword,
                 PCName = Environment.MachineName
             };
 
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            _dbContext.Users.Add(newUser);
+            _dbContext.SaveChanges();
 
-            ErrorMessage = "Регистрация успешна!";
-            OnPropertyChanged(nameof(ErrorMessage));
+            MessageBox.Show("Регистрация успешна!", "Готово", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        public event Action<User> LoginSucceeded;
-
-        private void LoginUser()
+        private void LoginUser(object obj)
         {
-            var hash = HashPassword(LoginPassword);
-            var user = _context.Users.FirstOrDefault(u => u.Username == LoginUsername && u.PasswordHash == hash);
-
-            if (user == null)
+            if (string.IsNullOrWhiteSpace(LoginUsername) || string.IsNullOrWhiteSpace(LoginPassword))
             {
-                ErrorMessage = "Неверный логин или пароль";
-                OnPropertyChanged(nameof(ErrorMessage));
+                MessageBox.Show("Введите имя пользователя и пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            CurrentUser = user;
-            LoginSucceeded?.Invoke(user); // уведомляем MainViewModel
+            var user = _dbContext.Users.FirstOrDefault(u => u.Username == LoginUsername);
 
-            ErrorMessage = $"Добро пожаловать, {user.Username}!";
-            OnPropertyChanged(nameof(ErrorMessage));
+            if (user == null)
+            {
+                MessageBox.Show("Пользователь не найден!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (user.PasswordHash != HashPassword(LoginPassword))
+            {
+                MessageBox.Show("Неверный пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            MessageBox.Show($"Добро пожаловать, {user.Username}!", "Успешный вход", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private string HashPassword(string password)
         {
-            using var sha256 = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(password);
-            var hash = sha256.ComputeHash(bytes);
-            return Convert.ToBase64String(hash);
+            using (var sha256 = SHA256.Create())
+            {
+                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+            }
         }
     }
 }

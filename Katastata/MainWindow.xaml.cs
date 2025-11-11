@@ -25,11 +25,23 @@ namespace Katastata
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly AppDbContext _dbContext;
+        private readonly AppMonitorService _service;
+        private readonly int _currentUserId;
+
+        public MainWindow(int userId)
         {
             InitializeComponent();
 
-            InitializeComponent();
+            _currentUserId = userId;
+
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseSqlite("Data Source=appdata.db")
+                .Options;
+
+            _dbContext = new AppDbContext(options);
+            _service = new AppMonitorService(_dbContext);
+
             DataContext = new MainViewModel(_service, _currentUserId);
         }
 

@@ -15,13 +15,18 @@ namespace Katastata
         {
             base.OnStartup(e);
 
-            var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlite("Data Source=katastata.db").Options;
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseSqlite("Data Source=appdata.db")
+                .Options;
 
-            using (var context = new AppDbContext(options))
-            {
-                context.Database.EnsureCreated();
-            }
+            using var db = new AppDbContext(options);
+            db.Database.EnsureCreated();
+
+            // Открываем страницу логина
+            var loginWindow = new AuthWindow();
+            loginWindow.Show();
         }
+
     }
 
 }
