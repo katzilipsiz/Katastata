@@ -13,6 +13,7 @@ namespace Katastata.Services
     public class AppMonitorService
     {
         private readonly AppDbContext _context;
+
         private Dictionary<int, Session> activeSessions = new Dictionary<int, Session>();
         private System.Timers.Timer monitoringTimer; 
 
@@ -22,6 +23,7 @@ namespace Katastata.Services
         [DllImport("user32.dll")]
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
+        // Конструктор
         public AppMonitorService(AppDbContext context) => _context = context;
 
         // Начало мониторинга
@@ -182,11 +184,15 @@ namespace Katastata.Services
         // Получение статистики
         public List<Statistics> GetStatistics(int userId)
         {
-            return _context.Statistics
+            var stats = _context.Statistics
                 .Where(st => st.UserId == userId)
                 .Include(st => st.Program)
+                .ToList();
+
+            return stats
                 .OrderByDescending(st => st.TotalTime)
                 .ToList();
         }
+
     }
 }
