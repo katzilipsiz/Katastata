@@ -29,30 +29,11 @@ namespace Katastata
         private readonly AppMonitorService _service;
         private readonly int _currentUserId;
 
-        public MainWindow(int userId)
+        public MainWindow()
         {
             InitializeComponent();
 
-            _currentUserId = userId;
-
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseSqlite("Data Source=appdata.db")
-                .Options;
-
-            _dbContext = new AppDbContext(options);
-            _service = new AppMonitorService(_dbContext);
-
-            DataContext = new MainViewModel(_service, _currentUserId);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
+            
         }
 
         private void AuthClick(object sender, RoutedEventArgs e)

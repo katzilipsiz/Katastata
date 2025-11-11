@@ -1,6 +1,4 @@
-﻿using Katastata.ViewModels;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Katastata.UserControls
 {
@@ -13,18 +11,10 @@ namespace Katastata.UserControls
 
         private void LoginPasswordBox_PasswordChanged(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (DataContext is UserViewModel vm)
+            if (DataContext is ViewModels.UserViewModel vm)
             {
                 vm.LoginPassword = ((PasswordBox)sender).Password;
             }
         }
-
-        private void OnLoginSuccess(int userId)
-        {
-            var mainWindow = new MainWindow(userId);
-            mainWindow.Show();
-            Window.GetWindow(this)?.Close();
-        }
-
     }
 }

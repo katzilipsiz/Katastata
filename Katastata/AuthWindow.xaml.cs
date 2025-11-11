@@ -1,98 +1,55 @@
 ﻿using Katastata.Data;
-using Katastata.Helpers;
-using Katastata.Models;
+using Katastata.UserControls;
+using Katastata.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Katastata
 {
-    /// <summary>
-    /// Логика взаимодействия для AuthWindow.xaml
-    /// </summary>
     public partial class AuthWindow : Window
     {
-        private readonly AppDbContext _db;
+        private readonly AppDbContext _dbContext;
+        private readonly UserViewModel _viewModel;
+
+        public int LoggedInUserId { get; private set; }
+
         public AuthWindow()
         {
             InitializeComponent();
 
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseSqlite("Data Source=katastata.db")
+                .UseSqlite("Data Source=appdata.db")
                 .Options;
+            _dbContext = new AppDbContext(options);
 
-            _db = new AppDbContext(options);
+            _viewModel = new UserViewModel(_dbContext);
+            _viewModel.LoginSuccessful += OnLoginSuccessful;
+
+            DataContext = _viewModel;
 
 
         }
 
-        private async void Register_Click(object sender, RoutedEventArgs e)
+        private void OnLoginSuccessful(int userId)
         {
-            string username = UsernameBox.Text.Trim();
-            string password = PasswordBox.Password.Trim();
-
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            LoggedInUserId = userId;
+            Dispatcher.Invoke(() =>
             {
-                ShowError("Введите имя и пароль");
-                return;
-            }
-
-            var exists = await _db.Users.AnyAsync(u => u.Username == username);
-            if (exists)
-            {
-                ShowError("Такой пользователь уже существует");
-                return;
-            }
-
-            var user = new User
-            {
-                Username = username,
-                PasswordHash = PasswordHelper.HashPassword(password),
-                PCName = Environment.MachineName
-            };
-
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync();
-
-            MessageBox.Show("Пользователь зарегистрирован!", "Katastata");
+                DialogResult = true;
+                Close();
+            });
         }
 
-        private async void Login_Click(object sender, RoutedEventArgs e)
+        public void ShowLoginPage(object sender, RoutedEventArgs e)
         {
-            string username = UsernameBox.Text.Trim();
-            string password = PasswordBox.Password.Trim();
-            string hash = PasswordHelper.HashPassword(password);
-
-            var user = await _db.Users
-                .FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == hash);
-
-            if (user == null)
-            {
-                ShowError("Неверное имя или пароль");
-                return;
-            }
-
-            // Можно передать инфу о вошедшем пользователе владельцу окна или сохранить в статическое свойство приложения
-            MessageBox.Show($"Добро пожаловать, {user.Username}!", "Katastata");
-            DialogResult = true;
-            Close();
+            ContentArea.Content = new LoginPage();
         }
 
-        private void ShowError(string text)
+        public void ShowRegisterPage(object sender, RoutedEventArgs e)
         {
-            ErrorText.Text = text;
-            ErrorText.Visibility = Visibility.Visible;
+            ContentArea.Content = new RegisterPage();
         }
+
     }
 }

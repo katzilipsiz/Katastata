@@ -16,17 +16,22 @@ namespace Katastata.ViewModels
         public ICommand RegisterCommand { get; }
         public ICommand LoginCommand { get; }
 
-        // Поля для регистрации
         public string RegisterUsername { get; set; }
         public string RegisterPassword { get; set; }
 
-        // Поля для логина
         public string LoginUsername { get; set; }
         public string LoginPassword { get; set; }
+
+        // Событие для уведомления окна авторизации об успешном входе
+        public event Action<int> LoginSuccessful;
+
+        // Для XAML
+        public UserViewModel() { }
 
         public UserViewModel(AppDbContext dbContext)
         {
             _dbContext = dbContext;
+
             RegisterCommand = new RelayCommand(RegisterUser);
             LoginCommand = new RelayCommand(LoginUser);
         }
@@ -82,16 +87,15 @@ namespace Katastata.ViewModels
                 return;
             }
 
-            MessageBox.Show($"Добро пожаловать, {user.Username}!", "Успешный вход", MessageBoxButton.OK, MessageBoxImage.Information);
+            // Уведомляем AuthWindow о успешном входе
+            LoginSuccessful?.Invoke(user.Id);
         }
 
         private string HashPassword(string password)
         {
-            using (var sha256 = SHA256.Create())
-            {
-                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return BitConverter.ToString(bytes).Replace("-", "").ToLower();
-            }
+            using var sha256 = SHA256.Create();
+            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
     }
 }

@@ -1,104 +1,100 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-	<!-- Основные цвета -->
-	<Color x:Key="BaseBackgroundColor">#FF222222</Color>
-	<Color x:Key="BaseForegroundColor">#FFFFFFFF</Color>
-	<Color x:Key="AccentColor">#FFE67300</Color>
-	<!-- Тот же оранжевый -->
-	<Color x:Key="BorderColor">#FF444444</Color>
-	<Color x:Key="DisabledColor">#FF666666</Color>
+    <!-- Основные цвета -->
+    <Color x:Key="BaseBackgroundColor">#FF222222</Color>
+    <Color x:Key="BaseForegroundColor">#FFFFFFFF</Color>
+    <Color x:Key="AccentColorDefault">#FFE3B662</Color>
+    <Color x:Key="AccentColorPressed">#9D3636</Color>
+    <Color x:Key="BorderColor">#FF444444</Color>
+    <Color x:Key="DisabledColor">#FF666666</Color>
 
+    <!-- Кисти -->
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="{StaticResource BaseBackgroundColor}"/>
+    <SolidColorBrush x:Key="TextForegroundBrush" Color="{StaticResource BaseForegroundColor}"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColorDefault}"/>
+    <SolidColorBrush x:Key="AccentBrushActive" Color="{StaticResource AccentColorPressed}"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
+    <SolidColorBrush x:Key="DisabledBrush" Color="{StaticResource DisabledColor}"/>
 
-	<!-- Кисти -->
-	<SolidColorBrush x:Key="WindowBackgroundBrush" Color="{StaticResource BaseBackgroundColor}"/>
-	<SolidColorBrush x:Key="TextForegroundBrush" Color="{StaticResource BaseForegroundColor}"/>
-	<SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
-	<SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
-	<SolidColorBrush x:Key="DisabledBrush" Color="{StaticResource DisabledColor}"/>
+    <!-- Стиль кнопок с округлением -->
+    <Style x:Key="ThemeButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource WindowBackgroundBrush}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="8"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter x:Name="contentPresenter"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Content="{TemplateBinding Content}"
+                                      RecognizesAccessKey="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FFD4B76E"/>
+                        </Trigger>
 
-	<!-- Дополнительные ресурсы для интерфейса -->
-	<SolidColorBrush x:Key="PanelBackgroundBrush" Color="#2D2D30"/>
-	<SolidColorBrush x:Key="DataGridBackgroundBrush" Color="#2D2D30"/>
-	<SolidColorBrush x:Key="RowBackgroundBrush" Color="#333337"/>
-	<SolidColorBrush x:Key="AlternatingRowBackgroundBrush" Color="#2A2A2E"/>
-	<SolidColorBrush x:Key="HeaderForegroundBrush" Color="#AAAAAA"/>
+                        <!-- Pressed -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#9D3636"/>
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="White"/>
+                        </Trigger>
 
-	<!-- Стили кнопок (те же, что в светлой теме) -->
-	<Style x:Key="ThemeButtonStyle" TargetType="Button">
-		<Setter Property="Background" Value="{StaticResource AccentBrush}"/>
-		<Setter Property="Foreground" Value="{StaticResource WindowBackgroundBrush}"/>
-		<Setter Property="FontSize" Value="14"/>
-		<Setter Property="FontWeight" Value="SemiBold"/>
-		<Setter Property="Padding" Value="15 8"/>
-		<Setter Property="Cursor" Value="Hand"/>
-		<Setter Property="BorderThickness" Value="0"/>
-		<Setter Property="Width" Value="150"/>
-		<Setter Property="Height" Value="38"/>
-	</Style>
+                        <!-- Disabled -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DisabledBrush}"/>
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#FFAAAAAA"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<Style x:Key="AppButtonStyle" TargetType="Button" BasedOn="{StaticResource ThemeButtonStyle}">
-		<Setter Property="Width" Value="150"/>
-
+    <Style x:Key="ThemeSymbolButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Width" Value="35"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
-            <!-- Анимация при наведении -->
+            <!-- Наведение -->
             <Trigger Property="IsMouseOver" Value="True">
-                <Trigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation
-								Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-								To="#FFD46400"
-								Duration="0:0:0.2"
-								FillBehavior="HoldEnd"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation
-								Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-								To="{StaticResource AccentColor}"
-								Duration="0:0:0.3"
-								FillBehavior="HoldEnd"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>
+                <Setter Property="Foreground" Value="#FFD4AA66"/>
             </Trigger>
 
-            <!-- Анимация при нажатии -->
+            <!-- Нажатие -->
             <Trigger Property="IsPressed" Value="True">
-                <Trigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-								Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
-								To="0.95"
-								Duration="0:0:0.1"/>
-                            <DoubleAnimation
-								Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
-								To="0.95"
-								Duration="0:0:0.1"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-								Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
-								To="1.0"
-								Duration="0:0:0.2"/>
-                            <DoubleAnimation
-								Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
-								To="1.0"
-								Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>
+                <Setter Property="Foreground" Value="#9D3636"/>
             </Trigger>
         </Style.Triggers>
     </Style>
+
 
 </ResourceDictionary>

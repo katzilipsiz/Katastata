@@ -1,7 +1,8 @@
 ﻿using Katastata.Data;
 using Katastata.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Katastata.Services
 {
@@ -25,16 +26,10 @@ namespace Katastata.Services
                 try
                 {
                     string path = string.Empty;
-                    try
-                    {
-                        path = process.MainModule?.FileName ?? "";
-                    }
-                    catch { }
+                    try { path = process.MainModule?.FileName ?? ""; } catch { }
 
                     if (string.IsNullOrEmpty(path)) continue;
-
-                    if (_context.Programs.Any(p => p.Path == path))
-                        continue;
+                    if (_context.Programs.Any(p => p.Path == path)) continue;
 
                     _context.Programs.Add(new Program
                     {

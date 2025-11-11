@@ -7,7 +7,7 @@
         Background="{DynamicResource WindowBackgroundBrush}">
 
     <Window.Resources>
-        <!-- Эффект тени (оставляем, т.к. не зависит от темы) -->
+        <!-- Эффект тени -->
         <DropShadowEffect x:Key="SoftShadow"
                           BlurRadius="12"
                           ShadowDepth="2"
@@ -17,26 +17,32 @@
 
     <Grid>
         <!-- Верхний бар -->
-        <Border Background="{DynamicResource AccentBrush}"
-                Height="50"
-                VerticalAlignment="Top">
+        <Border Background="{DynamicResource AccentBrush}" Height="50" VerticalAlignment="Top">
             <DockPanel>
+                <!-- Название / логотип -->
                 <TextBlock Text="KATASTATA"
-                           Foreground="{DynamicResource TextForegroundBrush}"
+                           Foreground="{StaticResource AccentBrushActive}"
                            FontSize="20"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
-                           Margin="15,0,0,0" />
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Margin="0 5">
-                    <Button Content="Светлая тема"
-                            Click="LightTheme_Click"
+                           Margin="15,0,0,0"
+                           DockPanel.Dock="Left"/>
+
+                <!-- Кнопки справа -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="0,0,15,0">
+                    <Button x:Name="LightThemeBtn" Content="☀" 
+                            Style="{StaticResource ThemeSymbolButtonStyle}" 
+                            Click="LightTheme_Click"/>
+                    <Button x:Name="DarkThemeBtn" Content="🌙" 
+                            Style="{StaticResource ThemeSymbolButtonStyle}" 
+                            Click="DarkTheme_Click"/>
+
+
+                    <!-- Кнопка авторизации -->
+                    <Button Content="Авторизация"
+                            Click="AuthClick"
                             Style="{StaticResource ThemeButtonStyle}"
-                            Margin="0,0,10,0"/>
-                    <Button Content="Тёмная тема"
-                            Click="DarkTheme_Click"
-                            Style="{StaticResource ThemeButtonStyle}"/>
+                            Width="120" Height="35"/>
                 </StackPanel>
             </DockPanel>
         </Border>
@@ -52,16 +58,12 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,15">
                 <Button Content="⟳ Сканировать"
                         Command="{Binding ScanCommand}"
-                        Style="{StaticResource ThemeButtonStyle}"/>
+                        Style="{DynamicResource ThemeButtonStyle}"/>
                 <Button Content="🕓 Сессии"
-                        Style="{StaticResource ThemeButtonStyle}"
+                        Style="{DynamicResource ThemeButtonStyle}"
                         Margin="10,0,0,0"/>
                 <Button Content="⚙ Настройки"
-                        Style="{StaticResource ThemeButtonStyle}"
-                        Margin="10,0,0,0"/>
-                <Button Content="Авторизация"
-                        Click="AuthClick"
-                        Style="{StaticResource ThemeButtonStyle}"
+                        Style="{DynamicResource ThemeButtonStyle}"
                         Margin="10,0,0,0"/>
             </StackPanel>
 
@@ -72,19 +74,18 @@
                     Padding="10"
                     Effect="{StaticResource SoftShadow}">
                 <DataGrid ItemsSource="{Binding Programs}"
-              AutoGenerateColumns="False"
-              Background="{DynamicResource DataGridBackgroundBrush}"
-              Foreground="{DynamicResource TextForegroundBrush}"
-              HeadersVisibility="Column"
-              RowBackground="{DynamicResource RowBackgroundBrush}"
-              AlternatingRowBackground="{DynamicResource AlternatingRowBackgroundBrush}"
-              BorderThickness="0"
-              CanUserAddRows="False"
-              CanUserDeleteRows="False"
-              IsReadOnly="True"
-              GridLinesVisibility="None"
-              RowHeight="50">
-
+                          AutoGenerateColumns="False"
+                          Background="{DynamicResource DataGridBackgroundBrush}"
+                          Foreground="{DynamicResource TextForegroundBrush}"
+                          HeadersVisibility="Column"
+                          RowBackground="{DynamicResource RowBackgroundBrush}"
+                          AlternatingRowBackground="{DynamicResource AlternatingRowBackgroundBrush}"
+                          BorderThickness="0"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          IsReadOnly="True"
+                          GridLinesVisibility="None"
+                          RowHeight="50">
 
                     <DataGrid.Resources>
                         <!-- Стиль для заголовков -->
@@ -96,31 +97,12 @@
                             <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
                         </Style>
 
-                        <!-- Анимация строк при наведении -->
+                        <!-- Стиль строк с подсветкой при наведении -->
                         <Style TargetType="DataGridRow">
                             <Setter Property="Height" Value="35"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation
-                                Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                To="#FF555555"
-                                Duration="0:0:0.2"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation
-                                Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                To="{Binding Background, RelativeSource={RelativeSource Self}}"
-                                Duration="0:0:0.3"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
+                                    <Setter Property="Background" Value="#FF555555"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -133,7 +115,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
-
         </Grid>
     </Grid>
 </Window>
+ 

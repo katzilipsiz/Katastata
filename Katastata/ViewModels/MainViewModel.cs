@@ -14,16 +14,9 @@ namespace Katastata.ViewModels
 
         public RelayCommand ScanCommand { get; }
 
-        // Конструктор для XAML (нужен для дизайнера)
-        public MainViewModel()
+        public MainViewModel(AppMonitorService monitorService, int userId)
         {
-            // Не используется, но нужен для XAML-дизайнера, чтобы не падал
-        }
-
-        // Рабочий конструктор
-        public MainViewModel(AppMonitorService service, int userId)
-        {
-            _monitorService = service;
+            _monitorService = monitorService;
             _currentUserId = userId;
 
             ScanCommand = new RelayCommand(_ => ScanPrograms());
@@ -38,7 +31,7 @@ namespace Katastata.ViewModels
                 LoadPrograms();
                 MessageBox.Show("Сканирование завершено");
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show($"Ошибка при сканировании: {ex.Message}");
             }
