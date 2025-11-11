@@ -4,6 +4,12 @@ using Katastata.Data;
 using Katastata.Services;
 using Katastata.ViewModels;
 
+using Microsoft.EntityFrameworkCore;
+using Katastata.Models;
+using Katastata.Data;
+using Katastata.Services;
+using Katastata.ViewModels;
+
 namespace Katastata
 {
     /// <summary>
@@ -24,6 +30,35 @@ namespace Katastata
         public MainWindow()
         {
             InitializeComponent();
+
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                            .UseSqlite("Data Source=katastata.db")
+                            .Options;
+
+            var dbContext = new AppDbContext(options);
+            var viewModel = new AppMonitorService(dbContext); // передаём только контекст
+
+            DataContext = viewModel;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AuthClick(object sender, RoutedEventArgs e)
+        {
+            var loginWindow = new AuthWindow();
+            if (loginWindow.ShowDialog() == true)
+            {
+                MessageBox.Show("Вы вошли в систему!", "Katastata");
+            }
+
         }
 
         private void ApplyTheme(string themePath)
