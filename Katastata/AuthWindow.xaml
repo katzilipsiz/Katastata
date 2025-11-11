@@ -1,24 +1,21 @@
 ﻿<Window x:Class="Katastata.AuthWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Katastata — Вход / Регистрация"
-        Width="400" Height="300"
+        Title="Авторизация" Height="360" Width="420"
         WindowStartupLocation="CenterScreen"
-        Background="#1E1E1E">
-
+        ResizeMode="NoResize"
+        Background="{DynamicResource WindowBackgroundBrush}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <!-- Контейнер для UserControl -->
-        <ContentControl x:Name="ContentArea"/>
+        <ContentControl x:Name="ContentArea" Grid.Row="0"/>
 
-        <!-- Кнопки переключения -->
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" Margin="0 10">
-            <Button Content="Вход" Width="120" Margin="5" Click="ShowLoginPage" Foreground="#FF020000"/>
-            <Button Content="Регистрация" Width="120" Margin="5" Click="ShowRegisterPage" Foreground="Black"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+            <Button Content="Вход" Width="120" Margin="5" Click="ShowLoginPage" />
+            <Button Content="Регистрация" Width="120" Margin="5" Click="ShowRegisterPage" />
         </StackPanel>
     </Grid>
 </Window>

@@ -11,7 +11,7 @@ namespace Katastata.ViewModels
 {
     public class UserViewModel
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _db;
 
         public ICommand RegisterCommand { get; }
         public ICommand LoginCommand { get; }
@@ -22,16 +22,14 @@ namespace Katastata.ViewModels
         public string LoginUsername { get; set; }
         public string LoginPassword { get; set; }
 
-        // Событие для уведомления окна авторизации об успешном входе
         public event Action<int> LoginSuccessful;
 
-        // Для XAML
+        // Parameterless ctor for designer (optional)
         public UserViewModel() { }
 
-        public UserViewModel(AppDbContext dbContext)
+        public UserViewModel(AppDbContext db)
         {
-            _dbContext = dbContext;
-
+            _db = db;
             RegisterCommand = new RelayCommand(RegisterUser);
             LoginCommand = new RelayCommand(LoginUser);
         }
@@ -40,62 +38,60 @@ namespace Katastata.ViewModels
         {
             if (string.IsNullOrWhiteSpace(RegisterUsername) || string.IsNullOrWhiteSpace(RegisterPassword))
             {
-                MessageBox.Show("Введите имя пользователя и пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Введите имя и пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (_dbContext.Users.Any(u => u.Username == RegisterUsername))
+            if (_db.Users.Any(u => u.Username == RegisterUsername))
             {
-                MessageBox.Show("Такой пользователь уже существует!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Пользователь уже есть", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            var hashedPassword = HashPassword(RegisterPassword);
-
-            var newUser = new User
+            var user = new User
             {
                 Username = RegisterUsername,
-                PasswordHash = hashedPassword,
+                PasswordHash = HashPassword(RegisterPassword),
                 PCName = Environment.MachineName
             };
 
-            _dbContext.Users.Add(newUser);
-            _dbContext.SaveChanges();
+            _db.Users.Add(user);
+            _db.SaveChanges();
 
-            MessageBox.Show("Регистрация успешна!", "Готово", MessageBoxButton.OK, MessageBoxImage.Information);
+            // автологин после регистрации:
+            LoginSuccessful?.Invoke(user.Id);
         }
 
         private void LoginUser(object obj)
         {
             if (string.IsNullOrWhiteSpace(LoginUsername) || string.IsNullOrWhiteSpace(LoginPassword))
             {
-                MessageBox.Show("Введите имя пользователя и пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Введите имя и пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            var user = _dbContext.Users.FirstOrDefault(u => u.Username == LoginUsername);
-
+            var user = _db.Users.FirstOrDefault(u => u.Username == LoginUsername);
             if (user == null)
             {
-                MessageBox.Show("Пользователь не найден!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Пользователь не найден", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (user.PasswordHash != HashPassword(LoginPassword))
             {
-                MessageBox.Show("Неверный пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Неверный пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            // Уведомляем AuthWindow о успешном входе
             LoginSuccessful?.Invoke(user.Id);
         }
 
         private string HashPassword(string password)
         {
-            using var sha256 = SHA256.Create();
-            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+            using var sha = SHA256.Create();
+            var b = Encoding.UTF8.GetBytes(password);
+            var h = sha.ComputeHash(b);
+            return Convert.ToBase64String(h);
         }
     }
 }

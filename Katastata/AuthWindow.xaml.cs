@@ -1,39 +1,36 @@
-﻿using Katastata.Data;
-using Katastata.UserControls;
-using Katastata.ViewModels;
+﻿using System.Windows;
 using Microsoft.EntityFrameworkCore;
-using System.Windows;
-using System.Windows.Threading;
+using Katastata.Data;
+using Katastata.ViewModels;
+using Katastata.UserControls;
 
 namespace Katastata
 {
     public partial class AuthWindow : Window
     {
-        private readonly AppDbContext _dbContext;
-        private readonly UserViewModel _viewModel;
+        private readonly AppDbContext _db;
+        private readonly UserViewModel _vm;
 
         public int LoggedInUserId { get; private set; }
 
-        public AuthWindow()
+        public AuthWindow(DbContextOptions<AppDbContext> options)
         {
             InitializeComponent();
 
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseSqlite("Data Source=appdata.db")
-                .Options;
-            _dbContext = new AppDbContext(options);
+            _db = new AppDbContext(options);
+            _vm = new UserViewModel(_db);
 
-            _viewModel = new UserViewModel(_dbContext);
-            _viewModel.LoginSuccessful += OnLoginSuccessful;
+            // Когда VM вызывает событие — окно реагирует
+            _vm.LoginSuccessful += OnLoginSuccessful;
 
-            DataContext = _viewModel;
-
-
+            // Показываем Login по умолчанию
+            ShowLoginPage(null, null);
         }
 
         private void OnLoginSuccessful(int userId)
         {
             LoggedInUserId = userId;
+            // Закрываем окно как диалог (в UI-потоке)
             Dispatcher.Invoke(() =>
             {
                 DialogResult = true;
@@ -41,15 +38,18 @@ namespace Katastata
             });
         }
 
-        public void ShowLoginPage(object sender, RoutedEventArgs e)
+        private void ShowLoginPage(object sender, RoutedEventArgs e)
         {
-            ContentArea.Content = new LoginPage();
+            var page = new LoginPage();
+            page.DataContext = _vm;
+            ContentArea.Content = page;
         }
 
-        public void ShowRegisterPage(object sender, RoutedEventArgs e)
+        private void ShowRegisterPage(object sender, RoutedEventArgs e)
         {
-            ContentArea.Content = new RegisterPage();
+            var page = new RegisterPage();
+            page.DataContext = _vm;
+            ContentArea.Content = page;
         }
-
     }
 }

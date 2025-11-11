@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
+﻿using System.Windows;
 using Microsoft.EntityFrameworkCore;
-using Katastata.Models;
 using Katastata.Data;
 using Katastata.Services;
 using Katastata.ViewModels;
@@ -25,25 +11,23 @@ namespace Katastata
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _db;
         private readonly AppMonitorService _service;
-        private readonly int _currentUserId;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            
+            DataContext = new MainViewModel(); // или ViewModelLocator, если ты его используешь
         }
 
-        private void AuthClick(object sender, RoutedEventArgs e)
+        public MainWindow(int userId, DbContextOptions<AppDbContext> options)
         {
-            var loginWindow = new AuthWindow();
-            if (loginWindow.ShowDialog() == true)
-            {
-                MessageBox.Show("Вы вошли в систему!", "Katastata");
-            }
+            InitializeComponent();
 
+            _db = new AppDbContext(options);
+            _service = new AppMonitorService(_db);
+
+            DataContext = new MainViewModel(_service, userId);
         }
 
         private void ApplyTheme(string themePath)

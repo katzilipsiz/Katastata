@@ -1,5 +1,6 @@
 ﻿using Katastata.Models;
 using Katastata.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -7,19 +8,21 @@ namespace Katastata.ViewModels
 {
     public class MainViewModel
     {
-        private readonly AppMonitorService _monitorService;
-        private readonly int _currentUserId;
+        private readonly AppMonitorService _service;
+        private readonly int _userId;
 
-        public ObservableCollection<Program> Programs { get; set; } = new();
-
+        public ObservableCollection<Program> Programs { get; } = new ObservableCollection<Program>();
         public RelayCommand ScanCommand { get; }
 
-        public MainViewModel(AppMonitorService monitorService, int userId)
+        public MainViewModel() { } // для дизайнера
+
+        public MainViewModel(AppMonitorService service, int userId)
         {
-            _monitorService = monitorService;
-            _currentUserId = userId;
+            _service = service;
+            _userId = userId;
 
             ScanCommand = new RelayCommand(_ => ScanPrograms());
+
             LoadPrograms();
         }
 
@@ -27,20 +30,20 @@ namespace Katastata.ViewModels
         {
             try
             {
-                _monitorService.ScanRunningPrograms(_currentUserId);
+                _service.ScanRunningPrograms(_userId);
                 LoadPrograms();
                 MessageBox.Show("Сканирование завершено");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при сканировании: {ex.Message}");
+                MessageBox.Show("Ошибка: " + ex.Message);
             }
         }
 
         private void LoadPrograms()
         {
             Programs.Clear();
-            var items = _monitorService.GetAllPrograms(_currentUserId);
+            var items = _service.GetAllPrograms(_userId);
             foreach (var p in items)
                 Programs.Add(p);
         }

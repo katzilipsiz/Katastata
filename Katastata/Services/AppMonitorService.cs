@@ -1,5 +1,7 @@
 ﻿using Katastata.Data;
 using Katastata.Models;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +12,7 @@ namespace Katastata.Services
     {
         private readonly AppDbContext _context;
 
-        public AppMonitorService(AppDbContext context)
-        {
-            _context = context;
-        }
+        public AppMonitorService(AppDbContext context) => _context = context;
 
         public void ScanRunningPrograms(int userId)
         {
@@ -21,24 +20,33 @@ namespace Katastata.Services
                 .Where(p => !string.IsNullOrEmpty(p.MainWindowTitle))
                 .ToList();
 
-            foreach (var process in processes)
+            // ensure default category exists
+            if (!_context.Categories.Any(c => c.Id == 1))
+            {
+                _context.Categories.Add(new Category { Id = 1, Name = "Не классифицировано" });
+                _context.SaveChanges();
+            }
+
+            foreach (var proc in processes)
             {
                 try
                 {
-                    string path = string.Empty;
-                    try { path = process.MainModule?.FileName ?? ""; } catch { }
+                    string path = "";
+                    try { path = proc.MainModule?.FileName ?? ""; } catch { }
 
                     if (string.IsNullOrEmpty(path)) continue;
-                    if (_context.Programs.Any(p => p.Path == path)) continue;
 
-                    _context.Programs.Add(new Program
+                    if (!_context.Programs.Any(p => p.Path == path))
                     {
-                        Name = process.ProcessName,
-                        Path = path,
-                        CategoryId = 1
-                    });
+                        _context.Programs.Add(new Program
+                        {
+                            Name = string.IsNullOrEmpty(proc.ProcessName) ? "Unknown" : proc.ProcessName,
+                            Path = path,
+                            CategoryId = 1
+                        });
+                    }
                 }
-                catch { }
+                catch { /* ignore access denied */ }
             }
 
             _context.SaveChanges();

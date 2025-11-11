@@ -36,13 +36,6 @@
                     <Button x:Name="DarkThemeBtn" Content="🌙" 
                             Style="{StaticResource ThemeSymbolButtonStyle}" 
                             Click="DarkTheme_Click"/>
-
-
-                    <!-- Кнопка авторизации -->
-                    <Button Content="Авторизация"
-                            Click="AuthClick"
-                            Style="{StaticResource ThemeButtonStyle}"
-                            Width="120" Height="35"/>
                 </StackPanel>
             </DockPanel>
         </Border>

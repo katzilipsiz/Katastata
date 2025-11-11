@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Katastata
+namespace Katastata.ViewModels
 {
     public class RelayCommand : ICommand
     {
