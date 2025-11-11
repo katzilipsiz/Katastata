@@ -1,27 +1,50 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using System;
+using System.IO;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using Katastata.Data;
 
 namespace Katastata
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        private const string DbFileName = "katastata.db";
+
+        private void Application_Startup(object sender, StartupEventArgs e)
         {
-            base.OnStartup(e);
+            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DbFileName);
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseSqlite($"Data Source={dbPath}")
+                .Options;
 
-            var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlite("Data Source=katastata.db").Options;
+            using (var ctx = new AppDbContext(options))
+                ctx.Database.EnsureCreated();
 
-            using (var context = new AppDbContext(options))
+            int maxTries = 3;
+            int tries = 0;
+            bool authenticated = false;
+
+            while (!authenticated && tries < maxTries)
             {
-                context.Database.EnsureCreated();
+                var auth = new AuthWindow(options);
+                var dialogResult = auth.ShowDialog();
+
+                if (dialogResult == true)
+                {
+                    authenticated = true;
+                    var mainWindow = new MainWindow(auth.LoggedInUserId, options);
+                    Current.MainWindow = mainWindow;  // Установите явно для безопасности
+                    mainWindow.Show();
+                    Current.ShutdownMode = ShutdownMode.OnMainWindowClose;  // Верните нормальный режим
+                }
+                tries++;
+            }
+
+            if (!authenticated)
+            {
+                MessageBox.Show("Превышено количество попыток авторизации.");
+                Shutdown();
             }
         }
     }
-
 }

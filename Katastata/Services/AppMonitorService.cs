@@ -1,10 +1,12 @@
 ﻿using Katastata.Data;
 using Katastata.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Timers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Katastata.Services
 {
@@ -12,122 +14,184 @@ namespace Katastata.Services
     {
         private readonly AppDbContext _context;
 
-        public AppMonitorService(AppDbContext context)
+        private Dictionary<int, Session> activeSessions = new Dictionary<int, Session>();
+        private System.Timers.Timer monitoringTimer; 
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+        // Конструктор
+        public AppMonitorService(AppDbContext context) => _context = context;
+
+        // Начало мониторинга
+        public void StartMonitoring(int userId)
         {
-            _context = context;
+            if (monitoringTimer == null)
+            {
+                monitoringTimer = new System.Timers.Timer(10000);
+                monitoringTimer.Elapsed += (sender, e) => MonitorProcesses(userId);
+                monitoringTimer.Start();
+            }
         }
 
-        public void ScanRunningPrograms(int userId)
+        // Мониторинг процессов
+        private void MonitorProcesses(int userId)
         {
-            var processes = Process.GetProcesses()
-                .Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)) // Только видимые окна
-                .ToList();
-
-            foreach (var process in processes)
-            {
-                try
-                {
-                    string path = string.Empty;
-                    try
-                    {
-                        path = process.MainModule?.FileName ?? "";
-                    }
-                    catch { }
-
-                    if (string.IsNullOrEmpty(path)) continue;
-
-                    // Проверяем, есть ли программа уже в базе
-                    var existingProgram = _context.Programs.FirstOrDefault(p => p.Path == path);
-                    if (existingProgram != null) continue;
-
-                    // Добавляем новую программу
-                    var newProgram = new Program
-                    {
-                        Name = string.IsNullOrEmpty(process.ProcessName) ? "Unknown" : process.ProcessName,
-                        Path = path,
-                        CategoryId = 1
-                    };
-
-                    _context.Programs.Add(newProgram);
-                }
-                catch
-                {
-                    // просто пропускаем процессы без доступа
-                    continue;
-                }
-            }
-
-            // Сохраняем все изменения в БД
             try
             {
+                var currentProcesses = Process.GetProcesses()
+                    .Where(p => !string.IsNullOrEmpty(p.MainWindowTitle))
+                    .ToDictionary(p => p.Id, p => p);
+
+                foreach (var sessionId in activeSessions.Keys.ToList())
+                {
+                    if (!currentProcesses.ContainsKey(sessionId))
+                    {
+                        var session = activeSessions[sessionId];
+                        session.EndTime = DateTime.Now;
+                        _context.Sessions.Add(session);
+                        _context.SaveChanges();
+                        UpdateStatistics(session);
+                        activeSessions.Remove(sessionId);
+                    }
+                }
+
+                IntPtr foregroundWindow = GetForegroundWindow();
+                uint fgProcessId;
+                GetWindowThreadProcessId(foregroundWindow, out fgProcessId);
+
+                if (fgProcessId > 0 && currentProcesses.TryGetValue((int)fgProcessId, out var fgProcess) &&
+                    !activeSessions.ContainsKey(fgProcess.Id))
+                {
+                    string path = "";
+                    try { path = fgProcess.MainModule?.FileName ?? ""; } catch { }
+
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var program = _context.Programs.FirstOrDefault(p => p.Path == path) ??
+                                      AddNewProgram(fgProcess);
+                        var newSession = new Session
+                        {
+                            UserId = userId,
+                            ProgramId = program.Id,
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now
+                        };
+                        activeSessions[fgProcess.Id] = newSession;
+                    }
+                }
+            }
+            catch { }
+        }
+
+        // Сканирование программ
+        private Program AddNewProgram(Process proc)
+        {
+            if (!_context.Categories.Any(c => c.Id == 1))
+            {
+                _context.Categories.Add(new Category { Id = 1, Name = "Не классифицировано" });
                 _context.SaveChanges();
             }
-            catch (DbUpdateException ex)
+
+            var program = new Program
             {
-                // Логируем внутреннюю ошибку для диагностики
-                Console.WriteLine(ex.InnerException?.Message);
-                throw; // можно убрать throw, если не хотим падения приложения
-            }
-        }
-
-        public List<Program> GetAllPrograms(int userId)
-        {
-            return _context.Programs
-                .Include(p => p.Category) // чтобы Category.Name работал в DataGrid
-                .ToList();
-        }
-
-        public void StartProgramSession(int userId, string programPath)
-        {
-            // Ищем программу по пути
-            var program = _context.Programs.FirstOrDefault(p => p.Path == programPath);
-            if (program == null) return;
-
-            // Создаём новую сессию
-            var session = new Session
-            {
-                UserId = userId,
-                ProgramId = program.Id,
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now // пока что ставим одинаково
+                Name = proc.ProcessName ?? "Unknown",
+                Path = proc.MainModule?.FileName ?? "",
+                CategoryId = 1
             };
+            _context.Programs.Add(program);
+            _context.SaveChanges();
+            return program;
+        }
 
-            _context.Sessions.Add(session);
 
-            // Обновляем статистику
-            var stats = _context.Statistics.FirstOrDefault(s => s.UserId == userId && s.ProgramId == program.Id);
-            if (stats == null)
+        // Обновление статистики
+        private void UpdateStatistics(Session session)
+        {
+            var stat = _context.Statistics.FirstOrDefault(s => s.UserId == session.UserId && s.ProgramId == session.ProgramId);
+            if (stat == null)
             {
-                stats = new Statistics
+                stat = new Statistics
                 {
-                    UserId = userId,
-                    ProgramId = program.Id,
+                    UserId = session.UserId,
+                    ProgramId = session.ProgramId,
                     TotalTime = TimeSpan.Zero,
-                    LastLaunch = DateTime.Now
+                    LastLaunch = null
                 };
-                _context.Statistics.Add(stats);
-            }
-            else
-            {
-                stats.LastLaunch = DateTime.Now;
+                _context.Statistics.Add(stat);
             }
 
+            stat.TotalTime += session.EndTime - session.StartTime;
+            stat.LastLaunch = session.StartTime > (stat.LastLaunch ?? DateTime.MinValue) ? session.StartTime : stat.LastLaunch;
             _context.SaveChanges();
         }
 
-        public List<Session> GetUserSessions(int userId)
+        // Сканирование запущенный программ
+        public void ScanRunningPrograms(int userId)
+        {
+            var processes = Process.GetProcesses()
+                .Where(p => !string.IsNullOrEmpty(p.MainWindowTitle))
+                .ToList();
+
+            if (!_context.Categories.Any(c => c.Id == 1))
+            {
+                _context.Categories.Add(new Category { Id = 1, Name = "Не классифицировано" });
+                _context.SaveChanges();
+            }
+
+            foreach (var proc in processes)
+            {
+                try
+                {
+                    string path = proc.MainModule?.FileName ?? "";
+                    if (string.IsNullOrEmpty(path)) continue;
+
+                    if (!_context.Programs.Any(p => p.Path == path))
+                    {
+                        _context.Programs.Add(new Program
+                        {
+                            Name = proc.ProcessName ?? "Unknown",
+                            Path = path,
+                            CategoryId = 1
+                        });
+                    }
+                }
+                catch { }
+            }
+            _context.SaveChanges();
+        }
+
+        // Получение списка программ
+        public List<Program> GetAllPrograms(int userId)
+        {
+            return _context.Programs.Include(p => p.Category).ToList();
+        }
+
+        // Получение сессий
+        public List<Session> GetSessions(int userId)
         {
             return _context.Sessions
-                .Include(s => s.Program)
-                    .ThenInclude(p => p.Category)
                 .Where(s => s.UserId == userId)
+                .Include(s => s.Program)
+                .ThenInclude(p => p.Category)
                 .OrderByDescending(s => s.StartTime)
                 .ToList();
         }
 
-        public AppDbContext GetDbContext()
+        // Получение статистики
+        public List<Statistics> GetStatistics(int userId)
         {
-            return _context;
+            var stats = _context.Statistics
+                .Where(st => st.UserId == userId)
+                .Include(st => st.Program)
+                .ToList();
+
+            return stats
+                .OrderByDescending(st => st.TotalTime)
+                .ToList();
         }
 
     }

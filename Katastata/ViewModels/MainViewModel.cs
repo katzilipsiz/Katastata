@@ -1,102 +1,71 @@
-﻿using Katastata.Data;
-using Katastata.Models;
+﻿using Katastata.Models;
 using Katastata.Services;
-using Katastata.UserControls;
+using System;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using System.Windows.Input;
+using System.Windows;
 
 namespace Katastata.ViewModels
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel
     {
-        private UserControl _currentPage;
-        public UserControl CurrentPage
+        private readonly AppMonitorService _service;
+        private readonly int _userId;
+        public ObservableCollection<Program> Programs { get; } = new ObservableCollection<Program>();
+        public RelayCommand ScanCommand { get; }
+        public RelayCommand ShowSessionsCommand { get; }
+        public RelayCommand ShowStatisticsCommand { get; } 
+
+        public MainViewModel() { }
+
+        public MainViewModel(AppMonitorService service, int userId)
         {
-            get => _currentPage;
-            set { _currentPage = value; OnPropertyChanged(nameof(CurrentPage)); }
-        }
-
-        public RelayCommand ShowLoginCommand { get; set; }
-        public RelayCommand ShowRegisterCommand { get; set; }
-
-        public ObservableCollection<Program> Programs { get; set; } = new ObservableCollection<Program>();
-        public ObservableCollection<SessionViewModel> Sessions { get; set; } = new ObservableCollection<SessionViewModel>();
-
-        private readonly AppMonitorService _monitorService;
-        private readonly int _currentUserId = 1; // временно фиксируем пользователя
-
-        public ICommand ScanCommand { get; set; }
-
-        public MainViewModel(AppMonitorService monitorService)
-        {
-            _monitorService = monitorService;
-
-            // Команды переключения страниц
-            ShowLoginCommand = new RelayCommand(ShowLogin);
-            ShowRegisterCommand = new RelayCommand(ShowRegister);
-
-            // По умолчанию показываем Login
-            ShowLogin();
-
-            // Команда сканирования
-            ScanCommand = new RelayCommand(ScanPrograms);
-
-            // Загружаем начальные данные
+            _service = service;
+            _userId = userId;
+            ScanCommand = new RelayCommand(_ => ScanPrograms());
+            ShowSessionsCommand = new RelayCommand(_ => ShowSessions());
+            ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics()); 
             LoadPrograms();
-            LoadSessions();
+            _service.StartMonitoring(_userId);
         }
 
-        private void ShowLogin()
-        {
-            CurrentPage = new LoginPage
-            {
-                DataContext = new UserViewModel(_monitorService.GetDbContext())
-            };
-        }
-
-        private void ShowRegister()
-        {
-            CurrentPage = new RegisterPage
-            {
-                DataContext = new UserViewModel(_monitorService.GetDbContext())
-            };
-        }
+        // Сканировать программы
         private void ScanPrograms()
         {
-            // 1. Сканируем программы
-            _monitorService.ScanRunningPrograms(_currentUserId);
-
-            // 2. Обновляем сессии (создаём новые сессии для текущих программ)
-            foreach (var prog in _monitorService.GetAllPrograms(_currentUserId))
+            try
             {
-                _monitorService.StartProgramSession(_currentUserId, prog.Path);
+                _service.ScanRunningPrograms(_userId);
+                LoadPrograms();
+                MessageBox.Show("Сканирование завершено");
             }
-
-            // 3. Обновляем коллекцию программ для DataGrid
-            LoadPrograms();
-
-            // 4. Обновляем коллекцию сессий для DataGrid
-            LoadSessions();
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка: " + ex.Message);
+            }
         }
 
+        // Показ программ
         private void LoadPrograms()
         {
             Programs.Clear();
-            foreach (var prog in _monitorService.GetAllPrograms(_currentUserId))
-            {
-                Programs.Add(prog);
-            }
+            var items = _service.GetAllPrograms(_userId);
+            foreach (var p in items)
+                Programs.Add(p);
         }
 
-        private void LoadSessions()
+        // Показ сессий
+        private void ShowSessions()
         {
-            Sessions.Clear();
-            var userSessions = _monitorService.GetUserSessions(_currentUserId);
-            foreach (var session in userSessions)
-            {
-                Sessions.Add(new SessionViewModel(session));
-            }
+            var sessions = _service.GetSessions(_userId);
+            var sessionsWindow = new SessionsWindow(sessions);
+            sessionsWindow.Show();
+        }
+
+        // Показ статистики
+        private void ShowStatistics()
+        {
+            var stats = _service.GetStatistics(_userId);
+            var statsWindow = new StatisticsWindow(stats);
+            statsWindow.Show();
         }
     }
 }

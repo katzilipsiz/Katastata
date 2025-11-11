@@ -1,94 +1,59 @@
-﻿using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Windows.Input;
+﻿using Katastata.Data;
 using Katastata.Models;
-using Katastata.Data;
+using System;
+using System.Linq;
+using System.Security;
+using System.Windows.Input;
+using Katastata.Helpers;
 
 namespace Katastata.ViewModels
 {
-    public class UserViewModel : BaseViewModel
+    public class UserViewModel
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _db;
+        public event Action<int> LoginSuccessful;
 
-        public UserViewModel(AppDbContext context)
-        {
-            _context = context;
-            RegisterCommand = new RelayCommand(RegisterUser);
-            LoginCommand = new RelayCommand(LoginUser);
-        }
-
-        // Регистрация
         public string RegisterUsername { get; set; }
-        public string RegisterPassword { get; set; } // сюда будем сохранять пароль с PasswordBox
-        public ICommand RegisterCommand { get; set; }
-
-        // Вход
+        public SecureString RegisterPassword { get; set; } = new SecureString();
         public string LoginUsername { get; set; }
-        public string LoginPassword { get; set; } // сюда будем сохранять пароль с PasswordBox
-        public ICommand LoginCommand { get; set; }
+        public SecureString LoginPassword { get; set; } = new SecureString();
 
-        public string ErrorMessage { get; set; }
+        public ICommand RegisterCommand { get; }
+        public ICommand LoginCommand { get; }
 
-        public User CurrentUser { get; private set; }
+        public UserViewModel() { }
+
+        public UserViewModel(AppDbContext db)
+        {
+            _db = db;
+            RegisterCommand = new RelayCommand(_ => RegisterUser());
+            LoginCommand = new RelayCommand(_ => LoginUser());
+        }
 
         private void RegisterUser()
         {
-            if (string.IsNullOrWhiteSpace(RegisterUsername) || string.IsNullOrWhiteSpace(RegisterPassword))
-            {
-                ErrorMessage = "Заполните все поля";
-                OnPropertyChanged(nameof(ErrorMessage));
-                return;
-            }
+            if (string.IsNullOrWhiteSpace(RegisterUsername) || RegisterPassword.Length == 0) return;
+            if (_db.Users.Any(u => u.Username == RegisterUsername)) return;
 
-            if (_context.Users.Any(u => u.Username == RegisterUsername))
-            {
-                ErrorMessage = "Пользователь уже существует";
-                OnPropertyChanged(nameof(ErrorMessage));
-                return;
-            }
-
+            var passwordString = new System.Net.NetworkCredential(string.Empty, RegisterPassword).Password;
             var user = new User
             {
                 Username = RegisterUsername,
-                PasswordHash = HashPassword(RegisterPassword),
+                PasswordHash = PasswordHelper.HashPassword(passwordString),
                 PCName = Environment.MachineName
             };
-
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
-            ErrorMessage = "Регистрация успешна!";
-            OnPropertyChanged(nameof(ErrorMessage));
+            _db.Users.Add(user);
+            _db.SaveChanges();
+            LoginSuccessful?.Invoke(user.Id);
         }
-
-        public event Action<User> LoginSucceeded;
 
         private void LoginUser()
         {
-            var hash = HashPassword(LoginPassword);
-            var user = _context.Users.FirstOrDefault(u => u.Username == LoginUsername && u.PasswordHash == hash);
-
-            if (user == null)
-            {
-                ErrorMessage = "Неверный логин или пароль";
-                OnPropertyChanged(nameof(ErrorMessage));
-                return;
-            }
-
-            CurrentUser = user;
-            LoginSucceeded?.Invoke(user); // уведомляем MainViewModel
-
-            ErrorMessage = $"Добро пожаловать, {user.Username}!";
-            OnPropertyChanged(nameof(ErrorMessage));
-        }
-
-        private string HashPassword(string password)
-        {
-            using var sha256 = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(password);
-            var hash = sha256.ComputeHash(bytes);
-            return Convert.ToBase64String(hash);
+            var passwordString = new System.Net.NetworkCredential(string.Empty, LoginPassword).Password;
+            var hash = PasswordHelper.HashPassword(passwordString);
+            var user = _db.Users.FirstOrDefault(u => u.Username == LoginUsername && u.PasswordHash == hash);
+            if (user != null)
+                LoginSuccessful?.Invoke(user.Id);
         }
     }
 }

@@ -8,7 +8,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBox Grid.Row="0" Margin="0 0 0 10"
@@ -20,7 +19,5 @@
         <Button Grid.Row="2" Content="Зарегистрироваться"
                 Command="{Binding RegisterCommand}"
                 Padding="10" Background="#007ACC" Foreground="White"/>
-
-        <TextBlock Grid.Row="3" Foreground="Red" Text="{Binding ErrorMessage}"/>
     </Grid>
 </UserControl>

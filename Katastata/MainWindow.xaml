@@ -4,7 +4,7 @@
         Title="Katastata — Мониторинг программ"
         Width="950" Height="600"
         WindowStartupLocation="CenterScreen"
-        Background="#1E1E1E">
+        Background="{DynamicResource WindowBackgroundBrush}">
 
     <Window.Resources>
         <!-- Эффект тени -->
@@ -13,80 +13,30 @@
                           ShadowDepth="2"
                           Opacity="0.4"
                           Color="Black"/>
-
-        <!-- Стиль кнопки с анимацией -->
-        <Style x:Key="AnimatedButton" TargetType="Button">
-            <Setter Property="Background" Value="#2D2D30"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Padding" Value="15 8"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Width" Value="150"/>
-            <Setter Property="Height" Value="38"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="8"
-                                      ShadowDepth="2"
-                                      Opacity="0.3"
-                                      Color="Black"/>
-                </Setter.Value>
-            </Setter>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="6">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-
-                        <ControlTemplate.Triggers>
-                            <!-- Hover -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="border"
-                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                            To="#007ACC"
-                                                            Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="border"
-                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                            To="#2D2D30"
-                                                            Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
 
     <Grid>
         <!-- Верхний бар -->
-        <Border Background="#005A9E"
-                Height="50"
-                VerticalAlignment="Top">
+        <Border Background="{DynamicResource AccentBrush}" Height="50" VerticalAlignment="Top">
             <DockPanel>
-                <TextBlock Text="Katastata"
-                           Foreground="White"
+                <!-- Название / логотип -->
+                <TextBlock Text="KATASTATA"
+                           Foreground="{StaticResource AccentBrushActive}"
                            FontSize="20"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
-                           Margin="15,0,0,0" />
+                           Margin="15,0,0,0"
+                           DockPanel.Dock="Left"/>
+
+                <!-- Кнопки справа -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="0,0,15,0">
+                    <Button x:Name="LightThemeBtn" Content="☀" 
+                            Style="{StaticResource ThemeSymbolButtonStyle}" 
+                            Click="LightTheme_Click"/>
+                    <Button x:Name="DarkThemeBtn" Content="🌙" 
+                            Style="{StaticResource ThemeSymbolButtonStyle}" 
+                            Click="DarkTheme_Click"/>
+                </StackPanel>
             </DockPanel>
         </Border>
 
@@ -101,44 +51,59 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,15">
                 <Button Content="⟳ Сканировать"
                         Command="{Binding ScanCommand}"
-                        Style="{StaticResource AnimatedButton}"
-                        Background="#007ACC"/>
-
+                        Style="{DynamicResource ThemeButtonStyle}"/>
                 <Button Content="🕓 Сессии"
-                        Style="{StaticResource AnimatedButton}"
+                        Command="{Binding ShowSessionsCommand}"
+                        Style="{DynamicResource ThemeButtonStyle}"
                         Margin="10,0,0,0"/>
-
+                <Button Content="📊 Статистика"
+                        Command="{Binding ShowStatisticsCommand}"
+                        Style="{DynamicResource ThemeButtonStyle}"
+                        Margin="10,0,0,0"/>
                 <Button Content="⚙ Настройки"
-                        Style="{StaticResource AnimatedButton}"
-                        Margin="10,0,0,0"/>
-                <Button Content="Авторизация"
-                        Click="AuthClick"
-                        Style="{StaticResource AnimatedButton}"
+                        Style="{DynamicResource ThemeButtonStyle}"
                         Margin="10,0,0,0"/>
             </StackPanel>
 
             <!-- Таблица -->
             <Border Grid.Row="1"
-                    Background="#252526"
+                    Background="{DynamicResource PanelBackgroundBrush}"
                     CornerRadius="8"
                     Padding="10"
                     Effect="{StaticResource SoftShadow}">
                 <DataGrid ItemsSource="{Binding Programs}"
                           AutoGenerateColumns="False"
-                          Background="#252526"
-                          Foreground="White"
+                          Background="{DynamicResource DataGridBackgroundBrush}"
+                          Foreground="{DynamicResource TextForegroundBrush}"
                           HeadersVisibility="Column"
-                          RowBackground="#2D2D30"
-                          AlternatingRowBackground="#333337"
+                          RowBackground="{DynamicResource RowBackgroundBrush}"
+                          AlternatingRowBackground="{DynamicResource AlternatingRowBackgroundBrush}"
                           BorderThickness="0"
                           CanUserAddRows="False"
                           CanUserDeleteRows="False"
                           IsReadOnly="True"
                           GridLinesVisibility="None"
-                          RowHeight="35">
+                          RowHeight="50">
 
                     <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007ACC"/>
+                        <!-- Стиль для заголовков -->
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Foreground" Value="{DynamicResource HeaderForegroundBrush}"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Padding" Value="10,5"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                        </Style>
+
+                        <!-- Стиль строк с подсветкой при наведении -->
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Height" Value="35"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FF555555"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
                     </DataGrid.Resources>
 
                     <DataGrid.Columns>
@@ -151,3 +116,4 @@
         </Grid>
     </Grid>
 </Window>
+ 

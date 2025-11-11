@@ -8,24 +8,16 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Логин -->
         <TextBox Grid.Row="0" Margin="0 0 0 10"
-                 Text="{Binding LoginUsername, Mode=TwoWay}"
-                 />
+                 Text="{Binding LoginUsername, Mode=TwoWay}"/>
 
-        <!-- Пароль -->
         <PasswordBox Grid.Row="1" Margin="0 0 0 10"
                      PasswordChanged="LoginPasswordBox_PasswordChanged"/>
 
-        <!-- Кнопка Вход -->
         <Button Grid.Row="2" Content="Войти"
                 Command="{Binding LoginCommand}"
                 Padding="10" Background="#007ACC" Foreground="White"/>
-
-        <!-- Ошибки -->
-        <TextBlock Grid.Row="3" Foreground="Red" Text="{Binding ErrorMessage}"/>
     </Grid>
 </UserControl>

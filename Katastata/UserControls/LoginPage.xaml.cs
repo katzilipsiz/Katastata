@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using Katastata.ViewModels;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace Katastata.UserControls
 {
@@ -10,11 +10,11 @@ namespace Katastata.UserControls
             InitializeComponent();
         }
 
-        private void LoginPasswordBox_PasswordChanged(object sender, System.Windows.RoutedEventArgs e)
+        private void LoginPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (DataContext is UserViewModel vm)
+            if (DataContext is ViewModels.UserViewModel vm)
             {
-                vm.LoginPassword = ((PasswordBox)sender).Password;
+                vm.LoginPassword = ((PasswordBox)sender).SecurePassword;
             }
         }
     }

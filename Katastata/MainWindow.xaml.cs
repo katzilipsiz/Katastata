@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Microsoft.EntityFrameworkCore;
+using Katastata.Data;
+using Katastata.Services;
+using Katastata.ViewModels;
 
 using Microsoft.EntityFrameworkCore;
 using Katastata.Models;
@@ -25,6 +17,16 @@ namespace Katastata
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainWindow(int userId, DbContextOptions<AppDbContext> options)
+        {
+            InitializeComponent();
+
+            var db = new AppDbContext(options);
+            var service = new AppMonitorService(db);
+            DataContext = new MainViewModel(service, userId);
+        }
+
+        // Для дизайнера оставим пустой ctor
         public MainWindow()
         {
             InitializeComponent();
@@ -58,5 +60,31 @@ namespace Katastata
             }
 
         }
+
+        private void ApplyTheme(string themePath)
+        {
+            var themeDict = new ResourceDictionary
+            {
+                Source = new Uri(themePath, UriKind.Relative)
+            };
+
+            Application.Current.Resources.MergedDictionaries.Clear();
+            Application.Current.Resources.MergedDictionaries.Add(themeDict);
+        }
+
+        private void LightTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ApplyTheme("Assets/Themes/Light.xaml");
+
+        }
+
+        // Переключение на тёмную тему
+        private void DarkTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ApplyTheme("Assets/Themes/Dark.xaml");
+
+        }
+
+        
     }
 }
