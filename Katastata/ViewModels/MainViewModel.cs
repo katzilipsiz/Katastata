@@ -10,9 +10,9 @@ namespace Katastata.ViewModels
     {
         private readonly AppMonitorService _service;
         private readonly int _userId;
-
         public ObservableCollection<Program> Programs { get; } = new ObservableCollection<Program>();
         public RelayCommand ScanCommand { get; }
+        public RelayCommand ShowSessionsCommand { get; }  // Новая команда
 
         public MainViewModel() { } // для дизайнера
 
@@ -20,10 +20,10 @@ namespace Katastata.ViewModels
         {
             _service = service;
             _userId = userId;
-
             ScanCommand = new RelayCommand(_ => ScanPrograms());
-
+            ShowSessionsCommand = new RelayCommand(_ => ShowSessions());  // Привязка
             LoadPrograms();
+            _service.StartMonitoring(_userId);
         }
 
         private void ScanPrograms()
@@ -46,6 +46,13 @@ namespace Katastata.ViewModels
             var items = _service.GetAllPrograms(_userId);
             foreach (var p in items)
                 Programs.Add(p);
+        }
+
+        private void ShowSessions()
+        {
+            var sessions = _service.GetSessions(_userId);
+            var sessionsWindow = new SessionsWindow(sessions);  // Новое окно для сессий
+            sessionsWindow.Show();
         }
     }
 }
