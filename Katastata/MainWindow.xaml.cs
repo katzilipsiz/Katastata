@@ -29,16 +29,8 @@ namespace Katastata
         {
             InitializeComponent();
 
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                            .UseSqlite("Data Source=katastata.db")
-                            .Options;
-
-            var dbContext = new AppDbContext(options);
-            var viewModel = new AppMonitorService(dbContext); // передаём только контекст
-
-            DataContext = viewModel;
-
-
+            InitializeComponent();
+            DataContext = new MainViewModel(_service, _currentUserId);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

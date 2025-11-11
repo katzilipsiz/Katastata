@@ -1,10 +1,10 @@
-﻿using Katastata.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Katastata.Data;
 using Katastata.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 namespace Katastata.Services
 {
@@ -19,116 +19,61 @@ namespace Katastata.Services
 
         public void ScanRunningPrograms(int userId)
         {
-            var processes = Process.GetProcesses()
-                .Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)) // Только видимые окна
-                .ToList();
+            Console.WriteLine("▶ Сканирование началось");
 
-            foreach (var process in processes)
+            var defaultCat = _context.Categories.FirstOrDefault(c => c.Id == 1);
+            if (defaultCat == null)
+            {
+                defaultCat = new Category { Id = 1, Name = "Не классифицировано" };
+                _context.Categories.Add(defaultCat);
+                _context.SaveChanges();
+            }
+
+            var processes = Process.GetProcesses();
+
+            foreach (var p in processes)
             {
                 try
                 {
-                    string path = string.Empty;
-                    try
-                    {
-                        path = process.MainModule?.FileName ?? "";
-                    }
-                    catch { }
-
+                    var path = p.MainModule?.FileName;
                     if (string.IsNullOrEmpty(path)) continue;
 
-                    // Проверяем, есть ли программа уже в базе
-                    var existingProgram = _context.Programs.FirstOrDefault(p => p.Path == path);
-                    if (existingProgram != null) continue;
+                    if (_context.Programs.Any(x => x.Path == path)) continue;
 
-                    // Добавляем новую программу
-                    var newProgram = new Program
+                    var program = new Program
                     {
-                        Name = string.IsNullOrEmpty(process.ProcessName) ? "Unknown" : process.ProcessName,
+                        Name = p.ProcessName,
                         Path = path,
-                        CategoryId = 1
+                        CategoryId = defaultCat.Id
                     };
 
-                    _context.Programs.Add(newProgram);
+                    _context.Programs.Add(program);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // просто пропускаем процессы без доступа
-                    continue;
+                    // Игнорируем системные процессы
+                    Debug.WriteLine($"Не удалось получить доступ к {p.ProcessName}: {ex.Message}");
                 }
             }
 
-            // Сохраняем все изменения в БД
             try
             {
                 _context.SaveChanges();
+                Console.WriteLine("✅ Сканирование завершено и сохранено в БД");
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                // Логируем внутреннюю ошибку для диагностики
-                Console.WriteLine(ex.InnerException?.Message);
-                throw; // можно убрать throw, если не хотим падения приложения
+                Console.WriteLine($"❌ Ошибка при сохранении: {ex.Message}");
+                throw;
             }
         }
 
-        public List<Program> GetAllPrograms(int userId)
+        public List<Program> GetAllPrograms()
         {
             return _context.Programs
-                .Include(p => p.Category) // чтобы Category.Name работал в DataGrid
+                .Include(p => p.Category)
+                .OrderBy(p => p.Name)
                 .ToList();
         }
-
-        public void StartProgramSession(int userId, string programPath)
-        {
-            // Ищем программу по пути
-            var program = _context.Programs.FirstOrDefault(p => p.Path == programPath);
-            if (program == null) return;
-
-            // Создаём новую сессию
-            var session = new Session
-            {
-                UserId = userId,
-                ProgramId = program.Id,
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now // пока что ставим одинаково
-            };
-
-            _context.Sessions.Add(session);
-
-            // Обновляем статистику
-            var stats = _context.Statistics.FirstOrDefault(s => s.UserId == userId && s.ProgramId == program.Id);
-            if (stats == null)
-            {
-                stats = new Statistics
-                {
-                    UserId = userId,
-                    ProgramId = program.Id,
-                    TotalTime = TimeSpan.Zero,
-                    LastLaunch = DateTime.Now
-                };
-                _context.Statistics.Add(stats);
-            }
-            else
-            {
-                stats.LastLaunch = DateTime.Now;
-            }
-
-            _context.SaveChanges();
-        }
-
-        public List<Session> GetUserSessions(int userId)
-        {
-            return _context.Sessions
-                .Include(s => s.Program)
-                    .ThenInclude(p => p.Category)
-                .Where(s => s.UserId == userId)
-                .OrderByDescending(s => s.StartTime)
-                .ToList();
-        }
-
-        public AppDbContext GetDbContext()
-        {
-            return _context;
-        }
-
     }
 }

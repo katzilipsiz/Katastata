@@ -40,71 +40,65 @@
 	<Style x:Key="AppButtonStyle" TargetType="Button" BasedOn="{StaticResource ThemeButtonStyle}">
 		<Setter Property="Width" Value="150"/>
 
-		<Style.Triggers>
-			<!-- Анимация при наведении -->
-			<Trigger Property="IsMouseOver" Value="True">
-				<Trigger.EnterActions>
-					<BeginStoryboard>
-						<Storyboard>
-							<ColorAnimation
+        <Style.Triggers>
+            <!-- Анимация при наведении -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
 								Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
 								To="#FFD46400"
 								Duration="0:0:0.2"
 								FillBehavior="HoldEnd"/>
-						</Storyboard>
-					</BeginStoryboard>
-				</Trigger.EnterActions>
-				<Trigger.ExitActions>
-					<BeginStoryboard>
-						<Storyboard>
-							<ColorAnimation
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
 								Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
 								To="{StaticResource AccentColor}"
 								Duration="0:0:0.3"
 								FillBehavior="HoldEnd"/>
-						</Storyboard>
-					</BeginStoryboard>
-				</Trigger.ExitActions>
-			</Trigger>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
 
-			<!-- Анимация при нажатии -->
-			<Trigger Property="IsPressed" Value="True">
-				<Trigger.EnterActions>
-					<BeginStoryboard>
-						<Storyboard>
-							<DoubleAnimation
+            <!-- Анимация при нажатии -->
+            <Trigger Property="IsPressed" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
 								Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
 								To="0.95"
 								Duration="0:0:0.1"/>
-							<DoubleAnimation
+                            <DoubleAnimation
 								Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
 								To="0.95"
 								Duration="0:0:0.1"/>
-						</Storyboard>
-					</BeginStoryboard>
-				</Trigger.EnterActions>
-				<Trigger.ExitActions>
-					<BeginStoryboard>
-						<Storyboard>
-							<DoubleAnimation
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
 								Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
 								To="1.0"
 								Duration="0:0:0.2"/>
-							<DoubleAnimation
+                            <DoubleAnimation
 								Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
 								To="1.0"
 								Duration="0:0:0.2"/>
-						</Storyboard>
-					</BeginStoryboard>
-				</Trigger.ExitActions>
-			</Trigger>
-		</Style.Triggers>
-
-		<!-- Трансформация для эффекта нажатия -->
-		<Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-		<Setter Property="RenderTransform">
-			<ScaleTransform/>
-		</Setter>
-	</Style>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 </ResourceDictionary>

@@ -69,6 +69,8 @@
                 </Trigger.ExitActions>
             </Trigger>
 
+            
+            
             <!-- Анимация при нажатии -->
             <Trigger Property="IsPressed" Value="True">
                 <Trigger.EnterActions>
@@ -102,11 +104,7 @@
             </Trigger>
         </Style.Triggers>
 
-        <!-- Трансформация для эффекта нажатия -->
-        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-        <Setter Property="RenderTransform">
-            <ScaleTransform/>
-        </Setter>
+        
     </Style>
 
 </ResourceDictionary>
