@@ -5,16 +5,7 @@
         Width="950" Height="600"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource WindowBackgroundBrush}">
-
-    <Window.Resources>
-        <!-- Эффект тени -->
-        <DropShadowEffect x:Key="SoftShadow"
-                          BlurRadius="12"
-                          ShadowDepth="2"
-                          Opacity="0.4"
-                          Color="Black"/>
-    </Window.Resources>
-
+    
     <Grid>
         <!-- Верхний бар -->
         <Border Background="{DynamicResource AccentBrush}" Height="50" VerticalAlignment="Top">
