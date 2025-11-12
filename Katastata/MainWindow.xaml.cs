@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-
+using Katastata.Models;
+using System.Windows.Controls;
 
 namespace Katastata
 {
@@ -22,6 +23,8 @@ namespace Katastata
             DataContext = new MainViewModel(service, userId);
 
             HighlightActiveTheme("Dark");
+
+
         }
 
         // Для дизайнера оставим пустой ctor
@@ -144,5 +147,35 @@ namespace Katastata
                 DarkThemeBtn.Background = accent;
         }
 
+        private void ScannerBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ScanText.Text = "Сканирование завершено!";
+        }
+
+        private void ExportBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var choiceWindow = new ExportWindow();
+            choiceWindow.Owner = this; // модально
+            if (choiceWindow.ShowDialog() == true)
+            {
+                if (DataContext is MainViewModel vm)
+                {
+                    if (choiceWindow.SelectedFormat == "Excel")
+                        vm.ExportStatisticsExcelCommand.Execute(null);
+                    else if (choiceWindow.SelectedFormat == "Word")
+                        vm.ExportStatisticsWordCommand.Execute(null);
+                }
+            }
+        }
+
+        private void ProgramTile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Border border && border.DataContext is Program program)
+            {
+                var vm = (MainViewModel)DataContext;
+                var detailsWindow = new ProgramDetailsWindow(program, vm.UserId, vm.Service);
+                detailsWindow.Show();
+            }
+        }
     }
 }

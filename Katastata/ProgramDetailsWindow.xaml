@@ -1,0 +1,26 @@
+﻿<Window x:Class="Katastata.ProgramDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Детали программы" Height="500" Width="800"
+        Background="{DynamicResource WindowBackgroundBrush}">
+    <Grid Margin="10">
+        <TabControl>
+            <TabItem Header="Сессии">
+                <DataGrid ItemsSource="{Binding Sessions}"
+                          AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Начало" Binding="{Binding StartTime}" />
+                        <DataGridTextColumn Header="Конец" Binding="{Binding EndTime}" />
+                        <DataGridTextColumn Header="Длительность" Binding="{Binding Duration}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Статистика">
+                <StackPanel>
+                    <TextBlock Text="{Binding TotalTime}" />
+                    <TextBlock Text="{Binding LastLaunch}" />
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

@@ -9,6 +9,8 @@ namespace Katastata.UserControls
         public RegisterPage()
         {
             InitializeComponent();
+
+            Loaded += UserControl_Loaded;
         }
 
         private void RegisterPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
@@ -25,5 +27,9 @@ namespace Katastata.UserControls
                 vm.RegisterPasswordConfirm = (sender as PasswordBox)?.SecurePassword;
         }
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            UsernameTextBox.Focus();
+        }
     }
 }

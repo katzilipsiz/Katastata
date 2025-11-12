@@ -10,10 +10,14 @@ namespace Katastata.ViewModels
     {
         private readonly AppMonitorService _service;
         private readonly int _userId;
+        public AppMonitorService Service => _service;
+        public int UserId => _userId;
         public ObservableCollection<Program> Programs { get; } = new ObservableCollection<Program>();
         public RelayCommand ScanCommand { get; }
         public RelayCommand ShowSessionsCommand { get; }
-        public RelayCommand ShowStatisticsCommand { get; } 
+        public RelayCommand ShowStatisticsCommand { get; }
+        public RelayCommand ExportStatisticsExcelCommand { get; }
+        public RelayCommand ExportStatisticsWordCommand { get; }
 
         public MainViewModel() { }
 
@@ -21,9 +25,14 @@ namespace Katastata.ViewModels
         {
             _service = service;
             _userId = userId;
+
             ScanCommand = new RelayCommand(_ => ScanPrograms());
             ShowSessionsCommand = new RelayCommand(_ => ShowSessions());
-            ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics()); 
+            ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics());   
+
+            ExportStatisticsExcelCommand = new RelayCommand(_ => ExportStatisticsExcel());
+            ExportStatisticsWordCommand = new RelayCommand(_ => ExportStatisticsWord());
+
             LoadPrograms();
             _service.StartMonitoring(_userId);
         }
@@ -35,7 +44,6 @@ namespace Katastata.ViewModels
             {
                 _service.ScanRunningPrograms(_userId);
                 LoadPrograms();
-                MessageBox.Show("Сканирование завершено");
             }
             catch (Exception ex)
             {
@@ -68,6 +76,26 @@ namespace Katastata.ViewModels
             statsWindow.Show();
         }
 
+        // Экспорт статистики в Excel
+        private void ExportStatisticsExcel()
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog { Filter = "Excel files (*.xlsx)|*.xlsx", DefaultExt = "xlsx" };
+            if (dialog.ShowDialog() == true)
+            {
+                _service.ExportStatisticsToExcel(_userId, dialog.FileName);
+                MessageBox.Show("Экспорт завершен");
+            }
+        }
 
+        // Экспорт статистики в Word
+        private void ExportStatisticsWord()
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog { Filter = "Word files (.docx)|.docx", DefaultExt = "docx" };
+            if (dialog.ShowDialog() == true)
+            {
+                _service.ExportStatisticsToExcel(_userId, dialog.FileName);
+                MessageBox.Show("Экспорт завершен");
+            }
+        }
     }
 }

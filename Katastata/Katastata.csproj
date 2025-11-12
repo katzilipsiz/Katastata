@@ -9,30 +9,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Assets\Icons\**" />
     <Compile Remove="Assets\Themes\Dark\**" />
     <Compile Remove="Assets\Themes\Light\**" />
     <Compile Remove="Views\**" />
-    <EmbeddedResource Remove="Assets\Icons\**" />
     <EmbeddedResource Remove="Assets\Themes\Dark\**" />
     <EmbeddedResource Remove="Assets\Themes\Light\**" />
     <EmbeddedResource Remove="Views\**" />
-    <None Remove="Assets\Icons\**" />
     <None Remove="Assets\Themes\Dark\**" />
     <None Remove="Assets\Themes\Light\**" />
     <None Remove="Views\**" />
-    <Page Remove="Assets\Icons\**" />
     <Page Remove="Assets\Themes\Dark\**" />
     <Page Remove="Assets\Themes\Light\**" />
     <Page Remove="Views\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Icons\default_app.png" />
     <None Remove="Assets\Logo\mainlogo.png" />
     <None Remove="Assets\Logo\TextLogo.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.3.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
@@ -46,9 +44,11 @@
     </PackageReference>
     <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
     <PackageReference Include="System.Data.SQLite" Version="2.0.2" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Icons\default_app.png" />
     <Resource Include="Assets\Logo\MainLogo.png" />
     <Resource Include="Assets\Logo\TextLogo.png" />
   </ItemGroup>

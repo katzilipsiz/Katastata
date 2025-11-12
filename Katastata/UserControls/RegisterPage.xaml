@@ -25,6 +25,7 @@
                            Foreground="{DynamicResource TextForegroundBrush}"
                            FontSize="12" Margin="0,6,0,4"/>
                 <TextBox Text="{Binding RegisterUsername, Mode=TwoWay}"
+                         x:Name="UsernameTextBox"
                          Height="36"
                          Background="#333333"
                          Style="{StaticResource ThemeTextBoxStyle}"
