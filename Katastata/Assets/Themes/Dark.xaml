@@ -44,7 +44,7 @@
                     <ControlTemplate.Triggers>
                         <!-- Hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#FFD4B76E"/>
+                            <Setter TargetName="border" Property="Background" Value="#AD7636"/>
                         </Trigger>
 
                         <!-- Pressed -->

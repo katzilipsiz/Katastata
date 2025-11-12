@@ -41,26 +41,6 @@ namespace Katastata
             DataContext = viewModel;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void AuthClick(object sender, RoutedEventArgs e)
-        {
-            var loginWindow = new AuthWindow();
-            if (loginWindow.ShowDialog() == true)
-            {
-                MessageBox.Show("Вы вошли в систему!", "Katastata");
-            }
-
-        }
-
         private void ApplyTheme(string themePath)
         {
             var themeDict = new ResourceDictionary
