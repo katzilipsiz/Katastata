@@ -41,5 +41,10 @@ namespace Katastata
         {
             ContentArea.Content = new RegisterPage { DataContext = _vm };
         }
+
+        private void CloseApp(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
