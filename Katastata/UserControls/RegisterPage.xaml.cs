@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace Katastata.UserControls
 {
-    public partial class RegisterPage : UserControl
+    public partial class RegisterPage : System.Windows.Controls.UserControl
     {
         public RegisterPage()
         {

@@ -1,44 +1,53 @@
 ﻿using Katastata.Data;
+using Katastata.Models;
 using Katastata.Services;
 using Katastata.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
+using System.Drawing;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;  // Для tray
 using System.Windows.Input;
 using System.Windows.Media;
-using Katastata.Models;
-using System.Windows.Controls;
 
 namespace Katastata
 {
     public partial class MainWindow : Window
     {
+        private NotifyIcon trayIcon;
         private bool isFullscreen = false;
 
         public MainWindow(int userId, DbContextOptions<AppDbContext> options)
         {
             InitializeComponent();
-
             var db = new AppDbContext(options);
             var service = new AppMonitorService(db);
             DataContext = new MainViewModel(service, userId);
-
             HighlightActiveTheme("Dark");
 
+            trayIcon = new NotifyIcon();
+            trayIcon.Icon = new Icon(System.Windows.Application.GetResourceStream(new Uri("pack://application:,,,/Assets/Logo/app.ico")).Stream);
+            trayIcon.Text = "Katastata";
+            trayIcon.Visible = false;
 
+
+            // Контекстное меню для выхода
+            var contextMenu = new ContextMenuStrip();
+            contextMenu.Items.Add("Показать", null, (s, e) => TrayIcon_Click());
+            contextMenu.Items.Add("Выход", null, (s, e) => System.Windows.Application.Current.Shutdown());
+            trayIcon.ContextMenuStrip = contextMenu;
         }
 
         // Для дизайнера оставим пустой ctor
         public MainWindow()
         {
             InitializeComponent();
-
             var options = new DbContextOptionsBuilder<AppDbContext>()
                             .UseSqlite("Data Source=katastata.db")
                             .Options;
-
             var dbContext = new AppDbContext(options);
             var viewModel = new AppMonitorService(dbContext); // передаём только контекст
-
             DataContext = viewModel;
         }
 
@@ -48,16 +57,14 @@ namespace Katastata
             {
                 Source = new Uri(themePath, UriKind.Relative)
             };
-
-            Application.Current.Resources.MergedDictionaries.Clear();
-            Application.Current.Resources.MergedDictionaries.Add(themeDict);
+            System.Windows.Application.Current.Resources.MergedDictionaries.Clear();
+            System.Windows.Application.Current.Resources.MergedDictionaries.Add(themeDict);
         }
 
         private void LightTheme_Click(object sender, RoutedEventArgs e)
         {
             ApplyTheme("Assets/Themes/Light.xaml");
             HighlightActiveTheme("Light");
-
         }
 
         // Переключение на тёмную тему
@@ -65,14 +72,13 @@ namespace Katastata
         {
             ApplyTheme("Assets/Themes/Dark.xaml");
             HighlightActiveTheme("Dark");
-
         }
+
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 var exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
                 var startInfo = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = "dotnet",
@@ -81,14 +87,12 @@ namespace Katastata
                     CreateNoWindow = true, // скрываем окно CMD
                     WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
                 };
-
                 System.Diagnostics.Process.Start(startInfo);
-
-                Application.Current.Shutdown();
+                System.Windows.Application.Current.Shutdown();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Не удалось перезапустить приложение: " + ex.Message);
+                System.Windows.MessageBox.Show("Не удалось перезапустить приложение: " + ex.Message);
             }
         }
 
@@ -106,6 +110,20 @@ namespace Katastata
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true; // Отменяем закрытие
+            this.Hide(); // Скрываем окно
+            trayIcon.Visible = true; // Показываем значок
+        }
+
+        private void TrayIcon_Click()
+        {
+            this.Show(); // Восстанавливаем окно
+            this.WindowState = WindowState.Normal;
+            trayIcon.Visible = false; // Скрываем значок
         }
 
         private void FullscreenBtn_Click(object sender, RoutedEventArgs e)
@@ -133,13 +151,11 @@ namespace Katastata
 
         private void HighlightActiveTheme(string activeTheme)
         {
-            var accent = (Brush)Application.Current.Resources["AccentBrushActive"];
-            var normal = Brushes.Transparent;
-
+            System.Windows.Media.Brush accent = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["AccentBrushActive"];
+            System.Windows.Media.Brush normal = System.Windows.Media.Brushes.Transparent;
             // Сброс фона
             LightThemeBtn.Background = normal;
             DarkThemeBtn.Background = normal;
-
             // Подсветка активной
             if (activeTheme == "Light")
                 LightThemeBtn.Background = accent;

@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+	<UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
 
   <ItemGroup>
     <None Remove="Assets\Icons\default_app.png" />
+    <None Remove="Assets\Logo\app.ico" />
     <None Remove="Assets\Logo\mainlogo.png" />
     <None Remove="Assets\Logo\TextLogo.png" />
   </ItemGroup>
@@ -49,6 +51,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\Icons\default_app.png" />
+    <Resource Include="Assets\Logo\app.ico" />
     <Resource Include="Assets\Logo\MainLogo.png" />
     <Resource Include="Assets\Logo\TextLogo.png" />
   </ItemGroup>

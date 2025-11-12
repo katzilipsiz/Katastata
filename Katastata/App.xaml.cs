@@ -6,7 +6,7 @@ using Katastata.Data;
 
 namespace Katastata
 {
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         private const string DbFileName = "katastata.db";
 

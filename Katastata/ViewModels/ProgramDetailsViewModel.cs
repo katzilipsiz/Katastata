@@ -5,12 +5,16 @@ namespace Katastata.ViewModels
 {
     public class ProgramDetailsViewModel
     {
+        public string ProgramName { get; }
+        public string ProgramPath { get; }
         public ObservableCollection<SessionViewModel> Sessions { get; } = new ObservableCollection<SessionViewModel>();
         public TimeSpan TotalTime { get; }
         public DateTime? LastLaunch { get; }
 
-        public ProgramDetailsViewModel(List<Session> sessions, Statistics stat)
+        public ProgramDetailsViewModel(Program program, List<Session> sessions, Statistics stat)
         {
+            ProgramName = program.Name ?? "Unknown";
+            ProgramPath = program.Path ?? "";
             foreach (var session in sessions)
             {
                 Sessions.Add(new SessionViewModel(session));

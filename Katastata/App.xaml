@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="Assets/Themes/Dark.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <local:PathToIconConverter x:Key="PathToIconConverter"/>
+            <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

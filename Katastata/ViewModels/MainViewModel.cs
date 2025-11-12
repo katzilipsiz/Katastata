@@ -47,7 +47,7 @@ namespace Katastata.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка: " + ex.Message);
+                System.Windows.MessageBox.Show("Ошибка: " + ex.Message);
             }
         }
 
@@ -83,7 +83,7 @@ namespace Katastata.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 _service.ExportStatisticsToExcel(_userId, dialog.FileName);
-                MessageBox.Show("Экспорт завершен");
+                System.Windows.MessageBox.Show("Экспорт завершен");
             }
         }
 
@@ -94,7 +94,7 @@ namespace Katastata.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 _service.ExportStatisticsToExcel(_userId, dialog.FileName);
-                MessageBox.Show("Экспорт завершен");
+                System.Windows.MessageBox.Show("Экспорт завершен");
             }
         }
     }

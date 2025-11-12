@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace Katastata.UserControls
 {
-    public partial class LoginPage : UserControl
+    public partial class LoginPage : System.Windows.Controls.UserControl
     {
         public LoginPage()
         {

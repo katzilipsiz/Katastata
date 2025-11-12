@@ -41,23 +41,17 @@ namespace Katastata
             // Блокируем кнопки
             LoginButton.IsEnabled = false;
             RegisterButton.IsEnabled = false;
-
             // Отображаем оверлей
             SuccessOverlay.Visibility = Visibility.Visible;
-
             // Затухание содержимого
             var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(300));
             RootGrid.BeginAnimation(OpacityProperty, fadeOut);
-
             await Task.Delay(300);
-
             // Плавное появление надписи
             var fadeInOverlay = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(700));
             var fadeInText = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(700));
-
             SuccessOverlay.BeginAnimation(OpacityProperty, fadeInOverlay);
             SuccessText.BeginAnimation(OpacityProperty, fadeInText);
-
             await Task.Delay(2000);
         }
 
@@ -84,18 +78,17 @@ namespace Katastata
                 DragMove();
         }
 
-        private void HighlightActiveButton(Button activeButton)
+        private void HighlightActiveButton(System.Windows.Controls.Button activeButton)  // Уточнен тип Button
         {
-            var activeBrush = (Brush)Application.Current.Resources["AccentBrush"];
-            var inactiveBrush = (Brush)Application.Current.Resources["WindowBackgroundBrush"];
-            var activeForeground = (Brush)Application.Current.Resources["AccentBrushActive"];
-            var inactiveForeground = Brushes.LightGray;
+            System.Windows.Media.Brush activeBrush = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["AccentBrush"];
+            System.Windows.Media.Brush inactiveBrush = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["WindowBackgroundBrush"];
+            System.Windows.Media.Brush activeForeground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["AccentBrushActive"];
+            System.Windows.Media.Brush inactiveForeground = System.Windows.Media.Brushes.LightGray;
 
             LoginButton.Background = inactiveBrush;
             RegisterButton.Background = inactiveBrush;
             LoginButton.Foreground = inactiveForeground;
             RegisterButton.Foreground = inactiveForeground;
-
             activeButton.Background = activeBrush;
             activeButton.Foreground = activeForeground;
         }
