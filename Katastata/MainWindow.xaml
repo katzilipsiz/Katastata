@@ -5,14 +5,14 @@
         Width="950" Height="600"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource WindowBackgroundBrush}">
-    
+
     <Grid>
         <!-- Верхний бар -->
         <Border Background="{DynamicResource AccentBrush}" Height="50" VerticalAlignment="Top">
             <DockPanel>
                 <!-- Название / логотип -->
                 <TextBlock Text="KATASTATA"
-                           Foreground="{StaticResource AccentBrushActive}"
+                           Foreground="{DynamicResource AccentBrushActive}"
                            FontSize="20"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
@@ -20,12 +20,18 @@
                            DockPanel.Dock="Left"/>
 
                 <!-- Кнопки справа -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="0,0,15,0">
-                    <Button x:Name="LightThemeBtn" Content="☀" 
-                            Style="{StaticResource ThemeSymbolButtonStyle}" 
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            DockPanel.Dock="Right"
+                            Margin="0,0,15,0">
+                    <Button x:Name="LightThemeBtn"
+                            Content="☀"
+                            Style="{DynamicResource ThemeSymbolButtonStyle}"
                             Click="LightTheme_Click"/>
-                    <Button x:Name="DarkThemeBtn" Content="🌙" 
-                            Style="{StaticResource ThemeSymbolButtonStyle}" 
+                    <Button x:Name="DarkThemeBtn"
+                            Content="🌙"
+                            Style="{DynamicResource ThemeSymbolButtonStyle}"
                             Click="DarkTheme_Click"/>
                 </StackPanel>
             </DockPanel>
@@ -39,7 +45,10 @@
             </Grid.RowDefinitions>
 
             <!-- Панель управления -->
-            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,15">
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="0"
+                        HorizontalAlignment="Left"
+                        Margin="0,0,0,15">
                 <Button Content="⟳ Сканировать"
                         Command="{Binding ScanCommand}"
                         Style="{DynamicResource ThemeButtonStyle}"/>
@@ -58,53 +67,58 @@
 
             <!-- Таблица -->
             <Border Grid.Row="1"
-                    Background="{DynamicResource PanelBackgroundBrush}"
+                    Background="{DynamicResource WindowBackgroundBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
                     CornerRadius="8"
-                    Padding="10"
-                    Effect="{StaticResource SoftShadow}">
+                    Padding="10">
                 <DataGrid ItemsSource="{Binding Programs}"
                           AutoGenerateColumns="False"
-                          Background="{DynamicResource DataGridBackgroundBrush}"
+                          Background="{DynamicResource WindowBackgroundBrush}"
                           Foreground="{DynamicResource TextForegroundBrush}"
                           HeadersVisibility="Column"
-                          RowBackground="{DynamicResource RowBackgroundBrush}"
-                          AlternatingRowBackground="{DynamicResource AlternatingRowBackgroundBrush}"
                           BorderThickness="0"
                           CanUserAddRows="False"
                           CanUserDeleteRows="False"
                           IsReadOnly="True"
                           GridLinesVisibility="None"
-                          RowHeight="50">
+                          RowHeight="40">
 
                     <DataGrid.Resources>
-                        <!-- Стиль для заголовков -->
+                        <!-- Заголовки -->
                         <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Foreground" Value="{DynamicResource HeaderForegroundBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
                             <Setter Property="FontWeight" Value="SemiBold"/>
                             <Setter Property="Padding" Value="10,5"/>
                             <Setter Property="BorderThickness" Value="0,0,0,1"/>
                             <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
                         </Style>
 
-                        <!-- Стиль строк с подсветкой при наведении -->
+                        <!-- Строки -->
                         <Style TargetType="DataGridRow">
-                            <Setter Property="Height" Value="35"/>
+                            <Setter Property="Background" Value="#FF2E2E2E"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#FF555555"/>
+                                    <Setter Property="Background" Value="#FF3A3A3A"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
                     </DataGrid.Resources>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="2*"/>
-                        <DataGridTextColumn Header="Путь" Binding="{Binding Path}" Width="3*"/>
-                        <DataGridTextColumn Header="Категория" Binding="{Binding Category.Name}" Width="*"/>
+                        <DataGridTextColumn Header="Название"
+                                            Binding="{Binding Name}"
+                                            Width="2*"/>
+                        <DataGridTextColumn Header="Путь"
+                                            Binding="{Binding Path}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Категория"
+                                            Binding="{Binding Category.Name}"
+                                            Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
         </Grid>
     </Grid>
 </Window>
- 

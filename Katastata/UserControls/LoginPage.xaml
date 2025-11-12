@@ -4,13 +4,12 @@
              Background="{DynamicResource WindowBackgroundBrush}">
 
     <Grid Margin="20">
-        <Border Background="{DynamicResource PanelBackgroundBrush}"
+        <Border Background="{DynamicResource WindowBackgroundBrush}"
                 CornerRadius="12"
                 Padding="20"
                 Width="380"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Effect="{StaticResource SoftShadow}">
+                VerticalAlignment="Center">
             <StackPanel>
 
                 <!-- Заголовок -->

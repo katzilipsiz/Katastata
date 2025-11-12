@@ -12,24 +12,24 @@
     <Compile Remove="Assets\Icons\**" />
     <Compile Remove="Assets\Themes\Dark\**" />
     <Compile Remove="Assets\Themes\Light\**" />
+    <Compile Remove="Views\**" />
     <EmbeddedResource Remove="Assets\Icons\**" />
     <EmbeddedResource Remove="Assets\Themes\Dark\**" />
     <EmbeddedResource Remove="Assets\Themes\Light\**" />
+    <EmbeddedResource Remove="Views\**" />
     <None Remove="Assets\Icons\**" />
     <None Remove="Assets\Themes\Dark\**" />
     <None Remove="Assets\Themes\Light\**" />
+    <None Remove="Views\**" />
     <Page Remove="Assets\Icons\**" />
     <Page Remove="Assets\Themes\Dark\**" />
     <Page Remove="Assets\Themes\Light\**" />
+    <Page Remove="Views\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Assets\Logo\mainlogo.png" />
     <None Remove="Assets\Logo\TextLogo.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\" />
   </ItemGroup>
 
   <ItemGroup>
