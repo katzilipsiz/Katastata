@@ -33,6 +33,12 @@
                             Content="🌙"
                             Style="{DynamicResource ThemeSymbolButtonStyle}"
                             Click="DarkTheme_Click"/>
+                    <Button x:Name="LogoutBtn"
+                    Content="Выйти →"
+                    Style="{DynamicResource ThemeSymbolButtonStyle}"
+                    Width="120"
+                    Margin="5,0,0,0"
+                    Click="Logout_Click"/>
                 </StackPanel>
             </DockPanel>
         </Border>

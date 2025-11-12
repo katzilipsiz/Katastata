@@ -67,5 +67,7 @@ namespace Katastata.ViewModels
             var statsWindow = new StatisticsWindow(stats);
             statsWindow.Show();
         }
+
+
     }
 }

@@ -4,17 +4,9 @@ using Katastata.Data;
 using Katastata.Services;
 using Katastata.ViewModels;
 
-using Microsoft.EntityFrameworkCore;
-using Katastata.Models;
-using Katastata.Data;
-using Katastata.Services;
-using Katastata.ViewModels;
 
 namespace Katastata
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow(int userId, DbContextOptions<AppDbContext> options)
@@ -64,7 +56,30 @@ namespace Katastata
             ApplyTheme("Assets/Themes/Dark.xaml");
 
         }
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
-        
+                var startInfo = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "dotnet",
+                    Arguments = $"\"{exePath}\"",
+                    UseShellExecute = false,
+                    CreateNoWindow = true, // скрываем окно CMD
+                    WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
+                };
+
+                System.Diagnostics.Process.Start(startInfo);
+
+                Application.Current.Shutdown();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось перезапустить приложение: " + ex.Message);
+            }
+        }
+
     }
 }
