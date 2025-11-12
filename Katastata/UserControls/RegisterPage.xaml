@@ -27,9 +27,9 @@
                 <TextBox Text="{Binding RegisterUsername, Mode=TwoWay}"
                          Height="36"
                          Background="#333333"
+                         Style="{StaticResource ThemeTextBoxStyle}"
                          Foreground="{DynamicResource TextForegroundBrush}"
-                         BorderBrush="{DynamicResource BorderBrush}"
-                         Padding="8"/>
+                         BorderBrush="{DynamicResource BorderBrush}"/>
 
                 <!-- Пароль -->
                 <TextBlock Text="Пароль" 
@@ -37,9 +37,9 @@
                            FontSize="12" Margin="0,12,0,4"/>
                 <PasswordBox Height="36"
                              Background="#333333"
+                             Style="{StaticResource ThemePasswordBoxStyle}"
                              Foreground="{DynamicResource TextForegroundBrush}"
                              BorderBrush="{DynamicResource BorderBrush}"
-                             Padding="8"
                              PasswordChanged="RegisterPasswordBox_PasswordChanged"/>
 
                 <!-- Подтверждение пароля -->
@@ -47,22 +47,21 @@
                            Foreground="{DynamicResource TextForegroundBrush}"
                            FontSize="12" Margin="0,12,0,4"/>
                 <PasswordBox Height="36"
+                             Style="{StaticResource ThemePasswordBoxStyle}"
                              Background="#333333"
                              Foreground="{DynamicResource TextForegroundBrush}"
                              BorderBrush="{DynamicResource BorderBrush}"
-                             Padding="8"
                              PasswordChanged="RegisterPasswordConfirmBox_PasswordChanged"/>
 
                 <!-- Кнопка регистрации -->
                 <Button Content="Зарегистрироваться"
                         Command="{Binding RegisterCommand}"
                         Style="{StaticResource ThemeButtonStyle}"
-                        Margin="0,18,0,0"
+                        Width="340"
+                        Margin="0,40,0,0"
                         HorizontalAlignment="Stretch"/>
 
-                <!-- Сообщение -->
-                <TextBlock x:Name="RegisterMessage"
-                           Text="{Binding RegisterMessage, Mode=OneWay}"
+                <TextBlock Text="{Binding LoginMessage, Mode=OneWay}"
                            Foreground="OrangeRed"
                            FontSize="13"
                            Margin="0,10,0,0"

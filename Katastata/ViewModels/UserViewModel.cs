@@ -2,17 +2,26 @@
 using Katastata.Helpers;
 using Katastata.Models;
 using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Katastata.ViewModels
 {
-    public class UserViewModel
+    public class UserViewModel : INotifyPropertyChanged
     {
         private readonly AppDbContext _db;
         public event Action<int> LoginSuccessful;
+
+        private string _loginMessage;
+        public string LoginMessage
+        {
+            get => _loginMessage;
+            set { _loginMessage = value; OnPropertyChanged(); }
+        }
 
         public string RegisterUsername { get; set; }
         public SecureString RegisterPassword { get; set; } = new SecureString();
@@ -34,43 +43,44 @@ namespace Katastata.ViewModels
 
         private void RegisterUser()
         {
+            LoginMessage = string.Empty;
+
             var passwordString = new System.Net.NetworkCredential(string.Empty, RegisterPassword).Password;
             var confirmString = new System.Net.NetworkCredential(string.Empty, RegisterPasswordConfirm).Password;
 
-
             if (string.IsNullOrWhiteSpace(RegisterUsername))
             {
-                MessageBox.Show("Введите имя пользователя.", "Ошибка регистрации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoginMessage = "Введите имя пользователя.";
                 return;
             }
 
             if (RegisterPassword.Length == 0)
             {
-                MessageBox.Show("Введите пароль.", "Ошибка регистрации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoginMessage = "Введите пароль.";
                 return;
             }
 
             if (RegisterUsername.Length < 3)
             {
-                MessageBox.Show("Имя пользователя должно содержать минимум 3 символа.", "Ошибка регистрации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoginMessage = "Имя пользователя должно содержать минимум 3 символа.";
                 return;
             }
 
             if (passwordString.Length < 5)
             {
-                MessageBox.Show("Пароль должен содержать минимум 5 символов.", "Ошибка регистрации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoginMessage = "Пароль должен содержать минимум 5 символов.";
                 return;
             }
 
             if (passwordString != confirmString)
             {
-                MessageBox.Show("Пароли не совпадают.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoginMessage = "Пароли не совпадают.";
                 return;
             }
 
             if (_db.Users.Any(u => u.Username == RegisterUsername))
             {
-                MessageBox.Show("Такой пользователь уже существует.", "Ошибка регистрации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoginMessage = "Такой пользователь уже существует.";
                 return;
             }
 
@@ -83,23 +93,24 @@ namespace Katastata.ViewModels
             _db.Users.Add(user);
             _db.SaveChanges();
 
-            MessageBox.Show("Регистрация прошла успешно!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             LoginSuccessful?.Invoke(user.Id);
         }
 
         private void LoginUser()
         {
+            LoginMessage = string.Empty;
+
             var passwordString = new System.Net.NetworkCredential(string.Empty, LoginPassword).Password;
 
             if (string.IsNullOrWhiteSpace(LoginUsername))
             {
-                MessageBox.Show("Введите имя пользователя.", "Ошибка входа", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoginMessage = "Введите имя пользователя.";
                 return;
             }
 
             if (LoginPassword.Length == 0)
             {
-                MessageBox.Show("Введите пароль.", "Ошибка входа", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoginMessage = "Введите пароль.";
                 return;
             }
 
@@ -108,12 +119,17 @@ namespace Katastata.ViewModels
 
             if (user == null)
             {
-                MessageBox.Show("Неверный логин или пароль.", "Ошибка входа", MessageBoxButton.OK, MessageBoxImage.Error);
+                LoginMessage = "Неверный логин или пароль.";
                 return;
             }
 
-            MessageBox.Show($"Добро пожаловать, {user.Username}!", "Успешный вход", MessageBoxButton.OK, MessageBoxImage.Information);
             LoginSuccessful?.Invoke(user.Id);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
