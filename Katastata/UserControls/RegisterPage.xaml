@@ -1,23 +1,73 @@
 ﻿<UserControl x:Class="Katastata.UserControls.RegisterPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#1E1E1E">
+             Background="{DynamicResource WindowBackgroundBrush}">
 
     <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Border Background="{DynamicResource PanelBackgroundBrush}"
+                CornerRadius="12"
+                Padding="20"
+                Width="380"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <StackPanel>
 
-        <TextBox Grid.Row="0" Margin="0 0 0 10"
-                 Text="{Binding RegisterUsername, Mode=TwoWay}"/>
+                <!-- Заголовок -->
+                <TextBlock Text="Регистрация"
+                           Foreground="{DynamicResource TextForegroundBrush}"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="0 0 0 10"
+                           HorizontalAlignment="Center"/>
 
-        <PasswordBox Grid.Row="1" Margin="0 0 0 10"
-                     PasswordChanged="RegisterPasswordBox_PasswordChanged"/>
+                <!-- Имя пользователя -->
+                <TextBlock Text="Имя пользователя" 
+                           Foreground="{DynamicResource TextForegroundBrush}"
+                           FontSize="12" Margin="0,6,0,4"/>
+                <TextBox Text="{Binding RegisterUsername, Mode=TwoWay}"
+                         Height="36"
+                         Background="#333333"
+                         Foreground="{DynamicResource TextForegroundBrush}"
+                         BorderBrush="{DynamicResource BorderBrush}"
+                         Padding="8"/>
 
-        <Button Grid.Row="2" Content="Зарегистрироваться"
-                Command="{Binding RegisterCommand}"
-                Padding="10" Background="#007ACC" Foreground="White"/>
+                <!-- Пароль -->
+                <TextBlock Text="Пароль" 
+                           Foreground="{DynamicResource TextForegroundBrush}"
+                           FontSize="12" Margin="0,12,0,4"/>
+                <PasswordBox Height="36"
+                             Background="#333333"
+                             Foreground="{DynamicResource TextForegroundBrush}"
+                             BorderBrush="{DynamicResource BorderBrush}"
+                             Padding="8"
+                             PasswordChanged="RegisterPasswordBox_PasswordChanged"/>
+
+                <!-- Подтверждение пароля -->
+                <TextBlock Text="Подтверждение пароля" 
+                           Foreground="{DynamicResource TextForegroundBrush}"
+                           FontSize="12" Margin="0,12,0,4"/>
+                <PasswordBox Height="36"
+                             Background="#333333"
+                             Foreground="{DynamicResource TextForegroundBrush}"
+                             BorderBrush="{DynamicResource BorderBrush}"
+                             Padding="8"
+                             PasswordChanged="RegisterPasswordConfirmBox_PasswordChanged"/>
+
+                <!-- Кнопка регистрации -->
+                <Button Content="Зарегистрироваться"
+                        Command="{Binding RegisterCommand}"
+                        Style="{StaticResource ThemeButtonStyle}"
+                        Margin="0,18,0,0"
+                        HorizontalAlignment="Stretch"/>
+
+                <!-- Сообщение -->
+                <TextBlock x:Name="RegisterMessage"
+                           Text="{Binding RegisterMessage, Mode=OneWay}"
+                           Foreground="OrangeRed"
+                           FontSize="13"
+                           Margin="0,10,0,0"
+                           TextAlignment="Center"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

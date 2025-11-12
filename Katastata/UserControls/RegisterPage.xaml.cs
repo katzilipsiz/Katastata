@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Katastata.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Katastata.UserControls
@@ -17,5 +18,12 @@ namespace Katastata.UserControls
                 vm.RegisterPassword = ((PasswordBox)sender).SecurePassword;
             }
         }
+
+        private void RegisterPasswordConfirmBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is UserViewModel vm)
+                vm.RegisterPasswordConfirm = (sender as PasswordBox)?.SecurePassword;
+        }
+
     }
 }
