@@ -53,7 +53,13 @@ namespace Katastata
 
         private void AuthClick(object sender, RoutedEventArgs e)
         {
-            var loginWindow = new AuthWindow();
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                            .UseSqlite("Data Source=katastata.db")
+                            .Options;
+
+            var dbContext = new AppDbContext(options);
+
+            var loginWindow = new AuthWindow(options);
             if (loginWindow.ShowDialog() == true)
             {
                 MessageBox.Show("Вы вошли в систему!", "Katastata");
