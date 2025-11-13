@@ -8,13 +8,8 @@
     <Grid Margin="20">
 
         <StackPanel>
-            
-        <Button Content="📤 Экспорт"
-                Style="{DynamicResource ThemeButtonStyle}" 
-                HorizontalAlignment="Left"
-                Margin="0,0,0,10"/>
-        
-        <Border Background="{DynamicResource WindowBackgroundBrush}"
+
+            <Border Background="{DynamicResource WindowBackgroundBrush}"
                 BorderBrush="{DynamicResource BorderBrush}"
                 BorderThickness="1"
                 CornerRadius="8"

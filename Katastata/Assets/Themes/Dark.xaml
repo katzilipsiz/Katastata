@@ -18,7 +18,7 @@
     <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
     <SolidColorBrush x:Key="DisabledBrush" Color="{StaticResource DisabledColor}"/>
 
-    <!-- Стиль кнопок с округлением -->
+    <!-- Стиль кнопок -->
     <Style x:Key="ThemeButtonStyle" TargetType="Button">
         <Setter Property="Width" Value="150"/>
         <Setter Property="Height" Value="38"/>
@@ -104,7 +104,7 @@
         <Setter Property="Foreground" Value="{StaticResource TextForegroundBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="6"/>
+        <Setter Property="Padding" Value="4"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="CaretBrush" Value="{StaticResource AccentBrush}"/>
         <Setter Property="Template">
@@ -174,7 +174,7 @@
         </Setter>
     </Style>
 
-    <!-- Стиль для карточек статистики (на основе ThemeButtonStyle) -->
+    <!-- Стиль для карточек статистики -->
     <Style x:Key="StatisticCardStyle" TargetType="Border">
         <Setter Property="Background">
             <Setter.Value>
@@ -206,6 +206,102 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!-- 🧭 ScrollViewer -->
+    <Style TargetType="ScrollViewer">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollViewer">
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <ScrollContentPresenter Grid.Row="0" Grid.Column="0"/>
+
+                        <!-- Вертикальный скролл -->
+                        <ScrollBar x:Name="PART_VerticalScrollBar"
+                               Grid.Row="0"
+                               Grid.Column="1"
+                               Orientation="Vertical"
+                               Width="8"
+                               Margin="3,0,0,0"
+                               Background="Transparent"
+                               Foreground="{DynamicResource AccentBrush}"
+                               Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+
+                        <!-- Горизонтальный скролл -->
+                        <ScrollBar x:Name="PART_HorizontalScrollBar"
+                               Grid.Row="1"
+                               Grid.Column="0"
+                               Orientation="Horizontal"
+                               Height="8"
+                               Margin="0,3,0,0"
+                               Background="Transparent"
+                               Foreground="{DynamicResource AccentBrush}"
+                               Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!-- 🧷 Стиль скроллбара -->
+    <Style TargetType="ScrollBar">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Width" Value="8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid Background="Transparent">
+                        <Track x:Name="PART_Track" IsDirectionReversed="True">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.LineUpCommand"
+                                          Style="{x:Null}" 
+                                          Background="Transparent"
+                                          Height="0" Width="0"/>
+                            </Track.DecreaseRepeatButton>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.LineDownCommand"
+                                          Style="{x:Null}" 
+                                          Background="Transparent"
+                                          Height="0" Width="0"/>
+                            </Track.IncreaseRepeatButton>
+
+                            <Track.Thumb>
+                                <Thumb>
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Border x:Name="thumbBorder"
+                                                CornerRadius="4"
+                                                Background="{DynamicResource AccentBrush}"
+                                                Opacity="0.4"/>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="thumbBorder" Property="Opacity" Value="0.7"/>
+                                                </Trigger>
+                                                <Trigger Property="IsDragging" Value="True">
+                                                    <Setter TargetName="thumbBorder" Property="Opacity" Value="1.0"/>
+                                                    <Setter TargetName="thumbBorder" Property="Background" Value="{DynamicResource AccentBrushActive}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 
     <!-- Конвертер для TimeSpan (добавьте, если нет) -->
     <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
