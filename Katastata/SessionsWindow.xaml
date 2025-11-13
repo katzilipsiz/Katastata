@@ -11,7 +11,12 @@
                 BorderThickness="1"
                 CornerRadius="8"
                 Padding="5">
-
+            <StackPanel>
+            
+            <TextBlock Text="Фильтр:" Foreground="{DynamicResource TextForegroundBrush}"/>
+            <TextBox Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" 
+                     Style="{StaticResource ThemeTextBoxStyle}" 
+                     Margin="0,5,0,10"/>
             <!-- Убираем ScrollViewer -->
             <DataGrid ItemsSource="{Binding Sessions}"
                       AutoGenerateColumns="False"
@@ -59,6 +64,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
+            </StackPanel>
         </Border>
     </Grid>
 </Window>
