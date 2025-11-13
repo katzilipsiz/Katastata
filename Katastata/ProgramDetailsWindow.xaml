@@ -10,6 +10,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
         <!-- Заголовок с иконкой и названием -->
         <Border Grid.Row="0"
@@ -52,6 +53,7 @@
                                Margin="0,5,0,0"/>
                 </StackPanel>
             </Border>
+
             <Border Style="{StaticResource StatisticCardStyle}"
                     Width="Auto"
                     MinWidth="400">
@@ -66,6 +68,8 @@
                                Margin="0,5,0,0"/>
                 </StackPanel>
             </Border>
+            
+            
         </StackPanel>
         <!-- DataGrid сессий -->
         <Border Grid.Row="2"
@@ -105,6 +109,19 @@
                     <DataGridTextColumn Header="Длительность" Binding="{Binding Duration, Converter={StaticResource TimeSpanToStringConverter}}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
+        </Border>
+
+        <Border Grid.Row="3" Height="Auto" Margin="0,0,0,15">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Категория:" Foreground="{DynamicResource TextForegroundBrush}" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding Categories}"
+                  SelectedItem="{Binding SelectedCategory}"
+                  DisplayMemberPath="Name"
+                  Margin="10,0,0,0"
+                          Height="30"
+                  Width="200"/>
+                <Button Content="Сохранить" Command="{Binding SaveCategoryCommand}" Style="{StaticResource ThemeButtonStyle}" Margin="10,0,0,0"/>
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

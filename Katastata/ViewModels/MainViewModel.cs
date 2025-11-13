@@ -18,6 +18,7 @@ namespace Katastata.ViewModels
         public RelayCommand ShowStatisticsCommand { get; }
         public RelayCommand ExportStatisticsExcelCommand { get; }
         public RelayCommand ExportStatisticsWordCommand { get; }
+        public RelayCommand CreateCategoryCommand { get; }
 
         public MainViewModel() { }
 
@@ -28,7 +29,8 @@ namespace Katastata.ViewModels
 
             ScanCommand = new RelayCommand(_ => ScanPrograms());
             ShowSessionsCommand = new RelayCommand(_ => ShowSessions());
-            ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics());   
+            ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics());
+            CreateCategoryCommand = new RelayCommand(_ => CreateNewCategory());
 
             ExportStatisticsExcelCommand = new RelayCommand(_ => ExportStatisticsExcel());
             ExportStatisticsWordCommand = new RelayCommand(_ => ExportStatisticsWord());
@@ -76,6 +78,29 @@ namespace Katastata.ViewModels
             statsWindow.Show();
         }
 
+        // Создание новой категории
+        private void CreateNewCategory()
+        {
+            var newCategoryWindow = new NewCategoryWindow();
+            if (newCategoryWindow.ShowDialog() == true)
+            {
+                var name = newCategoryWindow.CategoryName;
+                if (string.IsNullOrWhiteSpace(name) || name.Length < 3)
+                {
+                    System.Windows.MessageBox.Show("Имя категории должно быть минимум 3 символа.");
+                    return;
+                }
+                if (_service.CategoryExists(name))
+                {
+                    System.Windows.MessageBox.Show("Категория уже существует.");
+                    return;
+                }
+                _service.AddCategory(name);
+                LoadPrograms();  // Обновить список
+                System.Windows.MessageBox.Show("Категория создана.");
+            }
+        }
+
         // Экспорт статистики в Excel
         private void ExportStatisticsExcel()
         {
@@ -97,5 +122,7 @@ namespace Katastata.ViewModels
                 System.Windows.MessageBox.Show("Экспорт завершен");
             }
         }
+
+
     }
 }

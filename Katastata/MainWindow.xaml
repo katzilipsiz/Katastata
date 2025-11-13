@@ -120,7 +120,12 @@
                         
                         Style="{DynamicResource ThemeSymbolButtonStyle}"
                         Margin="10,0,0,0"/>
-
+                
+                <Button Content="+"
+                        FontSize="24"
+                        Command="{Binding CreateCategoryCommand}"
+                        Style="{DynamicResource ThemeSymbolButtonStyle}"
+                        Margin="10,0,0,0"/>
             </StackPanel>
 
             <Border Grid.Row="1"

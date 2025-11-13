@@ -200,6 +200,23 @@ namespace Katastata.Services
                 .ToList();
         }
 
+        // Получение категорий
+        public bool CategoryExists(string name) => _context.Categories.Any(c => c.Name == name);
+
+        public void AddCategory(string name)
+        {
+            _context.Categories.Add(new Katastata.Models.Category { Name = name });
+            _context.SaveChanges();
+        }
+
+        public List<Katastata.Models.Category> GetAllCategories() => _context.Categories.ToList();
+
+        public void UpdateProgram(Program program)
+        {
+            _context.Programs.Update(program);
+            _context.SaveChanges();
+        }
+
         // Экспорт статистики в Excel
         public void ExportStatisticsToExcel(int userId, string filePath)
         {

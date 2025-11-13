@@ -12,7 +12,7 @@ namespace Katastata
             InitializeComponent();
             var sessions = service.GetSessions(userId).Where(s => s.ProgramId == program.Id).ToList();
             var stat = service.GetStatistics(userId).FirstOrDefault(st => st.ProgramId == program.Id);
-            DataContext = new ProgramDetailsViewModel(program, sessions, stat);
+            DataContext = new ProgramDetailsViewModel(program, sessions, stat, service);
         }
     }
 }
