@@ -217,6 +217,17 @@ namespace Katastata.Services
             _context.SaveChanges();
         }
 
+        // Удаление пользователя и связанных данных
+        public void DeleteUser(int userId)
+        {
+            var user = _context.Users.Find(userId);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+            }
+        }
+
         // Экспорт статистики в Excel
         public void ExportStatisticsToExcel(int userId, string filePath)
         {
@@ -270,24 +281,20 @@ namespace Katastata.Services
                 MainDocumentPart mainPart = document.AddMainDocumentPart();
                 mainPart.Document = new Document();
                 Body body = mainPart.Document.AppendChild(new Body());
-
                 DocumentFormat.OpenXml.Wordprocessing.Table table = new DocumentFormat.OpenXml.Wordprocessing.Table();
                 TableRow headerRow = new TableRow();
                 headerRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text("Программа")))));
                 headerRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text("Общее время")))));
                 headerRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text("Последний запуск")))));
                 table.Append(headerRow);
-
                 foreach (var stat in stats)
                 {
                     TableRow dataRow = new TableRow();
                     dataRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text(stat.Program?.Name ?? "Unknown")))));
                     dataRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text(stat.TotalTime.ToString())))));
                     dataRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text(stat.LastLaunch?.ToString() ?? "N/A")))));
-                    dataRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text(stat.User.ToString() ?? "Guest")))));
                     table.Append(dataRow);
                 }
-
                 body.Append(table);
                 mainPart.Document.Save();
             }

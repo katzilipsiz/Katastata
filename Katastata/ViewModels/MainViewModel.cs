@@ -19,7 +19,7 @@ namespace Katastata.ViewModels
         public RelayCommand ExportStatisticsExcelCommand { get; }
         public RelayCommand ExportStatisticsWordCommand { get; }
         public RelayCommand CreateCategoryCommand { get; }
-
+        public RelayCommand OpenSettingsCommand { get; }
         public MainViewModel() { }
 
         public MainViewModel(AppMonitorService service, int userId)
@@ -34,6 +34,8 @@ namespace Katastata.ViewModels
 
             ExportStatisticsExcelCommand = new RelayCommand(_ => ExportStatisticsExcel());
             ExportStatisticsWordCommand = new RelayCommand(_ => ExportStatisticsWord());
+
+            OpenSettingsCommand = new RelayCommand(_ => OpenSettings());
 
             LoadPrograms();
             _service.StartMonitoring(_userId);
@@ -99,6 +101,11 @@ namespace Katastata.ViewModels
                 LoadPrograms();  // Обновить список
                 System.Windows.MessageBox.Show("Категория создана.");
             }
+        }
+        private void OpenSettings()
+        {
+            var settingsWindow = new SettingsWindow(_service, _userId);
+            settingsWindow.ShowDialog();
         }
 
         // Экспорт статистики в Excel
