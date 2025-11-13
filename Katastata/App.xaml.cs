@@ -6,7 +6,7 @@ using Katastata.Data;
 
 namespace Katastata
 {
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         private const string DbFileName = "katastata.db";
 
@@ -20,7 +20,7 @@ namespace Katastata
             using (var ctx = new AppDbContext(options))
                 ctx.Database.EnsureCreated();
 
-            int maxTries = 3;
+            int maxTries = 1;
             int tries = 0;
             bool authenticated = false;
 
@@ -42,7 +42,6 @@ namespace Katastata
 
             if (!authenticated)
             {
-                MessageBox.Show("Превышено количество попыток авторизации.");
                 Shutdown();
             }
         }

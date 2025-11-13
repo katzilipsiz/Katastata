@@ -8,6 +8,12 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using Microsoft.EntityFrameworkCore;
 
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+
+using DocumentFormat.OpenXml.Wordprocessing;
+
 namespace Katastata.Services
 {
     public class AppMonitorService
@@ -92,7 +98,7 @@ namespace Katastata.Services
         {
             if (!_context.Categories.Any(c => c.Id == 1))
             {
-                _context.Categories.Add(new Category { Id = 1, Name = "Не классифицировано" });
+                _context.Categories.Add(new Models.Category { Id = 1, Name = "Не классифицировано" });
                 _context.SaveChanges();
             }
 
@@ -138,7 +144,7 @@ namespace Katastata.Services
 
             if (!_context.Categories.Any(c => c.Id == 1))
             {
-                _context.Categories.Add(new Category { Id = 1, Name = "Не классифицировано" });
+                _context.Categories.Add(new Models.Category { Id = 1, Name = "Не классифицировано" });
                 _context.SaveChanges();
             }
 
@@ -194,5 +200,97 @@ namespace Katastata.Services
                 .ToList();
         }
 
+        // Получение категорий
+        public bool CategoryExists(string name) => _context.Categories.Any(c => c.Name == name);
+
+        public void AddCategory(string name)
+        {
+            _context.Categories.Add(new Katastata.Models.Category { Name = name });
+            _context.SaveChanges();
+        }
+
+        public List<Katastata.Models.Category> GetAllCategories() => _context.Categories.ToList();
+
+        public void UpdateProgram(Program program)
+        {
+            _context.Programs.Update(program);
+            _context.SaveChanges();
+        }
+
+        // Экспорт статистики в Excel
+        public void ExportStatisticsToExcel(int userId, string filePath)
+        {
+            var stats = GetStatistics(userId);
+            using (SpreadsheetDocument document = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook))
+            {
+                WorkbookPart workbookPart = document.AddWorkbookPart();
+                workbookPart.Workbook = new Workbook();
+
+                WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                worksheetPart.Worksheet = new Worksheet(new SheetData());
+
+                Sheets sheets = workbookPart.Workbook.AppendChild(new Sheets());
+                Sheet sheet = new Sheet { Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = "Statistics" };
+                sheets.Append(sheet);
+
+                SheetData sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
+
+                // Заголовки
+                Row headerRow = new Row();
+                headerRow.Append(CreateTextCell("Программа"));
+                headerRow.Append(CreateTextCell("Общее время"));
+                headerRow.Append(CreateTextCell("Последний запуск"));
+                sheetData.Append(headerRow);
+
+                // Данные
+                foreach (var stat in stats)
+                {
+                    Row dataRow = new Row();
+                    dataRow.Append(CreateTextCell(stat.Program?.Name ?? "Unknown"));
+                    dataRow.Append(CreateTextCell(stat.TotalTime.ToString()));
+                    dataRow.Append(CreateTextCell(stat.LastLaunch?.ToString() ?? "N/A"));
+                    dataRow.Append(CreateTextCell(stat.UserId.ToString() ?? "Guest"));
+                    sheetData.Append(dataRow);
+                }
+
+                workbookPart.Workbook.Save();
+            }
+        }
+
+        private Cell CreateTextCell(string text)
+        {
+            return new Cell { CellValue = new CellValue(text), DataType = CellValues.String };
+        }
+
+        public void ExportStatisticsToWord(int userId, string filePath)
+        {
+            var stats = GetStatistics(userId);
+            using (WordprocessingDocument document = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
+            {
+                MainDocumentPart mainPart = document.AddMainDocumentPart();
+                mainPart.Document = new Document();
+                Body body = mainPart.Document.AppendChild(new Body());
+
+                DocumentFormat.OpenXml.Wordprocessing.Table table = new DocumentFormat.OpenXml.Wordprocessing.Table();
+                TableRow headerRow = new TableRow();
+                headerRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text("Программа")))));
+                headerRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text("Общее время")))));
+                headerRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text("Последний запуск")))));
+                table.Append(headerRow);
+
+                foreach (var stat in stats)
+                {
+                    TableRow dataRow = new TableRow();
+                    dataRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text(stat.Program?.Name ?? "Unknown")))));
+                    dataRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text(stat.TotalTime.ToString())))));
+                    dataRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text(stat.LastLaunch?.ToString() ?? "N/A")))));
+                    dataRow.Append(new TableCell(new Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new DocumentFormat.OpenXml.Wordprocessing.Text(stat.User.ToString() ?? "Guest")))));
+                    table.Append(dataRow);
+                }
+
+                body.Append(table);
+                mainPart.Document.Save();
+            }
+        }
     }
 }

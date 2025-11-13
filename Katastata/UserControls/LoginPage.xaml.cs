@@ -3,11 +3,13 @@ using System.Windows.Controls;
 
 namespace Katastata.UserControls
 {
-    public partial class LoginPage : UserControl
+    public partial class LoginPage : System.Windows.Controls.UserControl
     {
         public LoginPage()
         {
             InitializeComponent();
+
+            Loaded += UserControl_Loaded;
         }
 
         private void LoginPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
@@ -16,6 +18,11 @@ namespace Katastata.UserControls
             {
                 vm.LoginPassword = ((PasswordBox)sender).SecurePassword;
             }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            UsernameTextBox.Focus();  
         }
     }
 }

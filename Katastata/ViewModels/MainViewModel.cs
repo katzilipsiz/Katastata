@@ -10,10 +10,15 @@ namespace Katastata.ViewModels
     {
         private readonly AppMonitorService _service;
         private readonly int _userId;
+        public AppMonitorService Service => _service;
+        public int UserId => _userId;
         public ObservableCollection<Program> Programs { get; } = new ObservableCollection<Program>();
         public RelayCommand ScanCommand { get; }
         public RelayCommand ShowSessionsCommand { get; }
-        public RelayCommand ShowStatisticsCommand { get; } 
+        public RelayCommand ShowStatisticsCommand { get; }
+        public RelayCommand ExportStatisticsExcelCommand { get; }
+        public RelayCommand ExportStatisticsWordCommand { get; }
+        public RelayCommand CreateCategoryCommand { get; }
 
         public MainViewModel() { }
 
@@ -21,9 +26,15 @@ namespace Katastata.ViewModels
         {
             _service = service;
             _userId = userId;
+
             ScanCommand = new RelayCommand(_ => ScanPrograms());
             ShowSessionsCommand = new RelayCommand(_ => ShowSessions());
-            ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics()); 
+            ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics());
+            CreateCategoryCommand = new RelayCommand(_ => CreateNewCategory());
+
+            ExportStatisticsExcelCommand = new RelayCommand(_ => ExportStatisticsExcel());
+            ExportStatisticsWordCommand = new RelayCommand(_ => ExportStatisticsWord());
+
             LoadPrograms();
             _service.StartMonitoring(_userId);
         }
@@ -35,11 +46,10 @@ namespace Katastata.ViewModels
             {
                 _service.ScanRunningPrograms(_userId);
                 LoadPrograms();
-                MessageBox.Show("Сканирование завершено");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка: " + ex.Message);
+                System.Windows.MessageBox.Show("Ошибка: " + ex.Message);
             }
         }
 
@@ -67,5 +77,52 @@ namespace Katastata.ViewModels
             var statsWindow = new StatisticsWindow(stats);
             statsWindow.Show();
         }
+
+        // Создание новой категории
+        private void CreateNewCategory()
+        {
+            var newCategoryWindow = new NewCategoryWindow();
+            if (newCategoryWindow.ShowDialog() == true)
+            {
+                var name = newCategoryWindow.CategoryName;
+                if (string.IsNullOrWhiteSpace(name) || name.Length < 3)
+                {
+                    System.Windows.MessageBox.Show("Имя категории должно быть минимум 3 символа.");
+                    return;
+                }
+                if (_service.CategoryExists(name))
+                {
+                    System.Windows.MessageBox.Show("Категория уже существует.");
+                    return;
+                }
+                _service.AddCategory(name);
+                LoadPrograms();  // Обновить список
+                System.Windows.MessageBox.Show("Категория создана.");
+            }
+        }
+
+        // Экспорт статистики в Excel
+        private void ExportStatisticsExcel()
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog { Filter = "Excel files (*.xlsx)|*.xlsx", DefaultExt = "xlsx" };
+            if (dialog.ShowDialog() == true)
+            {
+                _service.ExportStatisticsToExcel(_userId, dialog.FileName);
+                System.Windows.MessageBox.Show("Экспорт завершен");
+            }
+        }
+
+        // Экспорт статистики в Word
+        private void ExportStatisticsWord()
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog { Filter = "Word files (.docx)|.docx", DefaultExt = "docx" };
+            if (dialog.ShowDialog() == true)
+            {
+                _service.ExportStatisticsToExcel(_userId, dialog.FileName);
+                System.Windows.MessageBox.Show("Экспорт завершен");
+            }
+        }
+
+
     }
 }
