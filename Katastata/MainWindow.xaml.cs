@@ -53,13 +53,46 @@ namespace Katastata
 
         private void ApplyTheme(string themePath)
         {
+            // 1. Очищаем ВСЕ ресурсы приложения (не только MergedDictionaries)
+            System.Windows.Application.Current.Resources.Clear();
+
+            // 2. Загружаем новый словарь тем
             var themeDict = new ResourceDictionary
             {
                 Source = new Uri(themePath, UriKind.Relative)
             };
-            System.Windows.Application.Current.Resources.MergedDictionaries.Clear();
+
+            // 3. Добавляем его в ресурсы
             System.Windows.Application.Current.Resources.MergedDictionaries.Add(themeDict);
+
+            // 4. Принудительно обновляем все элементы в текущем окне
+            UpdateThemeForAllElements(this);
         }
+
+        // Вспомогательный метод: рекурсивно обновляет стили всех элементов
+        private void UpdateThemeForAllElements(Visual container)
+        {
+            if (container == null) return;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(container); i++)
+            {
+                var child = VisualTreeHelper.GetChild(container, i) as Visual;
+                if (child != null)
+                {
+                    // Принудительно перепривязываем стили
+                    if (child is FrameworkElement fe)
+                    {
+                        fe.InvalidateProperty(FrameworkElement.StyleProperty);
+                        fe.InvalidateProperty(System.Windows.Controls.Control.ForegroundProperty);
+                        fe.InvalidateProperty(System.Windows.Controls.Control.BackgroundProperty);
+                        fe.InvalidateProperty(System.Windows.Controls.Panel.BackgroundProperty);
+                    }
+                    // Рекурсия для дочерних элементов
+                    UpdateThemeForAllElements(child);
+                }
+            }
+        }
+
 
         private void LightTheme_Click(object sender, RoutedEventArgs e)
         {

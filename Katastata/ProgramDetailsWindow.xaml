@@ -51,6 +51,7 @@
                     <TextBlock Text="{Binding TotalTime, Converter={StaticResource TimeSpanToStringConverter}}"
                                Foreground="{DynamicResource AccentBrushActive}"
                                FontSize="18"
+                               FontWeight="Bold"
                                Margin="0,5,0,0"/>
                 </StackPanel>
             </Border>
@@ -64,6 +65,7 @@
                                FontSize="14"
                                FontWeight="SemiBold"/>
                     <TextBlock Text="{Binding LastLaunch, StringFormat=dd.MM.yyyy HH:mm}"
+                               FontWeight="Bold"
                                Foreground="{DynamicResource AccentBrushActive}"
                                FontSize="18"
                                Margin="0,5,0,0"/>
@@ -75,17 +77,20 @@
         <!-- DataGrid сессий -->
         <Border Grid.Row="2"
                 Background="{DynamicResource WindowBackgroundBrush}"
-                BorderBrush="{DynamicResource BorderBrush}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Padding="10">
-            <DataGrid ItemsSource="{Binding Sessions}"
+                BorderBrush="{DynamicResource BorderBrush}">
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                
+                <DataGrid ItemsSource="{Binding Sessions}"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
                       GridLinesVisibility="None"
                       HeadersVisibility="Column"
                       RowHeight="40">
                 <DataGrid.Resources>
+                    <Style TargetType="DataGrid">
+                        <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
+                    </Style>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}"/>
                         <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
@@ -95,32 +100,38 @@
                         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
                     </Style>
                     <Style TargetType="DataGridRow">
-                        <Setter Property="Background" Value="#FF2E2E2E"/>
+                        <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
                         <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}"/>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF3A3A3A"/>
+                                <Setter Property="Background" Value="{DynamicResource BorderBrush}"/>
                             </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter Property="Background" Value="#AD7636"/> 
+                                </Trigger>
                         </Style.Triggers>
                     </Style>
                 </DataGrid.Resources>
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Начало" Binding="{Binding StartTime, StringFormat=dd.MM.yyyy HH:mm}" Width="*"/>
                     <DataGridTextColumn Header="Конец" Binding="{Binding EndTime, StringFormat=dd.MM.yyyy HH:mm}" Width="*"/>
                     <DataGridTextColumn Header="Длительность" Binding="{Binding Duration, Converter={StaticResource TimeSpanToStringConverter}}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
+            </ScrollViewer>
         </Border>
 
         <Border Grid.Row="3" Height="Auto" Margin="0,0,0,15">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Категория:" Foreground="{DynamicResource TextForegroundBrush}" VerticalAlignment="Center"/>
+
                 <ComboBox ItemsSource="{Binding Categories}"
-                  SelectedItem="{Binding SelectedCategory}"
-                  DisplayMemberPath="Name"
-                  Margin="10,0,0,0"
-                          Height="30"
-                  Width="200"/>
+                          SelectedItem="{Binding SelectedCategory}"
+                          DisplayMemberPath="Name"
+                          Height="35"
+                          Margin="10,0,0,0"
+                          Width="200"/>
                 <Button Content="Сохранить" Command="{Binding SaveCategoryCommand}" Style="{StaticResource ThemeButtonStyle}" Margin="10,0,0,0"/>
             </StackPanel>
         </Border>
