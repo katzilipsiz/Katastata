@@ -11,6 +11,8 @@ namespace Katastata.UserControls
             InitializeComponent();
 
             Loaded += UserControl_Loaded;
+
+            UsernameTextBox.Focus();
         }
 
         private void RegisterPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)

@@ -209,12 +209,27 @@ namespace Katastata.Services
             _context.SaveChanges();
         }
 
+        public List<Program> GetProgramsByCategory(int categoryId)
+        {
+            return _context.Programs.Where(p => p.CategoryId == categoryId).ToList();
+        }
+
         public List<Katastata.Models.Category> GetAllCategories() => _context.Categories.ToList();
 
         public void UpdateProgram(Program program)
         {
             _context.Programs.Update(program);
             _context.SaveChanges();
+        }
+
+        public void DeleteCategory(int categoryId)
+        {
+            var category = _context.Categories.Find(categoryId);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                _context.SaveChanges();
+            }
         }
 
         // Удаление пользователя и связанных данных

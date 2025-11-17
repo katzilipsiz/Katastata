@@ -13,15 +13,15 @@
         <StackPanel Margin="20" Orientation="Vertical" 
                     VerticalAlignment="Top">
 
-            <!-- 🔹 Категории -->
+            <!--  Категории -->
             <Border Style="{StaticResource StatisticCardStyle}" Margin="0,0,0,20">
                 <StackPanel>
-                    <TextBlock Text="Категории" 
-                               FontSize="18" 
-                               FontWeight="Bold" 
-                               Foreground="{DynamicResource AccentBrush}"/>
-                    <TextBlock Text="Добавь новую категорию для программ:" 
-                               Margin="0,6,0,10"/>
+                    <TextBlock Text="Категории"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   Foreground="{DynamicResource AccentBrush}"/>
+                    <TextBlock Text="Добавь новую категорию для программ:"
+                   Margin="0,6,0,10"/>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                         <TextBox x:Name="NewCategoryName"
                                  Width="250"
@@ -30,12 +30,63 @@
                         <Button Content="Создать"
                                 Style="{StaticResource ThemeButtonStyle}"
                                 Margin="10,0,0,0"
-                                Click="CreateCategory_Click"/>
+                                CommandParameter="{Binding Text, ElementName=NewCategoryName}"
+                                Command="{Binding CreateCategoryCommand}"/>
                     </StackPanel>
+
+                    <!-- Список существующих категорий -->
+                    <ListBox Margin="0,10,0,0"
+                             ItemsSource="{Binding Categories}"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             HorizontalContentAlignment="Stretch">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Название категории -->
+                                    <TextBlock Text="{Binding Name}"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextForegroundBrush}"/>
+
+
+                                    <!-- Кнопка удаления -->
+                                    <Button Grid.Column="1"
+                                            Content="×"
+                                            Style="{StaticResource ThemeSymbolButtonStyle}"
+                                            Foreground="Red"
+                                            FontSize="14"
+                                            Width="30"
+                                            Height="30"
+                                            Margin="10,0,0,0"
+                                            Command="{Binding DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding Id}"
+                                            ToolTip="Удалить категорию"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
                 </StackPanel>
             </Border>
 
-            <!-- 🔹 Экспорт -->
+
+            <!--  Экспорт -->
             <Border Style="{StaticResource StatisticCardStyle}" Margin="0,0,0,20">
                 <StackPanel>
                     <TextBlock Text="Экспорт данных"
@@ -51,7 +102,7 @@
                 </StackPanel>
             </Border>
 
-            <!-- 🔹 Статистика и сессии -->
+            <!--  Статистика и сессии -->
             <Border Style="{StaticResource StatisticCardStyle}" 
                     Margin="0,0,0,20">
                 <StackPanel>
@@ -78,7 +129,7 @@
                 </StackPanel>
             </Border>
 
-            <!-- 🔹 Темы -->
+            <!--  Темы -->
             <Border Style="{StaticResource StatisticCardStyle}" 
                     Margin="0,0,0,20">
                 <StackPanel>
@@ -102,7 +153,7 @@
                 </StackPanel>
             </Border>
 
-            <!-- 🔹 Аккаунт -->
+            <!--  Аккаунт -->
             <Border Style="{StaticResource StatisticCardStyle}">
                 <StackPanel>
                     <TextBlock Text="Аккаунт"
@@ -111,7 +162,7 @@
                                Foreground="{DynamicResource AccentBrush}"/>
                     <TextBlock Text="Удаление аккаунта приведёт к потере всех данных. Будьте осторожны."
                                Margin="0,6,0,10"
-                               Foreground="{DynamicResource DisabledBrush}"/>
+                               Foreground="{DynamicResource TextForegroundBrush}"/>
                     <Button Content="Удалить аккаунт"
                             Style="{StaticResource ThemeButtonStyle}"
                             Background="#9D3636"

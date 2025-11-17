@@ -16,14 +16,8 @@ namespace Katastata
             _service = service;
             _userId = userId;
             DataContext = new SettingsViewModel(service, userId);
-        }
 
-        private void CreateCategory_Click(object sender, RoutedEventArgs e)
-        {
-            var name = NewCategoryName.Text;
-            if (string.IsNullOrWhiteSpace(name)) return;
-            _service.AddCategory(name);
-            System.Windows.MessageBox.Show("Категория создана");
+            NewCategoryName.Focus();
         }
 
         private void LightTheme_Click(object sender, RoutedEventArgs e)
