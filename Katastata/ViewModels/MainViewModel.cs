@@ -2,17 +2,49 @@
 using Katastata.Services;
 using System;
 using System.Collections.ObjectModel;
-using System.Windows;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Katastata.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
     {
         private readonly AppMonitorService _service;
         private readonly int _userId;
+
         public AppMonitorService Service => _service;
         public int UserId => _userId;
+
         public ObservableCollection<Program> Programs { get; } = new ObservableCollection<Program>();
+        public ObservableCollection<Category> Categories { get; } = new ObservableCollection<Category>();
+
+        // Свойства для фильтрации и сортировки
+        private Category _selectedCategory;
+        public Category SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                _selectedCategory = value;
+                OnPropertyChanged();
+                ApplyFilterAndSort();
+            }
+        }
+
+        private string _sortMode = "NameAsc";
+        public string SortMode
+        {
+            get => _sortMode;
+            set
+            {
+                _sortMode = value;
+                OnPropertyChanged();
+                ApplyFilterAndSort();
+            }
+        }
+
+        // Команды (все — без generic)
         public RelayCommand ScanCommand { get; }
         public RelayCommand ShowSessionsCommand { get; }
         public RelayCommand ShowStatisticsCommand { get; }
@@ -20,6 +52,8 @@ namespace Katastata.ViewModels
         public RelayCommand ExportStatisticsWordCommand { get; }
         public RelayCommand CreateCategoryCommand { get; }
         public RelayCommand OpenSettingsCommand { get; }
+        public RelayCommand SortCommand { get; }  // Без <string>
+
         public MainViewModel() { }
 
         public MainViewModel(AppMonitorService service, int userId)
@@ -27,21 +61,41 @@ namespace Katastata.ViewModels
             _service = service;
             _userId = userId;
 
+            LoadCategories();
+
             ScanCommand = new RelayCommand(_ => ScanPrograms());
             ShowSessionsCommand = new RelayCommand(_ => ShowSessions());
             ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics());
             CreateCategoryCommand = new RelayCommand(_ => CreateNewCategory());
-
             ExportStatisticsExcelCommand = new RelayCommand(_ => ExportStatisticsExcel());
             ExportStatisticsWordCommand = new RelayCommand(_ => ExportStatisticsWord());
-
             OpenSettingsCommand = new RelayCommand(_ => OpenSettings());
+
+            // Команда сортировки: принимаем object, приводим к string
+            SortCommand = new RelayCommand(parameter =>
+            {
+                if (parameter is string mode)
+                {
+                    SortMode = mode;
+                }
+            });
 
             LoadPrograms();
             _service.StartMonitoring(_userId);
         }
 
-        // Сканировать программы
+        private void LoadCategories()
+        {
+            var cats = _service.GetAllCategories();
+            Categories.Clear();
+
+            Categories.Add(Category.All);
+
+            foreach (var cat in cats)
+                Categories.Add(cat);
+        }
+
+
         private void ScanPrograms()
         {
             try
@@ -55,16 +109,44 @@ namespace Katastata.ViewModels
             }
         }
 
-        // Показ программ
         private void LoadPrograms()
         {
+            var items = _service.GetAllPrograms(_userId).ToList();
+            ApplyFilterAndSort(items);
+        }
+
+        private void ApplyFilterAndSort(List<Program> source = null)
+        {
+            var filtered = (source ?? _service.GetAllPrograms(_userId).ToList()).AsEnumerable();
+
+            if (SelectedCategory != null && SelectedCategory.Id != -1) // -1 = "Все"
+            {
+                filtered = filtered.Where(p => p.CategoryId == SelectedCategory.Id);
+            }
+
+            switch (SortMode)
+            {
+                case "NameAsc":
+                    filtered = filtered.OrderBy(p => p.Name);
+                    break;
+                case "NameDesc":
+                    filtered = filtered.OrderByDescending(p => p.Name);
+                    break;
+                case "LastLaunchAsc":
+                    filtered = filtered.OrderBy(p =>
+                        p.Statistics?.Max(s => s.LastLaunch) ?? DateTime.MinValue);
+                    break;
+                case "LastLaunchDesc":
+                    filtered = filtered.OrderByDescending(p =>
+                        p.Statistics?.Max(s => s.LastLaunch) ?? DateTime.MinValue);
+                    break;
+            }
+
             Programs.Clear();
-            var items = _service.GetAllPrograms(_userId);
-            foreach (var p in items)
+            foreach (var p in filtered)
                 Programs.Add(p);
         }
 
-        // Показ сессий
         private void ShowSessions()
         {
             var sessions = _service.GetSessions(_userId);
@@ -72,7 +154,6 @@ namespace Katastata.ViewModels
             sessionsWindow.Show();
         }
 
-        // Показ статистики
         private void ShowStatistics()
         {
             var stats = _service.GetStatistics(_userId);
@@ -80,7 +161,6 @@ namespace Katastata.ViewModels
             statsWindow.Show();
         }
 
-        // Создание новой категории
         private void CreateNewCategory()
         {
             var newCategoryWindow = new NewCategoryWindow();
@@ -98,17 +178,18 @@ namespace Katastata.ViewModels
                     return;
                 }
                 _service.AddCategory(name);
-                LoadPrograms();  // Обновить список
+                LoadCategories();
+                LoadPrograms();
                 System.Windows.MessageBox.Show("Категория создана.");
             }
         }
+
         private void OpenSettings()
         {
             var settingsWindow = new SettingsWindow(_service, _userId);
             settingsWindow.ShowDialog();
         }
 
-        // Экспорт статистики в Excel
         private void ExportStatisticsExcel()
         {
             var dialog = new Microsoft.Win32.SaveFileDialog { Filter = "Excel files (*.xlsx)|*.xlsx", DefaultExt = "xlsx" };
@@ -119,17 +200,20 @@ namespace Katastata.ViewModels
             }
         }
 
-        // Экспорт статистики в Word
         private void ExportStatisticsWord()
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog { Filter = "Word files (.docx)|.docx", DefaultExt = "docx" };
+            var dialog = new Microsoft.Win32.SaveFileDialog { Filter = "Word files (*.docx)|*.docx", DefaultExt = "docx" };
             if (dialog.ShowDialog() == true)
             {
-                _service.ExportStatisticsToExcel(_userId, dialog.FileName);
+                _service.ExportStatisticsToWord(_userId, dialog.FileName);
                 System.Windows.MessageBox.Show("Экспорт завершен");
             }
         }
 
-
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 }

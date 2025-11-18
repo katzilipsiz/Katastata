@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:Katastata.Helpers"
         Title="Katastata"
         Width="1100" Height="700"
-        MinWidth="700" MinHeight="500"
+        MinWidth="800" MinHeight="500"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource WindowBackgroundBrush}" 
         Icon="/Assets/Logo/MainLogo.png"
@@ -87,7 +87,7 @@
                         HorizontalAlignment="Left"
                         Margin="0,0,0,15">
                 
-                <Button Content="⟳ Сканировать"
+                <Button Content="⟳ Обновить"
                         Command="{Binding ScanCommand}"
                         Style="{DynamicResource ThemeButtonStyle}"
                         Click="ScannerBtn_Click"/>
@@ -100,22 +100,49 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"
-                        Grid.Row="0"
-                        HorizontalAlignment="Right"
-                        Margin="0,0,0,20">
+            Grid.Row="0"
+            HorizontalAlignment="Right"
+            Margin="0,0,0,20">
+
+                <ComboBox
+                    x:Name="CategoryFilterCombo"
+                    Width="180"
+                    Height="40"
+                    Margin="0,0,12,0"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory, UpdateSourceTrigger=PropertyChanged}"
+                    DisplayMemberPath="Name"
+                    VerticalAlignment="Center"
+                    Style="{DynamicResource ThemeComboBoxStyle}"/>
+
+
+                <!-- Кнопка сортировки по имени -->
+                <Button x:Name="SortByNameBtn"
+                        Content="Ab"
+                        Style="{StaticResource ThemeSymbolButtonStyle}"
+                        ToolTip="Сортировка по имени"
+                        Margin="0,0,0,0"
+                        Click="SortByName_Click"/>
+
+                <Button x:Name="SortByLastLaunchBtn"
+                        Content="🕒"
+                        Style="{StaticResource ThemeSymbolButtonStyle}"
+                        ToolTip="Сортировка по последнему запуску"
+                        Margin="0,0,0,0"
+                        Click="SortByLastLaunch_Click"/>
 
                 <Button Content="⚙"
-                        Command="{Binding OpenSettingsCommand}"
-                        Style="{DynamicResource ThemeSymbolButtonStyle}"
-                        Margin="10,0,0,0"/>
+                    Command="{Binding OpenSettingsCommand}"
+                    Style="{DynamicResource ThemeSymbolButtonStyle}"
+                    Margin="0,0,15,0"/>
             </StackPanel>
 
             <Border Grid.Row="1"
-        Background="{DynamicResource WindowBackgroundBrush}"
-        BorderBrush="{DynamicResource BorderBrush}"
-        BorderThickness="1"
-        CornerRadius="8"
-        Padding="10">
+                    Background="{DynamicResource WindowBackgroundBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="10">
 
                 <Border.Resources>
                     <Style TargetType="Border" x:Key="ProgramTileStyle">

@@ -285,7 +285,53 @@
         </Setter>
     </Style>
 
-    <!-- Конвертер для TimeSpan (добавьте, если нет) -->
+    <Style x:Key="ThemeComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <!-- Основной бордер -->
+                        <Border
+                        x:Name="BaseBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4"/>
+
+
+                        <!-- Текст выбранного элемента -->
+                        <ContentPresenter
+                        Margin="{TemplateBinding Padding}"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+
+
+                        <!-- Выпадающий список -->
+                        <Popup
+                        x:Name="PART_Popup"
+                        Placement="Bottom"
+                        IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                        Focusable="False">
+                            <Border
+                            Background="White"
+                            BorderBrush="#D0D0D0"
+                            BorderThickness="1"
+                            CornerRadius="0,0,4,4">
+                                <ScrollViewer Height="200">
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+    <!-- Конвертер для TimeSpan -->
     <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
     <local:PathToIconConverter x:Key="PathToIconConverter"/>
 

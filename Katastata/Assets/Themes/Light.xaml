@@ -282,6 +282,95 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ThemeComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid x:Name="MainGrid" SnapsToDevicePixels="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Основной бордер -->
+                        <Border x:Name="BaseBorder"
+                         Grid.ColumnSpan="2"
+                         Background="{TemplateBinding Background}"
+                         BorderBrush="{TemplateBinding BorderBrush}"
+                         BorderThickness="{TemplateBinding BorderThickness}"
+                         CornerRadius="6"/>
+
+                        <!-- Текст выбранного элемента -->
+                        <ContentPresenter x:Name="ContentSite"
+                                 Grid.Column="0"
+                                 Margin="{TemplateBinding Padding}"
+                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                 RecognizesAccessKey="True"/>
+
+                        <!-- Стрелка вниз -->
+                        <Path x:Name="Arrow"
+                       Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Data="M0,0 L4,4 L8,0 Z"
+                       Fill="{DynamicResource TextForegroundBrush}"
+                       Margin="8,0"/>
+
+                        <!-- Выпадающий список (обязательно!) -->
+                        <Popup x:Name="PART_Popup"
+                        Placement="Bottom"
+                        IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                        AllowsTransparency="True"
+                        Focusable="False">
+                            <Border x:Name="DropDownBorder"
+                             Background="{DynamicResource WindowBackgroundBrush}"
+                             BorderBrush="{DynamicResource BorderBrush}"
+                             BorderThickness="1"
+                             CornerRadius="0,0,4,4"
+                             Margin="0,-1,0,0">
+                                <ScrollViewer CanContentScroll="True">
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+
+                    <!-- Триггеры -->
+                    <ControlTemplate.Triggers>
+                        <!-- Наведение -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="BaseBorder" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                        </Trigger>
+
+                        <!-- Фокус -->
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="BaseBorder" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                        </Trigger>
+
+                        <!-- Отключён -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+
+                        <!-- Раскрыт -->
+                        <Trigger Property="IsDropDownOpen" Value="True">
+                            <Setter TargetName="Arrow" Property="Data" Value="M0,4 L4,0 L8,4 Z"/>
+                            <!-- Стрелка вверх -->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Конвертер для TimeSpan (без изменений) -->
     <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
     <local:PathToIconConverter x:Key="PathToIconConverter"/>

@@ -210,21 +210,21 @@ namespace Katastata
             ScanText.Text = "Сканирование завершено!";
         }
 
-        private void ExportBtn_Click(object sender, RoutedEventArgs e)
+        private void SortByName_Click(object sender, RoutedEventArgs e)
         {
-            var choiceWindow = new ExportWindow();
-            choiceWindow.Owner = this; // модально
-            if (choiceWindow.ShowDialog() == true)
-            {
-                if (DataContext is MainViewModel vm)
-                {
-                    if (choiceWindow.SelectedFormat == "Excel")
-                        vm.ExportStatisticsExcelCommand.Execute(null);
-                    else if (choiceWindow.SelectedFormat == "Word")
-                        vm.ExportStatisticsWordCommand.Execute(null);
-                }
-            }
+            var currentMode = (string)DataContext?.GetType().GetProperty("SortMode")?.GetValue(DataContext);
+            string newMode = currentMode == "NameAsc" ? "NameDesc" : "NameAsc";
+            DataContext?.GetType().GetMethod("set_SortMode")?.Invoke(DataContext, new object[] { newMode });
         }
+
+        private void SortByLastLaunch_Click(object sender, RoutedEventArgs e)
+        {
+            var currentMode = (string)DataContext?.GetType().GetProperty("SortMode")?.GetValue(DataContext);
+            string newMode = currentMode == "LastLaunchAsc" ? "LastLaunchDesc" : "LastLaunchAsc";
+            DataContext?.GetType().GetMethod("set_SortMode")?.Invoke(DataContext, new object[] { newMode });
+        }
+
+
 
         private void ProgramTile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
