@@ -18,6 +18,8 @@ namespace Katastata
         private NotifyIcon trayIcon;
         private bool isFullscreen = false;
 
+        private Dictionary<int, ProgramDetailsWindow> _openDetailsWindows = new Dictionary<int, ProgramDetailsWindow>();
+
         public MainWindow(int userId, DbContextOptions<AppDbContext> options)
         {
             InitializeComponent();
@@ -147,16 +149,23 @@ namespace Katastata
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true; // Отменяем закрытие
-            this.Hide(); // Скрываем окно
-            trayIcon.Visible = true; // Показываем значок
+            foreach (var window in _openDetailsWindows.Values)
+            {
+                window.Close();
+            }
+            _openDetailsWindows.Clear();
+
+            e.Cancel = true;
+            this.Hide();
+            trayIcon.Visible = true;  
         }
 
         private void TrayIcon_Click()
         {
-            this.Show(); // Восстанавливаем окно
+            this.Show();
             this.WindowState = WindowState.Normal;
-            trayIcon.Visible = false; // Скрываем значок
+            this.Activate();
+            trayIcon.Visible = false;
         }
 
         private void FullscreenBtn_Click(object sender, RoutedEventArgs e)
@@ -222,7 +231,25 @@ namespace Katastata
             if (sender is Border border && border.DataContext is Program program)
             {
                 var vm = (MainViewModel)DataContext;
+
+                if (_openDetailsWindows.ContainsKey(program.Id))
+                {
+                    var window = _openDetailsWindows[program.Id];
+                    window.Activate();
+                    window.WindowState = WindowState.Normal;
+                    return;
+                }
+
                 var detailsWindow = new ProgramDetailsWindow(program, vm.UserId, vm.Service);
+                detailsWindow.Owner = this;
+
+                detailsWindow.Closed += (s, ev) =>
+                {
+                    _openDetailsWindows.Remove(program.Id);
+                };
+
+                _openDetailsWindows[program.Id] = detailsWindow;
+
                 detailsWindow.Show();
             }
         }

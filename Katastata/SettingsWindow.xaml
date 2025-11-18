@@ -4,6 +4,7 @@
         Title="Настройки"
         Height="650" Width="900"
         MinHeight="400" MinWidth="600"
+        Icon="/Assets/Logo/MainLogo.png"
         Background="{DynamicResource WindowBackgroundBrush}"
         Foreground="{DynamicResource TextForegroundBrush}"
         WindowStartupLocation="CenterScreen"

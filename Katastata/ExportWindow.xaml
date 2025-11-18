@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Выберите формат" Height="150" Width="250"
         WindowStartupLocation="CenterOwner"
+        Icon="/Assets/Logo/MainLogo.png"
         ResizeMode="NoResize"
         Background="{DynamicResource WindowBackgroundBrush}"
         WindowStyle="None">
