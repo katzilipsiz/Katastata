@@ -66,7 +66,6 @@ namespace Katastata.ViewModels
             ScanCommand = new RelayCommand(_ => ScanPrograms());
             ShowSessionsCommand = new RelayCommand(_ => ShowSessions());
             ShowStatisticsCommand = new RelayCommand(_ => ShowStatistics());
-            CreateCategoryCommand = new RelayCommand(_ => CreateNewCategory());
             ExportStatisticsExcelCommand = new RelayCommand(_ => ExportStatisticsExcel());
             ExportStatisticsWordCommand = new RelayCommand(_ => ExportStatisticsWord());
             OpenSettingsCommand = new RelayCommand(_ => OpenSettings());
@@ -159,29 +158,6 @@ namespace Katastata.ViewModels
             var stats = _service.GetStatistics(_userId);
             var statsWindow = new StatisticsWindow(stats);
             statsWindow.Show();
-        }
-
-        private void CreateNewCategory()
-        {
-            var newCategoryWindow = new NewCategoryWindow();
-            if (newCategoryWindow.ShowDialog() == true)
-            {
-                var name = newCategoryWindow.CategoryName;
-                if (string.IsNullOrWhiteSpace(name) || name.Length < 3)
-                {
-                    System.Windows.MessageBox.Show("Имя категории должно быть минимум 3 символа.");
-                    return;
-                }
-                if (_service.CategoryExists(name))
-                {
-                    System.Windows.MessageBox.Show("Категория уже существует.");
-                    return;
-                }
-                _service.AddCategory(name);
-                LoadCategories();
-                LoadPrograms();
-                System.Windows.MessageBox.Show("Категория создана.");
-            }
         }
 
         private void OpenSettings()

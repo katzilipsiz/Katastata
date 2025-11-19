@@ -112,8 +112,7 @@
                     ItemsSource="{Binding Categories}"
                     SelectedItem="{Binding SelectedCategory, UpdateSourceTrigger=PropertyChanged}"
                     DisplayMemberPath="Name"
-                    VerticalAlignment="Center"
-                    Style="{DynamicResource ThemeComboBoxStyle}"/>
+                    VerticalAlignment="Center"/>
 
 
                 <!-- Кнопка сортировки по имени -->
@@ -177,13 +176,13 @@
                     </Style>
                 </Border.Resources>
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                              HorizontalScrollBarVisibility="Disabled">
                     <ItemsControl ItemsSource="{Binding Programs}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal"
-                               Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
-                               MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
+                                           Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
