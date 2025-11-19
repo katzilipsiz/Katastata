@@ -18,6 +18,8 @@ namespace Katastata
         private NotifyIcon trayIcon;
         private bool isFullscreen = false;
 
+        private Dictionary<int, ProgramDetailsWindow> _openDetailsWindows = new Dictionary<int, ProgramDetailsWindow>();
+
         public MainWindow(int userId, DbContextOptions<AppDbContext> options)
         {
             InitializeComponent();
@@ -53,13 +55,46 @@ namespace Katastata
 
         private void ApplyTheme(string themePath)
         {
+            // 1. Очищаем ВСЕ ресурсы приложения (не только MergedDictionaries)
+            System.Windows.Application.Current.Resources.Clear();
+
+            // 2. Загружаем новый словарь тем
             var themeDict = new ResourceDictionary
             {
                 Source = new Uri(themePath, UriKind.Relative)
             };
-            System.Windows.Application.Current.Resources.MergedDictionaries.Clear();
+
+            // 3. Добавляем его в ресурсы
             System.Windows.Application.Current.Resources.MergedDictionaries.Add(themeDict);
+
+            // 4. Принудительно обновляем все элементы в текущем окне
+            UpdateThemeForAllElements(this);
         }
+
+        // Вспомогательный метод: рекурсивно обновляет стили всех элементов
+        private void UpdateThemeForAllElements(Visual container)
+        {
+            if (container == null) return;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(container); i++)
+            {
+                var child = VisualTreeHelper.GetChild(container, i) as Visual;
+                if (child != null)
+                {
+                    // Принудительно перепривязываем стили
+                    if (child is FrameworkElement fe)
+                    {
+                        fe.InvalidateProperty(FrameworkElement.StyleProperty);
+                        fe.InvalidateProperty(System.Windows.Controls.Control.ForegroundProperty);
+                        fe.InvalidateProperty(System.Windows.Controls.Control.BackgroundProperty);
+                        fe.InvalidateProperty(System.Windows.Controls.Panel.BackgroundProperty);
+                    }
+                    // Рекурсия для дочерних элементов
+                    UpdateThemeForAllElements(child);
+                }
+            }
+        }
+
 
         private void LightTheme_Click(object sender, RoutedEventArgs e)
         {
@@ -114,16 +149,23 @@ namespace Katastata
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true; // Отменяем закрытие
-            this.Hide(); // Скрываем окно
-            trayIcon.Visible = true; // Показываем значок
+            foreach (var window in _openDetailsWindows.Values)
+            {
+                window.Close();
+            }
+            _openDetailsWindows.Clear();
+
+            e.Cancel = true;
+            this.Hide();
+            trayIcon.Visible = true;  
         }
 
         private void TrayIcon_Click()
         {
-            this.Show(); // Восстанавливаем окно
+            this.Show();
             this.WindowState = WindowState.Normal;
-            trayIcon.Visible = false; // Скрываем значок
+            this.Activate();
+            trayIcon.Visible = false;
         }
 
         private void FullscreenBtn_Click(object sender, RoutedEventArgs e)
@@ -168,28 +210,46 @@ namespace Katastata
             ScanText.Text = "Сканирование завершено!";
         }
 
-        private void ExportBtn_Click(object sender, RoutedEventArgs e)
+        private void SortByName_Click(object sender, RoutedEventArgs e)
         {
-            var choiceWindow = new ExportWindow();
-            choiceWindow.Owner = this; // модально
-            if (choiceWindow.ShowDialog() == true)
-            {
-                if (DataContext is MainViewModel vm)
-                {
-                    if (choiceWindow.SelectedFormat == "Excel")
-                        vm.ExportStatisticsExcelCommand.Execute(null);
-                    else if (choiceWindow.SelectedFormat == "Word")
-                        vm.ExportStatisticsWordCommand.Execute(null);
-                }
-            }
+            var currentMode = (string)DataContext?.GetType().GetProperty("SortMode")?.GetValue(DataContext);
+            string newMode = currentMode == "NameAsc" ? "NameDesc" : "NameAsc";
+            DataContext?.GetType().GetMethod("set_SortMode")?.Invoke(DataContext, new object[] { newMode });
         }
+
+        private void SortByLastLaunch_Click(object sender, RoutedEventArgs e)
+        {
+            var currentMode = (string)DataContext?.GetType().GetProperty("SortMode")?.GetValue(DataContext);
+            string newMode = currentMode == "LastLaunchAsc" ? "LastLaunchDesc" : "LastLaunchAsc";
+            DataContext?.GetType().GetMethod("set_SortMode")?.Invoke(DataContext, new object[] { newMode });
+        }
+
+
 
         private void ProgramTile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (sender is Border border && border.DataContext is Program program)
             {
                 var vm = (MainViewModel)DataContext;
+
+                if (_openDetailsWindows.ContainsKey(program.Id))
+                {
+                    var window = _openDetailsWindows[program.Id];
+                    window.Activate();
+                    window.WindowState = WindowState.Normal;
+                    return;
+                }
+
                 var detailsWindow = new ProgramDetailsWindow(program, vm.UserId, vm.Service);
+                detailsWindow.Owner = this;
+
+                detailsWindow.Closed += (s, ev) =>
+                {
+                    _openDetailsWindows.Remove(program.Id);
+                };
+
+                _openDetailsWindows[program.Id] = detailsWindow;
+
                 detailsWindow.Show();
             }
         }

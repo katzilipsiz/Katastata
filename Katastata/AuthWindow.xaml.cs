@@ -57,12 +57,15 @@ namespace Katastata
 
         private void ShowLoginPage(object sender, RoutedEventArgs e)
         {
+            _vm.LoginMessage = string.Empty;
             ContentArea.Content = new LoginPage { DataContext = _vm };
             HighlightActiveButton(LoginButton);
+            
         }
 
         private void ShowRegisterPage(object sender, RoutedEventArgs e)
         {
+            _vm.LoginMessage = string.Empty;
             ContentArea.Content = new RegisterPage { DataContext = _vm };
             HighlightActiveButton(RegisterButton);
         }
@@ -78,7 +81,7 @@ namespace Katastata
                 DragMove();
         }
 
-        private void HighlightActiveButton(System.Windows.Controls.Button activeButton)  // Уточнен тип Button
+        private void HighlightActiveButton(System.Windows.Controls.Button activeButton)
         {
             System.Windows.Media.Brush activeBrush = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["AccentBrush"];
             System.Windows.Media.Brush inactiveBrush = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["WindowBackgroundBrush"];

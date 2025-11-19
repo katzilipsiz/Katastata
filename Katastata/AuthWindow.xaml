@@ -5,6 +5,7 @@
         Height="700" Width="500"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
+        Icon="/Assets/Logo/MainLogo.png"
         Background="Transparent"
         WindowStyle="None"
         AllowsTransparency="True">

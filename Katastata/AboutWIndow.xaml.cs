@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace Katastata
 {
     /// <summary>
-    /// Логика взаимодействия для SettingWindow.xaml
+    /// Логика взаимодействия для AboutWIndow.xaml
     /// </summary>
-    public partial class SettingWindow : Window
+    public partial class AboutWindow : Window
     {
-        public SettingWindow()
+        public AboutWindow()
         {
             InitializeComponent();
         }

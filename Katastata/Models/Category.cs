@@ -11,5 +11,7 @@ namespace Katastata.Models
         public int Id { get; set; } //id категории
         public string Name { get; set; } //название категории
         public ICollection<Program>? Programs { get; set; } //программы в категории
+
+        public static Category All => new Category { Id = -1, Name = "Все" };
     }
 }

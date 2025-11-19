@@ -5,12 +5,12 @@ using System.Windows;
 
 namespace Katastata
 {
-    public partial class SessionsWindow : Window
+    public partial class StatisticsWindow : Window
     {
-        public SessionsWindow(List<Session> sessions)
+        public StatisticsWindow(List<Statistics> stats)
         {
             InitializeComponent();
-            DataContext = new SessionsViewModel(sessions);
+            DataContext = new StatisticsViewModel(stats);
         }
     }
 }

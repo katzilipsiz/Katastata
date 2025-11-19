@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:Katastata.Helpers"
         Title="Katastata"
         Width="1100" Height="700"
-        MinWidth="700" MinHeight="500"
+        MinWidth="800" MinHeight="500"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource WindowBackgroundBrush}" 
         Icon="/Assets/Logo/MainLogo.png"
@@ -87,7 +87,7 @@
                         HorizontalAlignment="Left"
                         Margin="0,0,0,15">
                 
-                <Button Content="⟳ Сканировать"
+                <Button Content="⟳ Обновить"
                         Command="{Binding ScanCommand}"
                         Style="{DynamicResource ThemeButtonStyle}"
                         Click="ScannerBtn_Click"/>
@@ -100,40 +100,54 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"
-                        Grid.Row="0"
-                        HorizontalAlignment="Right"
-                        Margin="0,0,0,20">
+            Grid.Row="0"
+            HorizontalAlignment="Right"
+            Margin="0,0,0,20">
 
-                <Button Content="📤 Экспорт"
-                        Style="{DynamicResource ThemeButtonStyle}"
-                        Click="ExportBtn_Click"
-                        Margin="10,0,0,0"/>
-                <Button Content="🕓 Сессии"
-                        Command="{Binding ShowSessionsCommand}"
-                        Style="{DynamicResource ThemeButtonStyle}"
-                        Margin="10,0,0,0"/>
-                <Button Content="📊 Статистика"
-                        Command="{Binding ShowStatisticsCommand}"
-                        Style="{DynamicResource ThemeButtonStyle}"
-                        Margin="10,0,0,0"/>
+                <ComboBox
+                    x:Name="CategoryFilterCombo"
+                    Width="180"
+                    Height="40"
+                    Margin="0,0,12,0"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory, UpdateSourceTrigger=PropertyChanged}"
+                    DisplayMemberPath="Name"
+                    VerticalAlignment="Center"/>
+
+
+                <!-- Кнопка сортировки по имени -->
+                <Button x:Name="SortByNameBtn"
+                        Content="Ab"
+                        Style="{StaticResource ThemeSymbolButtonStyle}"
+                        ToolTip="Сортировка по имени"
+                        Margin="0,0,0,0"
+                        Click="SortByName_Click"/>
+
+                <Button x:Name="SortByLastLaunchBtn"
+                        Content="🕒"
+                        Style="{StaticResource ThemeSymbolButtonStyle}"
+                        ToolTip="Сортировка по последнему запуску"
+                        Margin="0,0,0,0"
+                        Click="SortByLastLaunch_Click"/>
+
                 <Button Content="⚙"
-                        
-                        Style="{DynamicResource ThemeSymbolButtonStyle}"
-                        Margin="10,0,0,0"/>
-                
-                <Button Content="+"
-                        FontSize="24"
-                        Command="{Binding CreateCategoryCommand}"
-                        Style="{DynamicResource ThemeSymbolButtonStyle}"
-                        Margin="10,0,0,0"/>
+                    Command="{Binding OpenSettingsCommand}"
+                    Style="{DynamicResource ThemeSymbolButtonStyle}"
+                    Margin="0,0,0,0"/>
+
+                <Button Content="?" 
+                        Command="{Binding OpenAboutCommand}" 
+                        Style="{StaticResource ThemeSymbolButtonStyle}" 
+                        Margin="00,0,0,0" 
+                        ToolTip="О программе"/>
             </StackPanel>
 
             <Border Grid.Row="1"
-        Background="{DynamicResource WindowBackgroundBrush}"
-        BorderBrush="{DynamicResource BorderBrush}"
-        BorderThickness="1"
-        CornerRadius="8"
-        Padding="10">
+                    Background="{DynamicResource WindowBackgroundBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="10">
 
                 <Border.Resources>
                     <Style TargetType="Border" x:Key="ProgramTileStyle">
@@ -141,7 +155,7 @@
 
                         </Setter>
                         <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
                         <Setter Property="CornerRadius" Value="14"/>
                         <Setter Property="Padding" Value="12"/>
                         <Setter Property="Cursor" Value="Hand"/>
@@ -160,33 +174,27 @@
                                         <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
                                     </Setter.Value>
                                 </Setter>
-                                <Setter Property="Background">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#FF4A4A4A" Offset="0"/>
-                                            <GradientStop Color="#FF3A3A3A" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
+                                <Setter Property="Background" Value="{DynamicResource BorderBrush}">
                                 </Setter>
-                                <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </Border.Resources>
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                              HorizontalScrollBarVisibility="Disabled">
                     <ItemsControl ItemsSource="{Binding Programs}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal"
-                               Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
-                               MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
+                                           Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Style="{StaticResource ProgramTileStyle}"
+                                <Border Style="{DynamicResource ProgramTileStyle}"
                             MouseLeftButtonDown="ProgramTile_MouseLeftButtonDown"
                             Width="220"
                             Height="120"
@@ -209,13 +217,13 @@
                                         <!-- Текст -->
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Name}"
-                                           Foreground="{StaticResource TextForegroundBrush}"
+                                           Foreground="{DynamicResource TextForegroundBrush}"
                                            FontWeight="SemiBold"
                                            FontSize="14"
                                            TextTrimming="CharacterEllipsis"
                                            MaxWidth="140"/>
                                             <TextBlock Text="{Binding Category.Name}"
-                                           Foreground="{StaticResource DisabledBrush}"
+                                           Foreground="{DynamicResource DisabledBrush}"
                                            FontSize="11"
                                            Margin="0,4,0,0"/>
                                         </StackPanel>
