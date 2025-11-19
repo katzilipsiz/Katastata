@@ -52,7 +52,8 @@ namespace Katastata.ViewModels
         public RelayCommand ExportStatisticsWordCommand { get; }
         public RelayCommand CreateCategoryCommand { get; }
         public RelayCommand OpenSettingsCommand { get; }
-        public RelayCommand SortCommand { get; }  // Без <string>
+        public RelayCommand SortCommand { get; }
+        public RelayCommand OpenAboutCommand { get; }
 
         public MainViewModel() { }
 
@@ -69,6 +70,7 @@ namespace Katastata.ViewModels
             ExportStatisticsExcelCommand = new RelayCommand(_ => ExportStatisticsExcel());
             ExportStatisticsWordCommand = new RelayCommand(_ => ExportStatisticsWord());
             OpenSettingsCommand = new RelayCommand(_ => OpenSettings());
+            OpenAboutCommand = new RelayCommand(_ => OpenAbout());
 
             // Команда сортировки: принимаем object, приводим к string
             SortCommand = new RelayCommand(parameter =>
@@ -94,7 +96,10 @@ namespace Katastata.ViewModels
                 Categories.Add(cat);
         }
 
-
+        private void OpenAbout()
+        {
+            new AboutWindow().ShowDialog();
+        }
         private void ScanPrograms()
         {
             try

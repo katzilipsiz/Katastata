@@ -133,7 +133,13 @@
                 <Button Content="⚙"
                     Command="{Binding OpenSettingsCommand}"
                     Style="{DynamicResource ThemeSymbolButtonStyle}"
-                    Margin="0,0,15,0"/>
+                    Margin="0,0,0,0"/>
+
+                <Button Content="?" 
+                        Command="{Binding OpenAboutCommand}" 
+                        Style="{StaticResource ThemeSymbolButtonStyle}" 
+                        Margin="00,0,0,0" 
+                        ToolTip="О программе"/>
             </StackPanel>
 
             <Border Grid.Row="1"
