@@ -28,7 +28,7 @@
                 <TextBox Text="{Binding LoginUsername, Mode=TwoWay}"
                          Name="UsernameTextBox"
                          Height="36"
-                         Background="#333333"
+                         Background="{DynamicResource WindowBackgroundBrush}"
                          Style="{StaticResource ThemeTextBoxStyle}"
                          Foreground="{DynamicResource TextForegroundBrush}"
                          BorderBrush="{DynamicResource BorderBrush}"
@@ -39,7 +39,7 @@
                            Foreground="{DynamicResource TextForegroundBrush}"
                            FontSize="12" Margin="0,12,0,4"/>
                 <PasswordBox Height="36"
-                             Background="#333333"
+                             Background="{DynamicResource WindowBackgroundBrush}"
                              Style="{StaticResource ThemePasswordBoxStyle}"
                              Foreground="{DynamicResource TextForegroundBrush}"
                              BorderBrush="{DynamicResource BorderBrush}"

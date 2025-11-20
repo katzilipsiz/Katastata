@@ -25,7 +25,7 @@
                 </Grid.RowDefinitions>
 
             <!-- Верхняя панель -->
-                <DockPanel Background="#252525"
+                <DockPanel Background="{DynamicResource WindowBackgroundBrush}"
                        Height="40"
                        VerticalAlignment="Top"
                        MouseLeftButtonDown="TopBar_MouseLeftButtonDown">
