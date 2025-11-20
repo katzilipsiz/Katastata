@@ -33,5 +33,10 @@ namespace Katastata.UserControls
         {
             UsernameTextBox.Focus();
         }
+
+        private void UsernameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

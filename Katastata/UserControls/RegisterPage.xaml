@@ -27,17 +27,17 @@
                 <TextBox Text="{Binding RegisterUsername, Mode=TwoWay}"
                          x:Name="UsernameTextBox"
                          Height="36"
-                         Background="#333333"
+                         Background="{DynamicResource WindowBackgroundBrush}"
                          Style="{StaticResource ThemeTextBoxStyle}"
                          Foreground="{DynamicResource TextForegroundBrush}"
-                         BorderBrush="{DynamicResource BorderBrush}"/>
+                         BorderBrush="{DynamicResource BorderBrush}" TextChanged="UsernameTextBox_TextChanged"/>
 
                 <!-- Пароль -->
                 <TextBlock Text="Пароль" 
                            Foreground="{DynamicResource TextForegroundBrush}"
                            FontSize="12" Margin="0,12,0,4"/>
                 <PasswordBox Height="36"
-                             Background="#333333"
+                             Background="{DynamicResource WindowBackgroundBrush}"
                              Style="{StaticResource ThemePasswordBoxStyle}"
                              Foreground="{DynamicResource TextForegroundBrush}"
                              BorderBrush="{DynamicResource BorderBrush}"
@@ -49,7 +49,7 @@
                            FontSize="12" Margin="0,12,0,4"/>
                 <PasswordBox Height="36"
                              Style="{StaticResource ThemePasswordBoxStyle}"
-                             Background="#333333"
+                             Background="{DynamicResource WindowBackgroundBrush}"
                              Foreground="{DynamicResource TextForegroundBrush}"
                              BorderBrush="{DynamicResource BorderBrush}"
                              PasswordChanged="RegisterPasswordConfirmBox_PasswordChanged"/>
