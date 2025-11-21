@@ -56,11 +56,11 @@
                             <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
                         </Style>
                         <Style TargetType="DataGridRow">
-                            <Setter Property="Background" Value="#FF2E2E2E"/>
+                            <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
                             <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#FF3A3A3A"/>
+                                    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>

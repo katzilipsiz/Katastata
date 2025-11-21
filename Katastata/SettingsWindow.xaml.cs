@@ -41,8 +41,26 @@ namespace Katastata
         {
             if (System.Windows.MessageBox.Show("Удалить аккаунт? Это необратимо.", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                _service.DeleteUser(_userId);
-                System.Windows.Application.Current.Shutdown();
+                try
+                {
+                    _service.DeleteUser(_userId);
+
+                    var exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                    var startInfo = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "dotnet",
+                        Arguments = $"\"{exePath}\"",
+                        UseShellExecute = false,
+                        CreateNoWindow = true, // скрываем окно CMD
+                        WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
+                    };
+                    System.Diagnostics.Process.Start(startInfo);
+                    System.Windows.Application.Current.Shutdown();
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show("Не удалось удалить аккаунт: " + ex.Message);
+                }
             }
         }
 
